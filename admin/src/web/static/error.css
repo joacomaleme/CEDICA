@@ -1,0 +1,25 @@
+.error-container {
+  margin: auto;
+  margin-top: 2rem;
+  padding: 5rem;
+  padding-top: 2rem;
+  width: max-content;
+  border-radius: 5px;
+  background-color: #eeeeee;
+}
+
+.error-code {
+  font-size: 3em;
+}
+
+.error.message {
+  font-size: 1em;
+}
+
+.error-details {
+  font-size: 1em;
+}
+
+.link-container {
+  margin-top: 1rem;
+}
