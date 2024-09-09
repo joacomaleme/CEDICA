@@ -1,0 +1,23 @@
+html{
+    background-image: url("Background.jpg");
+    background-position: center;
+    background-size: 600px;
+    background-repeat: repeat;
+    font-family: 'Times New Roman', Times, serif;
+}
+button{
+    height: 30px;
+    width: 110px;
+    color: #6c584c;
+    background-color: #adc178;
+    border-width: 2px;
+    border-radius: 12px;
+    border-color: #adc178;
+}
+button:hover{
+    background-color: #f0ead2;
+    border-color: #a98467;
+}
+a{
+    color: #78290f;
+}
