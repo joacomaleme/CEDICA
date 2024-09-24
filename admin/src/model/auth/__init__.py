@@ -32,3 +32,13 @@ def delete_user(id: int):
     db.session.commit()
 
     return user     #deberia devolver otra cosa?
+
+def create_role(**kwargs):
+    role = Role(**kwargs)
+    db.session.add(role)
+    db.session.commit()
+
+def create_permission(**kwargs):
+    permission = Permission(**kwargs)
+    db.session.add(permission)
+    db.session.commit()
