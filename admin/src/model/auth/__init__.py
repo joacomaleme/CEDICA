@@ -4,6 +4,9 @@ from .role import Role
 from .permission import Permission
 from .role_permissions import role_permissions
 
+# para la administracion de permisos y para hacer el decorator
+from functools import wraps # un decorator que hace que se mantengan los metadatos de la funcion cuando esta siendo decorada, util para debuggear.
+from flask import abort, g
 
 # CRUD 
 
@@ -123,6 +126,33 @@ def unassign_role(id: int) -> User:
         # se tira exception??
 
     return user
+
+
+# funcionalidad para verificar permisos
+
+def has_permission(user: User, permission_name:str) -> bool:    # pensar en hacer los permisos un Enum
+    # verifica que el rol del usuario tenga el permiso especificado
+    role = Role.query.get(user.role_id)
+    return any(permission.name == permission_name for permission in role.permissions)
+
+"""
+#Creacion de un decorator que consulte los permisos para agregarlos a las funciones del CRUD.
+se anota como @permission_required('user_index') (como ejemplo, puede recibir cualquier permiso como param)
+def permission_required(permission: str):
+    #Decorator para verificar si el usuario tiene el permiso necesario.
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            user = get_current_user()  # Función que devuelve el usuario autenticado
+            if not has_permission(user, permission):
+                #abort(403)  # Retorna un error 403 si no tiene el permiso, lo dejo como opcion para el futuro.
+                raise PermissionError("No se tiene permiso para realizar esta accion")
+            return func(*args, **kwargs)
+        return wrapper
+    return decorator
+"""
+
+
 
 # funcionalidad para el seed para crear roles y permisos.
 
