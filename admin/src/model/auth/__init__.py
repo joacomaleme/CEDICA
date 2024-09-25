@@ -4,34 +4,127 @@ from .role import Role
 from .permission import Permission
 from .role_permissions import role_permissions
 
-def create_user(**kwargs):  #checkear tema args, se podria pasar un User o una lista definida de atributos
+
+# CRUD 
+
+def create_user(**kwargs) -> User:  #checkear tema args, se podria pasar un User o una lista definida de atributos
     user = User(**kwargs)
     db.session.add(user)
     db.session.commit()
 
     return user
 
-def list_users():
+def list_users():   # lista TODOS los usuarios (solo usar cuando sea estrictamente necesario)
     users = User.query.all()
-    
-    return users
 
-def get_user(id: int):
-    user = User.query.get(id) #si no encuentra al user tira 404
+    return users # puede devolver una lista vacia
 
-    return user.to_dict()
+def list_users_filtered(enabled=None, role=None, order=None, direc='asc', page=1, limit=25):
+    """
+    Busca usuarios en la base de datos según los criterios especificados.
+
+    :param active: Estado del usuario (bool) (opcional).
+    :param role: Rol del usuario (opcional).
+    :param order: Campo por el que ordenar (email | insertion_date) (opcional).
+    :param direc: Dirección del ordenamiento (asc | desc) (por defecto: 'asc').
+    :param page: Número de página para paginación (por defecto: 1) CHECKEAR.
+    :param limit: Número máximo de registros por página (por defecto: 25).
+    """
+    if limit <= 0:      #se podria re-pensar si hay que usar excepciones o no
+        raise ValueError("El limite debe ser mayor que 0.")
+    if page <= 0:
+        raise ValueError("La pagina debe ser mayor que 0.")
+
+    users = User.query
+
+    # filtros
+    if enabled is not None:      # filtro por actividad
+        users = users.filter(User.enabled == enabled)
+    if role is not None:        # filtro por rol
+        users = users.filter(User.role == role)     #NO se checkea el rol, si se escribe mal se va a devolver una lista vacia.
+
+    # Ordenamiento
+    if order is not None:
+        if order == 'email':
+            users = users.order_by(User.email.asc() if direc == 'asc' else User.email.desc())
+        elif order == 'insertion_date':
+            users = users.order_by(User.inserted_at.asc() if direc == 'asc' else User.inserted_at.desc())
+
+    # Paginación seleccionando el numero de pagina y el limite de elementos.
+    page_result = users.paginate(page=page, per_page=limit, error_out=False)    # error_out genera un error 404 si esta en true y se genera error de paginacion
+    return page_result.items # Devuelve los resultados o lista vacia si no encuentra nada
+
+def get_user(id: int):      #devuelve un usuario dado un id
+    user = User.query.get(id)
+
+    return user
+
+def get_user_by_email(email: str):      #devuelve un usuario dado un email (el email es unico)
+    user = User.query.filter(User.email == email).first()
+
+    return user # si no encuentra nada devuelve None
 
 def update_user(): 
     db.session.commit()     #solo se hace commit pq el objeto se cambia por afuera??
-    
-    return True         # devuelve true pq ns que devolver
-    
-def delete_user(id: int):
+
+def delete_user(id: int):   # creo que no hace falta excepcion aca
     user = User.query.get(id)
     db.session.delete(user)
     db.session.commit()
 
-    return user     #deberia devolver otra cosa?
+    return user
+
+
+# funcionalidad para activar o desactivar a un usuario.
+
+def block_user(id: int):
+    user = get_user(id)
+    if user is None:
+        raise ValueError("No se encontro un usuario con ese ID") 
+    if user.system_admin == False:
+        user.enabled = False
+    # else se podria hacer algo (excepcion maybe??)
+
+    db.session.commit()
+
+    return user
+
+def unblock_user(id: int) -> User:
+    user = get_user(id)
+    if user is None:
+        raise ValueError("No se encontro un usuario con ese ID")
+    user.enabled = True
+    db.session.commit()
+
+    return user
+
+# funcionalidad para asignar o desasignar un rol a un usuario
+
+def assign_role(id: int, role: str) -> User:
+    user = get_user(id)
+    if user is None:
+        raise ValueError("No se encontro un usuario con ese ID")
+    if user.system_admin == False:
+        user.role = role
+        db.session.commit()
+    #else:
+        # se tira exception??
+
+    return user
+
+def unassign_role(id: int) -> User:
+    user = get_user(id)
+    if user is None:
+        raise ValueError("No se encontro un usuario con ese ID")
+    if user.system_admin == False:
+        user.role = None
+        db.session.commit()
+    #else:
+        # se tira exception??
+
+    return user
+
+# funcionalidad para el seed para crear roles y permisos.
 
 def create_role(**kwargs):
     role = Role(**kwargs)

@@ -13,7 +13,7 @@ class User(db.Model):
     role_id = db.Column(db.BigInteger, db.ForeignKey('roles.id'))
     inserted_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
-    
+
     role = db.relationship('Role', back_populates='users')
 
     def __repr__(self):
