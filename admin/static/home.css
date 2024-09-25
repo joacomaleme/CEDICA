@@ -5,7 +5,8 @@ html{
     background-repeat: repeat;
     font-family: 'Times New Roman', Times, serif;
 }
-button{
+
+.boton {
     height: 30px;
     width: 110px;
     color: #6c584c;
@@ -14,10 +15,8 @@ button{
     border-radius: 12px;
     border-color: #adc178;
 }
+
 button:hover{
     background-color: #f0ead2;
     border-color: #a98467;
-}
-a{
-    color: #78290f;
 }
