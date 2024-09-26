@@ -1,17 +1,31 @@
+const navMenu = document.querySelector(".nav-menu");
+const navLinksMenu = document.querySelector(".nav-links");
+
 const userLogo = document.querySelector(".user-logo");
 const navDropdown = document.querySelector(".nav-dropdown");
 
-// Cuando se cliquea afuera del botón userLogo, se cierra el dropdown
-window.addEventListener("click", (e) => {
-  const tieneClaseUserLogo = e.target.classList.contains("user-logo");
-  if (!tieneClaseUserLogo) hideNavDropdown();
+navMenu.addEventListener("click", () => {
+  navMenu.classList.toggle("open-menu");
+  navLinksMenu.classList.toggle("open");
+  e.stopPropagation(); // Previene el evento de click en window
 });
 
 // Cuando clickeo el botón userLogo se chequea el estado del dropdown
 userLogo.addEventListener("click", (e) => {
   checkNavDropdown();
+  hideLinksMenu(); // Lo cierro manual porque los clicks en window no pasan
   e.stopPropagation(); // Previene el evento de click en window
 });
+
+// Cuando se cliquea afuera del botón userLogo, se cierra el dropdown
+window.addEventListener("click", (e) => {
+  const clases = e.target.classList;
+  const selector = ".nav-menu, .nav-links, menu-bar";
+
+  if (!e.target.matches(selector)) hideLinksMenu();
+  if (!clases.contains("user-logo")) hideNavDropdown();
+});
+
 
 function checkNavDropdown() {
   // Arranca con display none para que no se vea la ejecución de la animación
@@ -33,4 +47,9 @@ function checkNavDropdown() {
 function hideNavDropdown() {
   navDropdown.classList.remove("show");
   navDropdown.classList.add("hidden");
+}
+
+function hideLinksMenu() {
+  navMenu.classList.remove("open-menu");
+  navLinksMenu.classList.remove("open");
 }
