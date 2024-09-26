@@ -29,4 +29,4 @@ class User(db.Model):
         self.role_id = role_id
 
     def __repr__(self):
-        return f'<User #{self.id} alias="{self.alias}" activo="{self.activo}">'
+        return f'<User #{self.id} alias="{self.alias}" activo="{self.enabled}">'

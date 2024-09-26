@@ -59,6 +59,8 @@ def list_users_filtered(enabled=None, role=None, order=None, direc='asc', page=1
 
 def get_user(id: int):      #devuelve un usuario dado un id
     user = User.query.get(id)
+    if User is None:
+        raise ValueError("No se encontro un usuario con ese ID") 
 
     return user
 
@@ -102,7 +104,6 @@ def unblock_user(id: int) -> User:
     return user
 
 # funcionalidad para asignar o desasignar un rol a un usuario
-
 def assign_role(id: int, role: str) -> User:
     user = get_user(id)
     if user is None:
@@ -137,7 +138,7 @@ def has_permission(user: User, permission_name:str) -> bool:    # pensar en hace
 
 """
 #Creacion de un decorator que consulte los permisos para agregarlos a las funciones del CRUD.
-se anota como @permission_required('user_index') (como ejemplo, puede recibir cualquier permiso como param)
+#se anota como @permission_required('user_index') (como ejemplo, puede recibir cualquier permiso como param)
 def permission_required(permission: str):
     #Decorator para verificar si el usuario tiene el permiso necesario.
     def decorator(func):
@@ -151,6 +152,7 @@ def permission_required(permission: str):
         return wrapper
     return decorator
 """
+
 
 
 
