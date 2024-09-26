@@ -9,16 +9,22 @@
 </head>
 <body>
     <nav>
-        <a href="{{ url_for('home') }}">
-            <div class="logo" >
+        <div class="logo" >
+            <a href="{{ url_for('home') }}">
                 <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo CEDICA">
-            </div>
-        </a>
+            </a>
+        </div>
+        <button class="nav-menu">
+            <span class="menu-bar menu-bar-top"></span>
+            <span class="menu-bar menu-bar-middle"></span>
+            <span class="menu-bar menu-bar-bottom"></span>
+        </button>
         <ul class="nav-links">
             <li><a href="#">J&#38;A</a></li>
             <li><a href="#">Ecuestre</a></li>
             <li><a href="#">Equipo</a></li>
         </ul>
+        <div class="gray-background"></div>
         <button class="user-logo">
             <img src="{{ url_for('static', filename='user_logo.png') }}" alt="Logo CEDICA">
         </button>

@@ -1,6 +1,5 @@
 from flask import render_template
 from flask import Blueprint
-from src.model import board
 
 bp = Blueprint("datos_reales", __name__, url_prefix="/dataSecreta")
 
