@@ -1,15 +1,15 @@
 from src.model.database import db
-from .user import User
-from .role import Role
-from .permission import Permission
-from .role_permissions import role_permissions
+from .tables.user import User
+from .tables.role import Role
+from .tables.permission import Permission
+from .tables.role_permissions import role_permissions
 
 # para la administracion de permisos y para hacer el decorator
 from functools import wraps # un decorator que hace que se mantengan los metadatos de la funcion cuando esta siendo decorada, util para debuggear.
 from flask import abort, g
 
 # CRUD 
-
+'''
 def create_user(**kwargs) -> User:  #checkear tema args, se podria pasar un User o una lista definida de atributos
     user = User(**kwargs)
     db.session.add(user)
@@ -126,7 +126,7 @@ def unassign_role(id: int) -> User:
         # se tira exception??
 
     return user
-
+'''#Implementados en user_operations
 
 # funcionalidad para verificar permisos
 
@@ -155,13 +155,15 @@ def permission_required(permission: str):
 
 
 # funcionalidad para el seed para crear roles y permisos.
-
+"""
 def create_role(**kwargs):
     role = Role(**kwargs)
     db.session.add(role)
     db.session.commit()
-
+"""#En role_operations
+"""
 def create_permission(**kwargs):
     permission = Permission(**kwargs)
     db.session.add(permission)
     db.session.commit()
+"""#En permission_operations

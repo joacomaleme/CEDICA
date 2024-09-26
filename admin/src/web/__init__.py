@@ -1,6 +1,5 @@
 from flask import Flask, render_template
 from src.web.handlers import error
-from src.web.config import config
 from src.web.controllers.user_controller import bp as user_bp
 from src.model import database
 from src.model.config import config

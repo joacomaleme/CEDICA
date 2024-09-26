@@ -10,5 +10,8 @@ class Permission(db.Model):
     # relacion N a N, un permiso puede pertenecer a muchos roles y un rol tener muchos permisos
     roles = db.relationship('Role', secondary=role_permissions, back_populates='permissions')
 
+    def __init__(self, name:str):
+        self.name = name
+
     def __repr__(self):
         return f"<Permission {self.name}>"

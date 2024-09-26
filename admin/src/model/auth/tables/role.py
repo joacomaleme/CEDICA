@@ -13,5 +13,8 @@ class Role(db.Model):
     # relacion N a N, un rol tiene muchos permisos y un permiso es tenido por muchos roles
     permissions = db.relationship('Permission', secondary=role_permissions, back_populates='roles') # el atributo back_populates es para indicar que ambas tablas pueden acceder a la otra via atributos y el atributo secondary define una relacion N a N.
 
+    def __init__(self, name:str):
+        self.name = name
+
     def __repr__(self):
         return f"<Role {self.name}>"
