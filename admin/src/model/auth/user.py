@@ -17,4 +17,4 @@ class User(db.Model):
     role = db.relationship('Role', back_populates='users')
 
     def __repr__(self):
-        return f'<User #{self.id} alias="{self.alias}" activo="{self.activo}">'
+        return f'<User #{self.id} alias="{self.alias}" activo="{self.enabled}">'
