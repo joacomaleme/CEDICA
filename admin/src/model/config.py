@@ -1,11 +1,12 @@
+from os import environ
+
 class Config(object):
     SECRET_KEY = "secret"
     TESTING = False
     SESSION_TYPE = "filesystem"
 
-
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = None
+    SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL")
 
 class DevelopmentConfig(Config):
     DB_USER = "postgres"
@@ -17,14 +18,11 @@ class DevelopmentConfig(Config):
         f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     )
 
-
-
 class TestingConfig(Config):
     TESTING = True
 
-
 config = {
-        "development": DevelopmentConfig,
-        "production": ProductionConfig,
-        "testing": TestingConfig,
+    "development": DevelopmentConfig,
+    "production": ProductionConfig,
+    "testing": TestingConfig,
 }
