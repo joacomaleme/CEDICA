@@ -2,17 +2,17 @@ from src.model.database import db
 from ..tables.role import Role
 from ..tables.permission import Permission
 from typing import List, Union
-from copy import deepcopy
+from sqlalchemy.orm.session import make_transient
+
 
 def create_role(name:str) -> Role:
     role = Role(name)
     db.session.add(role)
     db.session.commit()
-    
-    return deepcopy(role)
+    return role.deepcopy() #Explota incluso sin esto
 
 
-def assign_permission(role: Role, permissions: Union[List[Permission], Permission]):
+def assign_permission(real: Role, permissions: Union[List[Permission], Permission]):
     """Asigna uno o más permisos a un rol determinado.
     Args:
         role (Role): Una copia profunda de un rol existente.
@@ -32,5 +32,6 @@ def assign_permission(role: Role, permissions: Union[List[Permission], Permissio
 
     # Añadir el rol actualizado a la sesión y confirmar los cambios.
     db.session.add(real_role)
-    db.session.commit()
+    
+    db.session.commit() #Ahora explota acá
 

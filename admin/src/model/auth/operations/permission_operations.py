@@ -1,6 +1,6 @@
 from src.model.database import db
 from ..tables.permission import Permission
-from copy import deepcopy
+
 
 
 def create_permission(name:str) -> Permission:
@@ -8,4 +8,4 @@ def create_permission(name:str) -> Permission:
     db.session.add(permission)
     db.session.commit()
 
-    return deepcopy(permission)
+    return permission.deepcopy()

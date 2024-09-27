@@ -1,7 +1,8 @@
 from datetime import datetime
 from src.model.database import db
+from .sqla_table import Generic_sql_object
 
-class User(db.Model):
+class User(Generic_sql_object, db.Model):
     __tablename__ = 'users'
     
     id = db.Column(db.BigInteger, primary_key=True)
