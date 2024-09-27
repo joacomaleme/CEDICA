@@ -3,26 +3,29 @@ from ..tables.user import User
 from ..tables.role import Role
 from sqlalchemy.orm  import Query
 from typing import List, Optional
-from sqlalchemy.orm.session import make_transient
 
 
 def create_user(email: str, alias: str, password: str, role_id:Optional[int] = None, enabled:bool = True, system_admin:bool = False) -> User:
     user = User(email, alias, password, role_id, enabled, system_admin)
     db.session.add(user)
     db.session.commit()
-    return user.deepcopy()
+    db.session.expunge(user)
+    return user
 
 def list_users():   # lista TODOS los usuarios (solo usar cuando sea estrictamente necesario)
     users = User.query.all()
-    return [user.deepcopy() for user in users] # puede devolver una lista vacia
+    [db.session.expunge(user) for user in users.items]
+    return users # puede devolver una lista vacia
 
 def get_user(id: int):      #devuelve un usuario dado un id
     user = User.query.get(id)
-    return user.deepcopy() # si no encuentra nada devuelve None
+    db.session.expunge(user)
+    return user # si no encuentra nada devuelve None
 
 def get_user_by_email(email: str):      #devuelve un usuario dado un email (el email es unico)
     user = User.query.filter(User.email == email).first()
-    return user.deepcopy() # si no encuentra nada devuelve None
+    db.session.expunge(user)
+    return user # si no encuentra nada devuelve None
 
 def __update_user__(to_update: User) -> User:
     user = User.query.get(to_update.id)
@@ -34,9 +37,9 @@ def __update_user__(to_update: User) -> User:
     user.enabled = to_update.enabled if to_update.enabled is not None else user.enabled
     user.system_admin = to_update.system_admin if to_update.system_admin is not None else user.system_admin
     user.role = to_update.role #debería en vez solo copiar la foreign key? En el video lo hacen así
-    db.session.add(user)
     db.session.commit()
-    return user.deepcopy()
+    db.session.expunge(user)
+    return user
 
 def delete_user(id: int):   # creo que no hace falta excepcion aca
     user = User.query.get(id)
@@ -53,11 +56,11 @@ def toggle_block(id: int) -> User:
         raise ValueError("No se encontro un usuario con ese ID") 
     if user.system_admin == False:
         user.enabled = not user.enabled
-        db.session.add(user)
         db.session.commit()
     else:
         raise PermissionError("No se permite bloquear a administradores del sistema")
-    return user.deepcopy()
+    db.session.expunge(user)
+    return user
 
 def assign_role(id: int, role: Optional[Role] = None) -> User: #Enviar role = None o sin parametro para remover rol.
     user = User.query.get(id)
@@ -65,11 +68,11 @@ def assign_role(id: int, role: Optional[Role] = None) -> User: #Enviar role = No
         raise ValueError("No se encontro un usuario con ese ID")
     if user.system_admin == False:
         user.role = role
-        db.session.add(user)
         db.session.commit()
     else:
         raise PermissionError("No se permite asignar roles a administradores del sistema")
-    return user.deepcopy()
+    db.session.expunge(user)
+    return user
 
 ###INSTRUCCIONES DE LISTADO ESPECÍFICAS
 
@@ -88,9 +91,10 @@ def search_by_mail(users:Query, email:str = "") -> Query:
 def get_filtered_list(page:int, limit:int = 25, show_enabled:bool = True, show_disabled:bool = True, roles:List[Role] = [], sort_attr:str = "email", ascending:bool = True, search_mail:str = ""):
     if roles == []:
         roles = Role.query.all()
-    return [user.deepcopy() for user in\
-                search_by_mail(\
+    user_list = search_by_mail(\
                     sorted_by_attribute(\
                         filter_rol(\
                             filter_active(User.query, show_enabled, show_disabled), roles), sort_attr, ascending), search_mail)\
-                                .paginate(page=page, per_page=limit, error_out=False)]
+                                .paginate(page=page, per_page=limit, error_out=False)
+    [db.session.expunge(user) for user in user_list.items]
+    return user_list

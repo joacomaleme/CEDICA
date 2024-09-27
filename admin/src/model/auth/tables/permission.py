@@ -1,8 +1,8 @@
 from src.model.database import db
 from .role_permissions import role_permissions
-from .sqla_table import Generic_sql_object
 
-class Permission(Generic_sql_object,db.Model):
+
+class Permission(db.Model):
     __tablename__ = 'permissions'
 
     id = db.Column(db.BigInteger, primary_key=True)

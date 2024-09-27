@@ -4,6 +4,7 @@ class Config(object):
     SECRET_KEY = "secret"
     TESTING = False
     SESSION_TYPE = "filesystem"
+    
 
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL")
