@@ -1,11 +1,12 @@
 from src.model.database import db
 from ..tables.user import User
 from ..tables.role import Role
+from sqlalchemy.orm  import Query
 from copy import deepcopy
-from flask_sqlalchemy import Query
-from typing import List
+from typing import List, Optional
 
-def create_user(email: str, alias: str, password: str, role_id:int = None, enabled:bool = True, system_admin:bool = False) -> User:
+
+def create_user(email: str, alias: str, password: str, role_id:Optional[int] = None, enabled:bool = True, system_admin:bool = False) -> User:
     user = User(email, alias, password, role_id, enabled, system_admin)
     db.session.add(user)
     db.session.commit()
@@ -59,13 +60,13 @@ def toggle_block(id: int) -> User:
         raise PermissionError("No se permite bloquear a administradores del sistema")
     return deepcopy(user)
 
-def assign_role(id: int, role: Role = None) -> User: #Enviar role = None o sin parametro para remover rol.
+def assign_role(id: int, role: Optional[Role] = None) -> User: #Enviar role = None o sin parametro para remover rol.
     user = User.query.get(id)
     if user is None:
         raise ValueError("No se encontro un usuario con ese ID")
     if user.system_admin == False:
         user.role = role
-        db.session.add()
+        db.session.add(user)
         db.session.commit()
     else:
         raise PermissionError("No se permite asignar roles a administradores del sistema")
@@ -73,19 +74,21 @@ def assign_role(id: int, role: Role = None) -> User: #Enviar role = None o sin p
 
 ###INSTRUCCIONES DE LISTADO ESPECÍFICAS
 
-def sorted_by_attribute(users:Query, attribute:str = "email", ascending:bool = True) -> Query:
+def sorted_by_attribute(users: Query, attribute:str = "email", ascending:bool = True) -> Query:
     return users.order_by(getattr(User, attribute).asc() if ascending else getattr(User, users).desc()) #Solo enviar parametros "email" o "inserted_at"
 
 def filter_active(users:Query, show_enabled:bool = True, show_disabled:bool = True) -> Query:
     return users.filter(db.or_((User.enabled == show_enabled), (User.enabled == (not show_disabled))))
 
-def filter_rol(users:Query, roles:List[Role] = [Role.query.all()]) -> Query:
+def filter_rol(users:Query, roles:List[Role]) -> Query:
     return users.filter(User.role.id.in_(role.id for role in roles))
 
 def search_by_mail(users:Query, email:str = "") -> Query:
     return users.filter(User.email.ilike(f"%{email}%"))
 
-def get_filtered_list(page:int, limit:int = 25, show_enabled:bool = True, show_disabled:bool = True, roles:List[Role] = [Role.query.all()], sort_attr:str = "email", ascending:bool = True, search_mail:str = ""):
+def get_filtered_list(page:int, limit:int = 25, show_enabled:bool = True, show_disabled:bool = True, roles:List[Role] = [], sort_attr:str = "email", ascending:bool = True, search_mail:str = ""):
+    if roles == []:
+        roles = Role.query.all()
     return search_by_mail(\
         sorted_by_attribute(\
             filter_rol(\
