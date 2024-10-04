@@ -1,0 +1,47 @@
+.flash {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    max-width: 400px;
+    color: #fff;
+    text-align: center;
+}
+
+.flash.success {
+    background-color: #4CAF50;
+    border-left: 5px solid #388E3C;
+}
+
+.flash.error {
+    background-color: #F44336;
+    border-left: 5px solid #D32F2F;
+}
+
+.flash.warning {
+    background-color: #FF9800;
+    border-left: 5px solid #F57C00;
+}
+
+.flash.info {
+    background-color: #2196F3;
+    border-left: 5px solid #1976D2;
+}
+
+.flash .close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+    color: #fff;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.flash.fade-out {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+}
