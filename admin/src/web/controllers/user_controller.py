@@ -1,6 +1,7 @@
 from flask import render_template
 from flask import Blueprint
-from admin.src.model.auth.Operations import user_operations
+from src.model.auth.operations import user_operations
+
 
 bp = Blueprint("user", __name__, url_prefix="/usuarios")
 

@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()
+db = SQLAlchemy(session_options={'expire_on_commit': False})
 
 
 def init_app(app):
@@ -22,7 +22,6 @@ def config(app):
     @app.teardown_appcontext
     def close_session(exception=None):
         db.session.close()
-
     return app
 
 

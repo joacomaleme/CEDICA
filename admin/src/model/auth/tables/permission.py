@@ -1,6 +1,7 @@
 from src.model.database import db
 from .role_permissions import role_permissions
 
+
 class Permission(db.Model):
     __tablename__ = 'permissions'
 
