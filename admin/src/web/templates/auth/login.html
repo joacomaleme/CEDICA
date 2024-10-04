@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block Title %} Login {% endblock %}
+{% block title %} Inicia Sesión - CEDICA {% endblock %}
 
 
 {% block head %}
@@ -11,7 +11,10 @@
 {% block content %}
 <section>
     <h1>Iniciar sesión</h1>
-    <form action=""></form>
+    <form action="{{ url_for('auth.authenticate')}}" method="POST">
+        <input name="email" placeholder="Correo" type="email" required>
+        <input name="password" placeholder="Contraseña" type="password" required>
+        <input type="submit" value="Submit">
+    </form>
 </section>
 {% endblock %}
-    

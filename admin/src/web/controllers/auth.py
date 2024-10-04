@@ -1,15 +1,32 @@
 from flask import Blueprint
+from flask import render_template
+from flask import request
+from flask import url_for
+from flask import session
+from flask import redirect
+from flask import flash
+from src.model.auth.operations import user_operations
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
-bp.get("")
+@bp.get("/")
 def login():
     return render_template("auth/login.html")
 
-bp.post("/authenticate")
+@bp.post("/authenticate")
 def authenticate():
-    pass
+    params = request.form
 
-bp.get("/logout")
+    user = user_operations.authenticate_user(params["email"], params["password"])
+    
+    if not user:
+        flash('Credenciales incorrectas', 'error')
+        return redirect(url_for("auth.login"))
+
+    session["user"] = user.email
+    flash('Sesión iniciada con éxito', 'success')
+    return redirect(url_for("home"))
+
+@bp.get("/logout")
 def logout():
     pass
