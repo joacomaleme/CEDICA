@@ -22,19 +22,27 @@
             <span class="menu-bar menu-bar-bottom"></span>
         </button>
         <ul class="nav-links">
+            <li><a href="{{ url_for('home') }}">Inicio</a></li>
             <li><a href="#">J&#38;A</a></li>
             <li><a href="#">Ecuestre</a></li>
             <li><a href="#">Equipo</a></li>
         </ul>
         <div class="gray-background"></div>
-        <button class="user-logo">
-            <img src="{{ url_for('static', filename='user_logo.png') }}" alt="Logo CEDICA">
-        </button>
+        {% if is_authenticated(session) %}
+            <button class="user-logo">
+                <img src="{{ url_for('static', filename='user_logo.png') }}" alt="Logo CEDICA">
+            </button>
+
+        {% else %}
+            <button class="login-btn">
+                <a href="{{ url_for('auth.login') }}">Iniciar Sesión</a>
+            </button>
+        {% endif %}
         <div class="nav-dropdown display-none">
             <ul>
                 <li><a href="#">Perfil</a></li>
-                <li><a href="#">Cerrar sesión</a></li>
-            </ul>   
+                <li><a href="{{ url_for('auth.logout') }}">Cerrar sesión</a></li>
+            </ul>
         </div>
     </nav>
     <main>
