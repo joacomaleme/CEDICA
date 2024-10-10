@@ -1,5 +1,5 @@
 from src.model.database import db
-from ..tables.permission import Permission
+from src.model.auth.tables.permission import Permission
 
 
 def create_permission(name:str) -> Permission:

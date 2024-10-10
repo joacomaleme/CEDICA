@@ -1,8 +1,8 @@
 from src.model.database import db
-from .tables.user import User
-from .tables.role import Role
-from .tables.permission import Permission
-from .tables.role_permissions import role_permissions
+from src.model.auth.tables.user import User
+from src.model.auth.tables.role import Role
+from src.model.auth.tables.permission import Permission
+from src.model.auth.tables.role_permissions import role_permissions
 
 # para la administracion de permisos y para hacer el decorator
 from functools import wraps # un decorator que hace que se mantengan los metadatos de la funcion cuando esta siendo decorada, util para debuggear.
