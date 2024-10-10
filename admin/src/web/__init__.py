@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from flask_session import Session
+from src.model.encrypt import bcrypt
 from src.web.handlers import error
 from src.web.controllers.user_controller import bp as user_bp
 from src.web.controllers.auth import bp as auth_bp
@@ -17,6 +18,9 @@ def create_app(env="development", static_folder="../../static"):
     app.config.from_object(config[env])
     database.init_app(app)
     session.init_app(app)
+
+    #ENCRIPTACIÓN
+    bcrypt.init_app(app)
     
     #ROUTES, BLUEPRINTS, Y HANDLERS
     @app.route("/")
@@ -27,6 +31,7 @@ def create_app(env="development", static_folder="../../static"):
     app.register_blueprint(auth_bp)
     #---
     app.register_error_handler(404, error.error_not_found)
+    app.register_error_handler(401, error.error_unauthorized)
     #---
 
     # Registro funciones en jinja

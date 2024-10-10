@@ -1,4 +1,5 @@
 from src.model.database import db
+from src.model.encrypt import bcrypt
 from src.model.auth.tables.user import User
 from src.model.auth.tables.role import Role
 from sqlalchemy.orm  import Query
@@ -6,7 +7,7 @@ from typing import List, Optional
 
 
 def create_user(email: str, alias: str, password: str, role_id:Optional[int] = None, enabled:bool = True, system_admin:bool = False) -> User:
-    user = User(email, alias, password, role_id, enabled, system_admin)
+    user = User(email, alias, bcrypt.generate_password_hash(password.encode("utf-8")).decode("utf-8"), role_id, enabled, system_admin)
     db.session.add(user)
     db.session.commit()
     db.session.expunge(user)
@@ -30,10 +31,10 @@ def get_user_by_email(email: str) -> User:      #devuelve un usuario dado un ema
     return user # si no encuentra nada devuelve None
 
 def authenticate_user(email: str, password: str) -> User:
-    user = User.query.filter(db.and_(User.email == email, User.password == password)).first()
-    if user:
-        db.session.expunge(user)
-    return user
+    user = get_user_by_email(email)
+    if user and bcrypt.check_password_hash(user.password, password):
+        return user
+    return None
     
 
 def __update_user__(to_update: User) -> User:

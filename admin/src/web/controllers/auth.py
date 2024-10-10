@@ -17,7 +17,7 @@ def login():
 def authenticate():
     params = request.form
 
-    user = user_operations.authenticate_user(params["email"], params["password"])
+    user = user_operations.authenticate_user(params["email"], str(params["password"]))
     
     if not user:
         flash('Credenciales incorrectas', 'error')
@@ -28,8 +28,15 @@ def authenticate():
 
     session["user"] = user.email
     flash('Sesión iniciada con éxito', 'success')
-    return redirect(url_for("home"))
+    return redirect(url_for("user.index"))
 
 @bp.get("/logout")
 def logout():
-    pass
+    if session.get("user"):
+        del session["user"]
+        session.clear()
+        flash("Sesión cerrada correctamente", "info")
+    else:
+        ("No se hayó ninguna sesión activa", "error")
+    
+    return redirect(url_for("auth.login"))
