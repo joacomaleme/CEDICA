@@ -15,6 +15,7 @@ class User(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
     role = db.relationship('Role', back_populates='users')
+    pagos = db.relationship('Pago', back_populates='beneficiario')
 
     __table_args__ = (
         db.Index('idx_user_role', 'role_id'),
