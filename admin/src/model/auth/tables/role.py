@@ -1,5 +1,5 @@
 from src.model.database import db
-from .role_permissions import role_permissions
+from src.model.auth.tables.role_permissions import role_permissions
 
 
 class Role(db.Model):

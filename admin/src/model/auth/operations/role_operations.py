@@ -1,6 +1,6 @@
 from src.model.database import db
-from ..tables.role import Role
-from ..tables.permission import Permission
+from src.model.auth.tables.role import Role
+from src.model.auth.tables.permission import Permission
 from typing import List, Union
 
 

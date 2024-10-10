@@ -1,6 +1,6 @@
 from src.model.database import db
-from ..tables.user import User
-from ..tables.role import Role
+from src.model.auth.tables.user import User
+from src.model.auth.tables.role import Role
 from sqlalchemy.orm  import Query
 from typing import List, Optional
 

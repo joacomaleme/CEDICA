@@ -1,21 +1,29 @@
 from src.model.auth.operations import permission_operations as permissions
 from src.model.auth.operations import role_operations as roles
 from src.model.auth.operations import user_operations as users
+from src.model.registros.operations import pago_operations as pagos
+from src.model.registros.operations import tipo_pago_operations as tipos_pago
 from src.model import auth
 
+from datetime import datetime
+
 def run():
-    # Creado de permisos
-    user_index = permissions.create_permission(name='user_index')
-    user_new = permissions.create_permission(name='user_new')
-    user_destroy = permissions.create_permission(name='user_destroy')
-    user_update = permissions.create_permission(name='user_update')
-    user_show = permissions.create_permission(name='user_show')
+    ############
+    # Usuarios #
+    ############
 
     # Creado de roles
     rol_tecnica = roles.create_role(name='Tecnica')
     rol_ecuestre = roles.create_role(name='Ecuestre')
     rol_voluntariado = roles.create_role(name='Voluntariado')
     rol_administracion = roles.create_role(name='Administracion')
+
+    # Creado de permisos
+    user_index = permissions.create_permission(name='user_index')
+    user_new = permissions.create_permission(name='user_new')
+    user_destroy = permissions.create_permission(name='user_destroy')
+    user_update = permissions.create_permission(name='user_update')
+    user_show = permissions.create_permission(name='user_show')
 
     # Asignacion de permisos a roles
     roles.assign_permission(rol_tecnica, [user_index, user_show])
@@ -29,3 +37,28 @@ def run():
     user2 = users.create_user(alias='Martin', password=123, email='martin@gmail.com', enabled=True, role_id=1)
     user3 = users.create_user(alias='Sofia', password=123, email='sofia@gmail.com', enabled=True, role_id=2)
     user4 = users.create_user(alias='Pedro', password=123, email='pedro@gmail.com', enabled=True, role_id=3)
+
+    #####################
+    # REGISTRO DE PAGOS #
+    #####################
+
+    # Creado de permisos
+    tipo_pago_index = permissions.create_permission(name='tipo_pago_index')
+    tipo_pago_new = permissions.create_permission(name='tipo_pago_new')
+    tipo_pago_destroy = permissions.create_permission(name='tipo_pago_destroy')
+    tipo_pago_update = permissions.create_permission(name='tipo_pago_update')
+    tipo_pago_show = permissions.create_permission(name='tipo_pago_show')
+
+    # Asignacion de permisos a roles
+    roles.assign_permission(rol_administracion, [tipo_pago_index, tipo_pago_show, tipo_pago_update, tipo_pago_new, tipo_pago_destroy])
+
+    # Creado de tipos de pago
+    tipo_pago_honorarios = tipos_pago.create_tipo_pago("Honorarios")
+    tipo_pago_proveedor = tipos_pago.create_tipo_pago("Proveedor")
+    tipo_pago_gastos_varios = tipos_pago.create_tipo_pago("Gastos Varios")
+
+    # Creado de pagos
+    pagos.create_pago(beneficiario=user1, monto=5000, fecha_pago=datetime(2024, 9, 10), descripcion="Pago realizado", tipo_pago=tipo_pago_honorarios)
+    pagos.create_pago(beneficiario=user1, monto=7200, fecha_pago=datetime.now(), descripcion="El pago fue exitoso", tipo_pago=tipo_pago_gastos_varios)
+    pagos.create_pago(beneficiario=user3, monto=1300, fecha_pago=datetime(2024, 9, 15), descripcion="Un muy buen pago", tipo_pago=tipo_pago_honorarios)
+    pagos.create_pago(beneficiario=user4, monto=10200.50, fecha_pago=datetime(1999, 2, 20), descripcion="Pago de un proveedor", tipo_pago=tipo_pago_proveedor)
