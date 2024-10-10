@@ -27,5 +27,5 @@ def run():
     
     user1 = users.create_user(alias='Juan', password=123, email='juan@gmail.com', enabled=True, system_admin=True)
     user2 = users.create_user(alias='Martin', password=123, email='martin@gmail.com', enabled=True, role_id=1)
-    user3 = users.create_user(alias='Sofia', password=123, email='sofia@gmail.com', enabled=True, role_id=2)
+    user3 = users.create_user(alias='Sofia', password=123, email='sofia@gmail.com', enabled=False, role_id=2)
     user4 = users.create_user(alias='Pedro', password=123, email='pedro@gmail.com', enabled=True, role_id=3)

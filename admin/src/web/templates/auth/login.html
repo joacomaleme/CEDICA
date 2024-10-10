@@ -37,7 +37,16 @@
             var passwordError = document.getElementById("password-error");
             
             emailField.addEventListener("input", validateEmail);
+            emailField.addEventListener("focus", validateEmail);
             passwordField.addEventListener("input", validatePassword);
+            passwordField.addEventListener("focus", validatePassword);
+
+            if (emailField.value) {
+                validateEmail();
+            }
+            if (passwordField.value) {
+                validatePassword();
+            }
 
             function validateEmail(){
                 emailLabel.style.top = "-0.2rem";
@@ -51,6 +60,7 @@
                 else{
                     emailError.innerHTML = "";
                     emailField.style.borderBottomColor = "green";
+                    emailError.style.top = "50%";
                     return true;
                 }
             }
@@ -73,6 +83,7 @@
                     }
                     else{
                         passwordError.innerHTML = "";
+                        passwordError.style.top = "50%";
                         passwordField.style.borderBottomColor = "green";
                         return true;
                     }

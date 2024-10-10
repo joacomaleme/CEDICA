@@ -22,6 +22,9 @@ def authenticate():
     if not user:
         flash('Credenciales incorrectas', 'error')
         return redirect(url_for("auth.login"))
+    if not user.enabled:
+        flash('Su cuenta se haya suspendida en este momento', 'error')
+        return redirect(url_for("auth.login"))
 
     session["user"] = user.email
     flash('Sesión iniciada con éxito', 'success')
