@@ -9,7 +9,7 @@ class TipoPago(db.Model):
     # relacion 1 a N, un pago tiene un unico tipo y un tipo muchos pagos
     pagos = db.relationship('Pago', back_populates='tipo_pago')
 
-    def __init__(self, name:str):
+    def __init__(self, name: str):
         self.name = name
 
     def __repr__(self):
