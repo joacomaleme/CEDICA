@@ -15,7 +15,7 @@ class User(db.Model):
 
     # Relaciones con las tablas de roles y pagos
     role = db.relationship('Role', back_populates='users')
-    pagos = db.relationship('Pago', back_populates='beneficiario')
+    payments = db.relationship('Payment', back_populates='beneficiary')
 
     __table_args__ = (
         db.Index('idx_user_role', 'role_id'),

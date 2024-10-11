@@ -10,7 +10,7 @@ class Employee(db.Model):
     id = db.Column(db.BigInteger, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     surname = db.Column(db.String(100), nullable=False)
-    dni = db.Column(db.String(16), unique=True, nullable=False)
+    dni = db.Column(db.Int, unique=True, nullable=False)
     address = db.Column(db.String(255), nullable=False)       # podria ser otra tabla
     email = db.Column(db.String(120), unique=True, nullable=False)
     locality = db.Column(db.String(100), nullable=False)    # podria ser otra tabla
@@ -42,11 +42,16 @@ class Employee(db.Model):
     # Relación con la documentación complementaria
     documents = db.relationship('Document', backref='employee', lazy=True)
 
-    def __init__(self, name, surname, dni, address, email, locality, phone,
-                 profession_id, job_position_id, start_date=datetime.now(),
-                 end_date=None, emergency_contact_name='', emergency_contact_phone='',
-                 obra_social=None, affiliate_number=None, is_volunteer=False, enabled=True,
-                 user_id=None):
+
+    def __init__(self, 
+             name: str, surname: str, 
+             dni: int, address: str, 
+             email: str, locality: str, 
+             phone: str, profession_id: int, 
+             job_position_id: int, emergency_contact_name: str,
+             emergency_contact_phone: str, obra_social: str, 
+             affiliate_number: str, is_volunteer: bool = False,
+             enabled: bool = True, user_id=None):
         self.name = name
         self.surname = surname
         self.dni = dni
@@ -56,8 +61,6 @@ class Employee(db.Model):
         self.phone = phone
         self.profession_id = profession_id
         self.job_position_id = job_position_id
-        self.start_date = start_date
-        self.end_date = end_date
         self.emergency_contact_name = emergency_contact_name
         self.emergency_contact_phone = emergency_contact_phone
         self.obra_social = obra_social

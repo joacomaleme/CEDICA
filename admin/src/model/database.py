@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
 
 db = SQLAlchemy(session_options={'expire_on_commit': False})
 
@@ -30,7 +31,9 @@ def reset():
     Resetea la base de datos.
     """
     print("Eliminando base de datos...")
-    db.drop_all()
+    db.session.execute(text('DROP TABLE IF EXISTS users CASCADE;'))
+    db.session.commit()
+    db.drop_all()  # Drop other tables
     print("Creando base nuevamente...")
     db.create_all()
     print("Done!")

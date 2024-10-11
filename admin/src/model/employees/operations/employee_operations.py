@@ -8,8 +8,9 @@ from datetime import datetime
 
 def create_employee(name: str, surname: str, dni: int, address: str, email: str, locality: str, phone: str, profession_id: int, job_position_id: int, 
                     emergency_contact_name: str, emergency_contact_phone: str, obra_social: str, affiliate_number: str, is_volunteer: bool,
-                    enabled: bool = True, start_date: datetime = datetime.now(), end_date: datetime = None) -> Employee:
-    employee = Employee(name, surname, dni, address, email, locality, phone, profession_id, job_position_id, start_date, end_date, emergency_contact_name, emergency_contact_phone, obra_social, affiliate_number, is_volunteer, enabled)
+                    enabled: bool = True, user_id = None) -> Employee:
+    employee = Employee(name, surname, dni, address, email, locality, phone, profession_id, job_position_id, emergency_contact_name,
+                        emergency_contact_phone, obra_social, affiliate_number, is_volunteer, enabled, user_id)
     db.session.add(employee)
     db.session.commit()
     db.session.expunge(employee)
