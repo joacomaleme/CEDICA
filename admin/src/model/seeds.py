@@ -1,8 +1,12 @@
 from src.model.auth.operations import permission_operations as permissions
 from src.model.auth.operations import role_operations as roles
 from src.model.auth.operations import user_operations as users
+
 from src.model.registros.operations import pago_operations as pagos
 from src.model.registros.operations import tipo_pago_operations as tipos_pago
+
+from src.model.registros.operations import cobro_operations as cobros
+from src.model.registros.operations import medio_pago_operations as medios_pago
 from src.model import auth
 
 from datetime import datetime
@@ -43,22 +47,48 @@ def run():
     #####################
 
     # Creado de permisos
-    tipo_pago_index = permissions.create_permission(name='tipo_pago_index')
-    tipo_pago_new = permissions.create_permission(name='tipo_pago_new')
-    tipo_pago_destroy = permissions.create_permission(name='tipo_pago_destroy')
-    tipo_pago_update = permissions.create_permission(name='tipo_pago_update')
-    tipo_pago_show = permissions.create_permission(name='tipo_pago_show')
+    pago_index = permissions.create_permission(name='pago_index')
+    pago_new = permissions.create_permission(name='pago_new')
+    pago_destroy = permissions.create_permission(name='pago_destroy')
+    pago_update = permissions.create_permission(name='pago_update')
+    pago_show = permissions.create_permission(name='pago_show')
 
     # Asignacion de permisos a roles
-    roles.assign_permission(rol_administracion, [tipo_pago_index, tipo_pago_show, tipo_pago_update, tipo_pago_new, tipo_pago_destroy])
+    roles.assign_permission(rol_administracion, [pago_index, pago_new, pago_destroy, pago_update, pago_show])
 
     # Creado de tipos de pago
-    tipo_pago_honorarios = tipos_pago.create_tipo_pago("Honorarios")
-    tipo_pago_proveedor = tipos_pago.create_tipo_pago("Proveedor")
-    tipo_pago_gastos_varios = tipos_pago.create_tipo_pago("Gastos Varios")
+    tipos_pago.create_tipo_pago("Honorarios")
+    tipos_pago.create_tipo_pago("Proveedor")
+    tipos_pago.create_tipo_pago("Gastos Varios")
 
     # Creado de pagos
-    pagos.create_pago(beneficiario=user1, monto=5000, fecha_pago=datetime(2024, 9, 10), descripcion="Pago realizado", tipo_pago=tipo_pago_honorarios)
-    pagos.create_pago(beneficiario=user1, monto=7200, fecha_pago=datetime.now(), descripcion="El pago fue exitoso", tipo_pago=tipo_pago_gastos_varios)
-    pagos.create_pago(beneficiario=user3, monto=1300, fecha_pago=datetime(2024, 9, 15), descripcion="Un muy buen pago", tipo_pago=tipo_pago_honorarios)
-    pagos.create_pago(beneficiario=user4, monto=10200.50, fecha_pago=datetime(1999, 2, 20), descripcion="Pago de un proveedor", tipo_pago=tipo_pago_proveedor)
+    pagos.create_pago(beneficiario_id=1, monto=5000, fecha_pago=datetime(2024, 9, 10), descripcion="Pago realizado", tipo_pago_id=1)
+    pagos.create_pago(beneficiario_id=1, monto=7200, fecha_pago=datetime.now(), descripcion="El pago fue exitoso", tipo_pago_id=3)
+    pagos.create_pago(beneficiario_id=2, monto=1300, fecha_pago=datetime(2024, 9, 15), descripcion="Un muy buen pago", tipo_pago_id=1)
+    pagos.create_pago(beneficiario_id=4, monto=10200.50, fecha_pago=datetime(1999, 2, 20), descripcion="Pago de un proveedor", tipo_pago_id=2)
+
+    ######################
+    # REGISTRO DE COBROS #
+    ######################
+
+    # Creado de permisos
+    cobro_index = permissions.create_permission(name='cobro_index')
+    cobro_new = permissions.create_permission(name='cobro_new')
+    cobro_destroy = permissions.create_permission(name='cobro_destroy')
+    cobro_update = permissions.create_permission(name='cobro_update')
+    cobro_show = permissions.create_permission(name='cobro_show')
+
+    # Asignacion de permisos a roles
+    roles.assign_permission(rol_administracion, [cobro_index, cobro_new, cobro_destroy, cobro_update, cobro_show])
+    roles.assign_permission(rol_tecnica, [cobro_index, cobro_show])
+
+    # Creado de medios de pago
+    medios_pago.create_medio_pago("Efectivo")
+    medios_pago.create_medio_pago("Tarjeta de Crédito")
+    medios_pago.create_medio_pago("Tarjeta de Débito")
+
+    # Creado de cobros
+    cobros.create_cobro(monto=200, fecha_pago=datetime.now(), observaciones="Un buen cobro", recibe_dinero_id=1, medio_pago_id=1, jinete_y_amazona_id=2)
+    cobros.create_cobro(monto=700, fecha_pago=datetime(2024, 8, 10), observaciones="Gran cobro", recibe_dinero_id=2, medio_pago_id=3, jinete_y_amazona_id=1)
+    cobros.create_cobro(monto=150, fecha_pago=datetime(2024, 1, 20), observaciones="No solucinado", recibe_dinero_id=2, medio_pago_id=2, jinete_y_amazona_id=3)
+    cobros.create_cobro(monto=1200, fecha_pago=datetime(1998, 9, 15), observaciones="El último", recibe_dinero_id=4, medio_pago_id=2, jinete_y_amazona_id=1)

@@ -7,27 +7,27 @@ from sqlalchemy import desc
 from typing import List, Optional
 from datetime import datetime
 
-def create_pago(beneficiario, monto: float, fecha_pago: datetime, descripcion: str, tipo_pago: TipoPago) -> Pago:
+def create_pago(beneficiario_id: int, monto: float, fecha_pago: datetime, descripcion: str, tipo_pago_id: int) -> Pago:
     """
     Crea un nuevo pago (Pago), lo agrega a la base de datos y retorna el objeto expurgado.
 
     Parámetros:
-    beneficiario : EMPLEADO
-        El nombre del beneficiario del pago.
+    beneficiario : int
+        El id del beneficiario del pago.
     monto : float
         El monto del pago.
     fecha_pago : datetime
         La fecha en la que se realizó el pago.
     descripcion : str
         Descripción del pago.
-    tipo_pago : TipoPago
-        El tipo de pago asociado.
+    tipo_pago : int
+        El id del tipo de pago asociado.
 
     Retorna:
     Pago
         El objeto Pago recién creado y expurgado.
     """
-    pago = Pago(beneficiario, monto, fecha_pago, descripcion, tipo_pago)
+    pago = Pago(beneficiario_id, monto, fecha_pago, descripcion, tipo_pago_id)
     db.session.add(pago)
     db.session.commit()
     db.session.expunge(pago)
@@ -85,11 +85,11 @@ def update_pago(to_update: Pago) -> Pago:
     if pago is None:
         raise ValueError("No se encontró un pago con ese ID")
     
-    pago.beneficiario = to_update.beneficiario
+    pago.beneficiario_id = to_update.beneficiario_id
     pago.monto = to_update.monto or pago.monto
     pago.fecha_pago = to_update.fecha_pago or pago.fecha_pago
     pago.descripcion = to_update.descripcion or pago.descripcion
-    pago.tipo_pago = to_update.tipo_pago
+    pago.tipo_pago_id = to_update.tipo_pago_id
 
     db.session.commit()
     db.session.expunge(pago)
