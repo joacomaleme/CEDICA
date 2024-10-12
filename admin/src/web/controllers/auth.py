@@ -7,7 +7,7 @@ from flask import redirect
 from flask import flash
 from src.model.auth.operations import user_operations
 from src.model.auth.operations import role_operations
-from src.web.controllers import permission_required
+from src.web.handlers.check_permissions import permission_required
 import dns.resolver
 import re
 
