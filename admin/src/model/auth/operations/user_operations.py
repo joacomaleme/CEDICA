@@ -7,7 +7,8 @@ from typing import List, Optional
 
 
 def create_user(email: str, alias: str, password: str, role_id:Optional[int] = None, enabled:bool = True) -> User:
-    user = User(email, alias, password, role_id, enabled)
+    user = User(email, alias, bcrypt.generate_password_hash(password.encode("utf-8")).decode("utf-8"), role_id, enabled)
+    db.session.add(user)
     db.session.add(user)
     db.session.commit()
     db.session.expunge(user)
@@ -29,6 +30,12 @@ def get_user_by_email(email: str) -> User:      #devuelve un usuario dado un ema
     if user:
         db.session.expunge(user)
     return user # si no encuentra nada devuelve None
+
+def get_user_by_alias(alias: str) -> User:
+    user = User.query.filter(User.alias == alias).first()
+    if user:
+        db.session.expunge(user)
+    return user
 
 def authenticate_user(email: str, password: str) -> User:
     user = get_user_by_email(email)

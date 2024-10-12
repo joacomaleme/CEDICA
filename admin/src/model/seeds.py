@@ -13,7 +13,7 @@ def run():
     ############
 
     # Creado de roles
-    system_admin = roles.create_role(name='system_admin')
+    system_admin = roles.create_role(name='Administrador de Sistema')
     rol_tecnica = roles.create_role(name='Tecnica')
     rol_ecuestre = roles.create_role(name='Ecuestre')
     rol_voluntariado = roles.create_role(name='Voluntariado')
@@ -41,9 +41,9 @@ def run():
     roles.assign_permission(rol_administracion, [user_index, user_new, user_update, user_show, employee_index, employee_new, employee_destroy, employee_show, employee_update])
 
     user1 = users.create_user(alias='Juan', password='123a', email='juan@gmail.com', enabled=True)
-    user2 = users.create_user(alias='Martin', password='123a', email='martin@gmail.com', enabled=False, role_id=1)
+    user2 = users.create_user(alias='Martin', password='123a', email='martin@gmail.com', enabled=True, role_id=1)
     user3 = users.create_user(alias='Sofia', password='123a', email='sofia@gmail.com', enabled=True, role_id=2)
-    user4 = users.create_user(alias='Pedro', password='123a', email='pedro@gmail.com', enabled=True, role_id=3)
+    user4 = users.create_user(alias='Pedro', password='123a', email='pedro@gmail.com', enabled=False, role_id=3)
 
     #####################
     # REGISTRO DE PAGOS #
