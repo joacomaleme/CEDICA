@@ -16,5 +16,8 @@ class JobPosition(db.Model):
     # Relación inversa con Employee
     employees = db.relationship('Employee', backref='job_position', lazy=True)
 
+    def __init__(self, name: str):
+        self.name = name
+
     def __repr__(self):
-        return f'<PuestoLaboral {self.nombre}>'
+        return f'<PuestoLaboral {self.name}>'

@@ -4,10 +4,12 @@ from src.model.employees.tables.employee import Employee
 from src.model.auth.tables.role import Role
 from sqlalchemy.orm  import Query
 from typing import List, Optional
+from datetime import datetime
 
-
-def create_employee(name: str, surname: str, dni: int, address: str, email: str, locality: str, phone: str, profession_id: int, job_position_id: int, emergency_contact_name: str, emergency_contact_phone: str, obra_social: str, affiliate_number: str, is_volunteer: bool, enabled: bool = True) -> Employee:
-    employee = Employee(name, surname, dni, address, email, locality, phone, profession_id, job_position_id, emergency_contact_name, emergency_contact_phone, obra_social, affiliate_number, is_volunteer, enabled)
+def create_employee(name: str, surname: str, dni: int, address: str, email: str, locality: str, phone: str, profession_id: int, job_position_id: int, 
+                    emergency_contact_name: str, emergency_contact_phone: str, obra_social: str, affiliate_number: str, is_volunteer: bool,
+                    enabled: bool = True, start_date: datetime = datetime.now(), end_date: datetime = None) -> Employee:
+    employee = Employee(name, surname, dni, address, email, locality, phone, profession_id, job_position_id, start_date, end_date, emergency_contact_name, emergency_contact_phone, obra_social, affiliate_number, is_volunteer, enabled)
     db.session.add(employee)
     db.session.commit()
     db.session.expunge(employee)
@@ -15,7 +17,7 @@ def create_employee(name: str, surname: str, dni: int, address: str, email: str,
 
 def list_employees():   # lista TODOS los employees (solo usar cuando sea estrictamente necesario)
     employees = Employee.query.all()
-    [db.session.expunge(employee) for employee in employees.items]
+    [db.session.expunge(employee) for employee in employees]
     return employees # puede devolver una lista vacia
 
 def get_employee(id: int):      #devuelve un employee dado un id

@@ -10,5 +10,11 @@ class Document(db.Model):
 
     employee_id = db.Column(db.Integer, db.ForeignKey('employees.id'), nullable=False)
 
+    def __init__(self, titulo: str, tipo: str, archivo: str, employee_id: int):
+        self.titulo = titulo
+        self.tipo = tipo
+        self.archivo = archivo
+        self.employee_id = employee_id
+
     def __repr__(self):
         return f'<Document {self.titulo} ({self.tipo})>'

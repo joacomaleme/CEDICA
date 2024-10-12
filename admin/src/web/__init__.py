@@ -2,6 +2,7 @@ from flask import Flask, render_template
 from src.web.storage import storage
 from src.web.handlers import error
 from src.web.controllers.user_controller import bp as user_bp
+from src.web.controllers.employee_controller import bp as employee_bp
 from src.model import database
 from src.model.config import config
 from src.model import seeds
@@ -22,6 +23,7 @@ def create_app(env="development", static_folder="../../static"):
         return render_template('home.html')
     
     app.register_blueprint(user_bp)
+    app.register_blueprint(employee_bp)
 
     app.register_error_handler(404, error.error_not_found)
     

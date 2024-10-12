@@ -1,5 +1,8 @@
 from datetime import datetime
 from src.model.database import db
+from src.model.employees.tables.document import Document  # Ensure this is imported
+from src.model.employees.tables.job_position import JobPosition  # Ensure this is imported
+from src.model.employees.tables.profession import Profession  # Ensure this is imported
 
 class Employee(db.Model):
     __tablename__ = 'employees'
@@ -15,12 +18,9 @@ class Employee(db.Model):
     
     # Relación con Profession
     profession_id = db.Column(db.BigInteger, db.ForeignKey('professions.id'), nullable=False)
-    profession = db.relationship('Profession')
 
     # Relación con JobPosition
     job_position_id = db.Column(db.BigInteger, db.ForeignKey('job_positions.id'), nullable=False)
-    job_position = db.relationship('JobPosition')
-
 
     start_date = db.Column(db.Date, nullable=False, default=datetime.now())
     end_date = db.Column(db.Date)
@@ -42,7 +42,31 @@ class Employee(db.Model):
     # Relación con la documentación complementaria
     documents = db.relationship('Document', backref='employee', lazy=True)
 
+    def __init__(self, name, surname, dni, address, email, locality, phone,
+                 profession_id, job_position_id, start_date=datetime.now(),
+                 end_date=None, emergency_contact_name='', emergency_contact_phone='',
+                 obra_social=None, affiliate_number=None, is_volunteer=False, enabled=True,
+                 user_id=None):
+        self.name = name
+        self.surname = surname
+        self.dni = dni
+        self.address = address
+        self.email = email
+        self.locality = locality
+        self.phone = phone
+        self.profession_id = profession_id
+        self.job_position_id = job_position_id
+        self.start_date = start_date
+        self.end_date = end_date
+        self.emergency_contact_name = emergency_contact_name
+        self.emergency_contact_phone = emergency_contact_phone
+        self.obra_social = obra_social
+        self.affiliate_number = affiliate_number
+        self.is_volunteer = is_volunteer
+        self.enabled = enabled
+        self.user_id = user_id
+
     def __repr__(self):
-        return f'<Employee {self.nombre} {self.apellido}>'
+        return f'<Employee {self.name} {self.surname}>'
 
 
