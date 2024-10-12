@@ -13,4 +13,4 @@ class PaymentType(db.Model):
         self.name = name
 
     def __repr__(self):
-        return f"<TipoPago {self.name}>"
+        return f"<PaymentType {self.name}>"

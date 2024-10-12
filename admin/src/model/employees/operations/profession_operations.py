@@ -7,3 +7,8 @@ def create_profession(name: str) -> Profession:
     db.session.commit()
     db.session.expunge(profession)
     return profession
+
+def list_professions():
+    professions = Profession.query.all()
+    [db.session.expunge(profession) for profession in professions]
+    return professions

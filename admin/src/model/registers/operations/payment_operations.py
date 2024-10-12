@@ -85,7 +85,7 @@ def update_payment(to_update: Payment) -> Payment:
     if payment is None:
         raise ValueError("No se encontró un pago con ese ID")
     
-    payment.beneficiary = to_update.beneficiario
+    payment.beneficiary = to_update.beneficiary
     payment.amount = to_update.amount or payment.amount
     payment.date = to_update.date or payment.date
     payment.description = to_update.description or payment.description

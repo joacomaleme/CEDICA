@@ -15,8 +15,8 @@ class Payment(db.Model):
     payment_type = db.relationship('PaymentType', back_populates='payments')
 
     # Relacion con beneficiario
-    beneficiary_id = db.Column(db.BigInteger, db.ForeignKey('users.id'))
-    beneficiary = db.relationship('User', back_populates='payments')
+    beneficiary_id = db.Column(db.BigInteger, db.ForeignKey('employees.id'))
+    beneficiary = db.relationship('Employee', back_populates='payments')
 
     def __init__(self, amount: float, date: datetime, description: str, payment_type_id: int, beneficiary_id: Optional[int] = None):
         self.amount = amount 
@@ -26,4 +26,4 @@ class Payment(db.Model):
         self.beneficiary_id = beneficiary_id
 
     def __repr__(self):
-        return f"<Pago {self.id}>"
+        return f"<Payment {self.id}>"

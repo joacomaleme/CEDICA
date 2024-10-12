@@ -7,3 +7,8 @@ def create_job_position(name: str) -> JobPosition:
     db.session.commit()
     db.session.expunge(job_position)
     return job_position
+
+def list_job_positions():
+    job_positions = JobPosition.query.all()
+    [db.session.expunge(job_position) for job_position in job_positions]
+    return job_positions

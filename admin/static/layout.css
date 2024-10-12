@@ -21,10 +21,13 @@
   src: url("Panton-Regular.ttf");
 }
 
+body {
+  font-family: Panton;
+}
+
 /* General */
 li a {
   color: black;
-  font-family: Panton;
   text-decoration: none;
   font-size: 1.4em;
 }
@@ -38,6 +41,22 @@ nav {
   height: var(--nav-height);
   border-bottom: 1px solid;
   background-color: var(--nav-bg);
+}
+
+.btn {
+  border: none;
+  background-color: white;
+}
+
+.btn a {
+  display: inline-block;
+  padding: 0.8rem;
+  color: white;
+  text-decoration: none;
+  font-family: Panton;
+  font-size: 1.6em;
+  border-radius: 5px;
+  background-color: var(--blue-bg);
 }
 
 /* Estilos del nav */

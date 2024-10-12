@@ -4,8 +4,8 @@ from src.model.auth.operations import user_operations as users
 from src.model.employees.operations import employee_operations as employees
 from src.model.employees.operations import job_position_operations as job_positions
 from src.model.employees.operations import profession_operations as professions
-from src.model.registers.operations import payment_operations as pagos
-from src.model.registers.operations import payment_type_operations as tipos_pago
+from src.model.registers.operations import payment_operations as payments
+from src.model.registers.operations import payment_type_operations as payment_type
 from src.model import auth
 
 from datetime import datetime
@@ -73,22 +73,22 @@ def run():
     job_positions.create_job_position("Otro")
 
     # Creado de empleados
-    employees.create_employee(name='María', surname='Gómez', dni=45678901, address='Calle Falsa 123', email='maria.gomez@example.com', locality='Buenos Aires', phone='1122334455', profession_id=1, job_position_id=2, emergency_contact_name='Juan Gómez', emergency_contact_phone='1198765432', obra_social='OSDE', affiliate_number='ABC123456', is_volunteer=False, enabled=True)
-    employees.create_employee(name='Carlos', surname='Pérez', dni=23456789, address='Av. Libertador 456', email='carlos.perez@example.com', locality='Córdoba', phone='1167891234', profession_id=2, job_position_id=3, emergency_contact_name='Ana Pérez', emergency_contact_phone='1145678901', obra_social='Swiss Medical', affiliate_number='XYZ789012', is_volunteer=False, enabled=True)
-    employees.create_employee(name='Lucía', surname='Fernández', dni=34567890, address='Calle Las Rosas 789', email='lucia.fernandez@example.com', locality='Rosario', phone='1156781234', profession_id=3, job_position_id=4, emergency_contact_name='Clara Fernández', emergency_contact_phone='1178901234', obra_social='Galeno', affiliate_number='LMN456789', is_volunteer=True, enabled=True)
-    employees.create_employee(name='Javier', surname='López', dni=56789012, address='Pasaje Mitre 12', email='javier.lopez@example.com', locality='Mendoza', phone='1123456789', profession_id=4, job_position_id=1, emergency_contact_name='Sofía López', emergency_contact_phone='1124567890', obra_social='OSDE', affiliate_number='DEF123456', is_volunteer=False, enabled=False)
+    employees.create_employee(name='María', surname='Gómez', dni="45678901", address='Calle Falsa 123', email='maria.gomez@example.com', locality='Buenos Aires', phone='1122334455', profession_id=1, job_position_id=2, emergency_contact_name='Juan Gómez', emergency_contact_phone='1198765432', obra_social='OSDE', affiliate_number='ABC123456', is_volunteer=False, enabled=True)
+    employees.create_employee(name='Carlos', surname='Pérez', dni="23456789", address='Av. Libertador 456', email='carlos.perez@example.com', locality='Córdoba', phone='1167891234', profession_id=2, job_position_id=3, emergency_contact_name='Ana Pérez', emergency_contact_phone='1145678901', obra_social='Swiss Medical', affiliate_number='XYZ789012', is_volunteer=False, enabled=True)
+    employees.create_employee(name='Lucía', surname='Fernández', dni="34567890", address='Calle Las Rosas 789', email='lucia.fernandez@example.com', locality='Rosario', phone='1156781234', profession_id=3, job_position_id=4, emergency_contact_name='Clara Fernández', emergency_contact_phone='1178901234', obra_social='Galeno', affiliate_number='LMN456789', is_volunteer=True, enabled=True)
+    employees.create_employee(name='Javier', surname='López', dni="56789012", address='Pasaje Mitre 12', email='javier.lopez@example.com', locality='Mendoza', phone='1123456789', profession_id=4, job_position_id=1, emergency_contact_name='Sofía López', emergency_contact_phone='1124567890', obra_social='OSDE', affiliate_number='DEF123456', is_volunteer=False, enabled=False)
 
     #####################
     # REGISTRO DE PAGOS #
     #####################
 
     # Creado de tipos de pago
-    tipo_pago_honorarios = tipos_pago.create_payment_type("Honorarios")
-    tipo_pago_proveedor = tipos_pago.create_payment_type("Proveedor")
-    tipo_pago_gastos_varios = tipos_pago.create_payment_type("Gastos Varios")
+    tipo_pago_honorarios = payment_type.create_payment_type("Honorarios")
+    tipo_pago_proveedor = payment_type.create_payment_type("Proveedor")
+    tipo_pago_gastos_varios = payment_type.create_payment_type("Gastos Varios")
 
     # Creado de pagos
-    pagos.create_payment(amount=5000, date=datetime(2024, 9, 10), description="Pago realizado", payment_type_id=1, beneficiary_id=1)
-    pagos.create_payment(amount=7200, date=datetime.now(), description="El pago fue exitoso", payment_type_id=3, beneficiary_id=1)
-    pagos.create_payment(amount=1300, date=datetime(2024, 9, 15), description="Un muy buen pago", payment_type_id=1, beneficiary_id=3)
-    pagos.create_payment(amount=10200.50, date=datetime(1999, 2, 20), description="Un pago de un proveedor", payment_type_id=2, beneficiary_id=4)
+    payments.create_payment(amount=5000, date=datetime(2024, 9, 10), description="Pago realizado", payment_type_id=1, beneficiary_id=1)
+    payments.create_payment(amount=7200, date=datetime.now(), description="El pago fue exitoso", payment_type_id=3)
+    payments.create_payment(amount=1300, date=datetime(2024, 9, 15), description="Un muy buen pago", payment_type_id=1, beneficiary_id=3)
+    payments.create_payment(amount=10200.50, date=datetime(1999, 2, 20), description="Un pago de un proveedor", payment_type_id=2)
