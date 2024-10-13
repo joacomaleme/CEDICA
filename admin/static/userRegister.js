@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   const mails = {{ mails|tojson }};
   const aliases = {{ aliases|tojson }};
-
+  
   var emailField = document.getElementById("email-field");
   var emailLabel = document.getElementById("email-label");
   var emailError = document.getElementById("email-error");

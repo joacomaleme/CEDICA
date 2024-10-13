@@ -19,5 +19,11 @@ class JobPosition(db.Model):
     def __init__(self, name: str):
         self.name = name
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name
+        }
+
     def __repr__(self):
-        return f'<PuestoLaboral {self.name}>'
+        return f'<JobPosition {self.name}>'

@@ -13,17 +13,21 @@ def index():
 
 @bp.get("/nuevo")
 def new():
+    employees = employee_operations.list_employees()
     professions = profession_operations.list_professions()
     job_positions = job_position_operations.list_job_positions()
-    return render_template("employees/new.html", professions=professions, job_positions=job_positions)
+
+    mails = [employee.email for employee in employees]
+    dnis = [employee.dni for employee in employees]
+    affiliate_numbers = [employee.affiliate_number for employee in employees]
+
+    return render_template("employees/new.html", professions=professions, job_positions=job_positions,
+                           mails=mails, dnis=dnis, affiliate_numbers=affiliate_numbers)
 
 @bp.post("/create")
 def create():
     params = request.form
 
-    print(params.get("volunteer"), params.get("enabled"))
-
-    # Convert form data to correct types
     employee_data = {
         "name": params.get("name"),
         "surname": params.get("surname"),
@@ -39,14 +43,10 @@ def create():
         "obra_social": params.get("obra-social"),
         "affiliate_number": params.get("affiliate-number"),
         "is_volunteer": params.get("volunteer") == 'on',  # Convert to bool
-        "enabled": params.get("enabled") == 'on',  # Convert to bool
         "start_date": params.get("start-date"),
         "end_date": params.get("end-date"),
     }
 
-    print(employee_data)
-
-    # Call your employee creation method, unpacking the dictionary
     employee_operations.create_employee(**employee_data)
 
     return redirect(url_for("employee.index"))
@@ -56,4 +56,10 @@ def update(id):
     params = request.form
     print(params)
 
-    return redirect(url_for("employees.index"))
+    return redirect(url_for("employee.index"))
+
+
+@bp.delete("/<int:id>/delete")
+def delete(id):
+    employee_operations.delete_employee(id)
+    return redirect(url_for("employee.index"))

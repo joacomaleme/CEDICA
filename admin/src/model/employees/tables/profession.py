@@ -17,5 +17,11 @@ class Profession(db.Model):
     def __init__(self, name: str):
         self.name = name
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name
+        }
+
     def __repr__(self):
         return f'<Profesion {self.name}>'

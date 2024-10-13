@@ -29,7 +29,7 @@ class Employee(db.Model):
     emergency_contact_phone = db.Column(db.String(20), nullable=False)
 
     obra_social = db.Column(db.String(100))  # Opcional, como se escribe en ingles??? 
-    affiliate_number = db.Column(db.String(50))
+    affiliate_number = db.Column(db.String(50), unique=True, nullable=False)
 
     is_volunteer = db.Column(db.Boolean, nullable=False)    # puede ser Voluntario o Personal rentado, se describe con un boolean.
 
