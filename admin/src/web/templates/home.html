@@ -1,3 +1,21 @@
 {% extends "layout.html" %}
-{% block head %}{% endblock head %}
-{% block content %}<h1>Diseñenme porfis, soy lit la página principall</h1>{% endblock  %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css')}}"/>
+{% endblock %}
+{% block title %}VeryOriginalTitle™{% endblock %}
+{% block navbar %}
+    <a href="/NoExisto">Este link no lleva a ningún lado</a><br>
+    <a href="/NoExisto">Osea, cuenta esto siquiera como una barra de navegación?</a><br>
+    <a href="/NoExisto">Yo diría que no</a><br>
+    <a href="/NoExisto">No, no, confirmo, esto no cuenta</a>
+{% endblock %}
+{% block content %}
+    <h1>Soy una página de inicio</h1>
+    <p>Soy increíble<p>
+    <p>Sé que mi existencia es temporal, probablemente muera en una semana, cuando tengan que desarrollar la página real</p>
+    <p>Aún así, saber que fuí útil, aunque sea para una entrega, me llena de felicidad</p>
+    <button>No hago nada</button>
+{% endblock %}
+{% block footer %}
+    <p>SoyUnFooter :3</p>
+{% endblock %}
