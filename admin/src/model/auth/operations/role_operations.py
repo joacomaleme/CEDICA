@@ -11,6 +11,16 @@ def create_role(name:str) -> Role:
     db.session.expunge(role)
     return role #Explota incluso sin esto
 
+def list_roles() -> List[Role]:
+    roles = Role.query.all()
+    [db.session.expunge(role) for role in roles]
+    return roles # puede devolver una lista vacia
+
+def search_name(role_name:str) -> Role:
+    role = Role.query.filter_by(name=role_name).first()
+    if role:
+        db.session.expunge(role)
+    return role
 
 def assign_permission(role: Role, permissions: Union[List[Permission], Permission]):
     """Asigna uno o más permisos a un rol determinado.
