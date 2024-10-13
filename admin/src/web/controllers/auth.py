@@ -65,7 +65,6 @@ def password_is_valid(password:str):
 def domain_exists(email:str):
     domain = email.split('@')[1]
     try:
-        # Look up the MX records for the domain
         dns.resolver.resolve(domain, 'MX')
         return True
     except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN):
@@ -80,6 +79,7 @@ def upload():
     password = str(params.get("password"))
     checkMail = user_operations.get_user_by_email(mail)
     checkAlias = user_operations.get_user_by_alias(str(params.get("alias")))
+    enabled = params.get("enabled") is None
 
     if checkMail or checkAlias:
         flash("Lo lamentamos, ha habido un error inesperado", "error")
@@ -90,10 +90,11 @@ def upload():
     if (not is_valid_email(mail)) or (not domain_exists(mail)):
         flash("La dirección de mail ingresada no es válida", "error")
         return redirect((url_for("auth.register")))
+    if params["role"] == "Administrador de Sistema":
+        enabled = True
 
 
     role = role_operations.search_name(params["role"])
-    enabled = params.get("enabled") is not None
     user_operations.create_user(mail, params.get("alias"), password, role, enabled)
     flash("Usuario registrado exitosamente", "success")
     return redirect((url_for("auth.register")))

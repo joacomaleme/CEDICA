@@ -12,7 +12,7 @@ def login_required():
         def wrapper(*args, **kwargs):
             user_email = session.get("user")
             if not user_email:
-                return abort(403)
+                return abort(401)
             return func(*args, **kwargs)
         return wrapper
     return decorator

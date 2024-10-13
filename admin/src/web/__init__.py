@@ -32,6 +32,7 @@ def create_app(env="development", static_folder="../../static"):
     #---
     app.register_error_handler(404, error.error_not_found)
     app.register_error_handler(401, error.error_unauthorized)
+    app.register_error_handler(403, error.error_forbidden)
     #---
 
     # Registro funciones en jinja
