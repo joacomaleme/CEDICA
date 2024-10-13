@@ -46,7 +46,6 @@ def run():
     payment_create = permissions.create_permission(name='payment_create')
     payment_destroy = permissions.create_permission(name='payment_destroy')
 
-
     # permisos para riders
     rider_index = permissions.create_permission(name='rider_index')
     rider_show = permissions.create_permission(name='rider_show')
@@ -76,7 +75,6 @@ def run():
     ############
     # Generics #
     ############
-
     
     # Crear addresses
     address.create_address("Calle 1", "1433", "1A")
@@ -86,6 +84,7 @@ def run():
     address.create_address("Calle 44", "3010", "15F")
 
     # Crear localities
+    locality.create_locality("La Plata")
     locality.create_locality("San Carlos")
     locality.create_locality("Villa Adelina")
     locality.create_locality("Boulogne")
@@ -98,7 +97,6 @@ def run():
     province.create_province("Mendoza")
     province.create_province("Santa Fe")
     province.create_province("Tucumán")
-
 
     #############
     # Empleados #

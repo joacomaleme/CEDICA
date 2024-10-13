@@ -1,3 +1,4 @@
+from datetime import datetime
 from src.model.database import db
 from src.model.auth.tables.user import User
 from src.model.employees.tables.employee import Employee
@@ -5,11 +6,11 @@ from src.model.auth.tables.role import Role
 from sqlalchemy.orm  import Query
 from typing import Optional
 
-def create_employee(name: str, surname: str, dni: int, address_id: int, email: str, locality_id: int, phone: str, profession_id: int, job_position_id: int, 
+def create_employee(name: str, surname: str, dni: str, address_id: int, email: str, locality_id: int, phone: str, profession_id: int, job_position_id: int, 
                     emergency_contact_name: str, emergency_contact_phone: str, obra_social: str, affiliate_number: str, is_volunteer: bool,
-                    user_id: Optional[int] = None, enabled: bool = True) -> Employee:
+                    user_id: Optional[int] = None, enabled: bool = True, start_date: datetime = datetime.now(), end_date: datetime = None) -> Employee:
     employee = Employee(name, surname, dni, address_id, email, locality_id, phone, profession_id, job_position_id, emergency_contact_name,
-                        emergency_contact_phone, obra_social, affiliate_number, is_volunteer, enabled, user_id)
+                        emergency_contact_phone, obra_social, affiliate_number, is_volunteer, enabled, user_id, start_date, end_date)
     db.session.add(employee)
     db.session.commit()
     db.session.expunge(employee)

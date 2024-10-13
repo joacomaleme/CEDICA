@@ -11,21 +11,19 @@ class Employee(db.Model):
     id = db.Column(db.BigInteger, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     surname = db.Column(db.String(100), nullable=False)
-    dni = db.Column(db.Int, unique=True, nullable=False)
+    dni = db.Column(db.String(120), unique=True, nullable=False)
     address_id = db.Column(db.BigInteger, db.ForeignKey('addresses.id'), nullable=False)
     address = db.relationship('Address', foreign_keys=[address_id])
     email = db.Column(db.String(120), unique=True, nullable=False)
-    locality_id = db.Column(db.BigInteger, db.ForeignKey('localities'), nullable=False)
+    locality_id = db.Column(db.BigInteger, db.ForeignKey('localities.id'), nullable=False)
     locality = db.relationship('Locality', foreign_keys=[locality_id])
     phone = db.Column(db.String(20), nullable=False)
     
     # Relación con Profession
     profession_id = db.Column(db.BigInteger, db.ForeignKey('professions.id'), nullable=False)
-    profession = db.relationship('Profession', foreign_keys=[profession_id])
 
     # Relación con JobPosition
     job_position_id = db.Column(db.BigInteger, db.ForeignKey('job_positions.id'), nullable=False)
-    job_position = db.relationship('JobPosition', foreign_keys=[job_position_id])
 
     start_date = db.Column(db.Date, nullable=False, default=datetime.now())
     end_date = db.Column(db.Date, default=None)
@@ -45,12 +43,13 @@ class Employee(db.Model):
     user = db.relationship('User', backref='employee', lazy=True, foreign_keys=[user_id])
 
     # Relación con la documentación complementaria
-    documents = db.relationship('Document', back_populates='employee')
+    documents = db.relationship('Document', backref='employee', lazy=True)
 
     payments = db.relationship('Payment', back_populates='beneficiary')
 
-    def __init__(self, name: str, surname: str, dni: int, address_id: int, email: str, locality_id: int, phone: str, profession_id: int, job_position_id: int,
-                 emergency_contact_name: str, emergency_contact_phone: str, obra_social: str, affiliate_number: str, is_volunteer: bool, enabled: bool = True, user_id: Optional[int] = None):
+    def __init__(self, name: str, surname: str, dni: str, address_id: int, email: str, locality_id: int, phone: str, profession_id: int,
+                job_position_id: int, emergency_contact_name: str, emergency_contact_phone: str, obra_social: str, affiliate_number: str,
+                is_volunteer: bool, enabled: bool = True, user_id: Optional[int] = None, start_date: datetime = datetime.now(), end_date: datetime = None):
         self.name = name
         self.surname = surname
         self.dni = dni
@@ -69,7 +68,9 @@ class Employee(db.Model):
         self.is_volunteer = is_volunteer
         self.enabled = enabled
         self.user_id = user_id
-
+        self.start_date = start_date
+        if (end_date != ""):
+            self.end_date = end_date
 
     def __repr__(self):
         return f'<Employee {self.name} {self.surname}>'
