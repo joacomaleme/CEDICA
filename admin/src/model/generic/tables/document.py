@@ -1,5 +1,8 @@
 from src.model.database import db
 from datetime import datetime
+from src.model.generic.tables.document_types import DocumentType  # Ensure this is imported
+from src.model.riders.tables.rider import Rider  # Ensure this is imported
+
 class Document(db.Model):
     __tablename__ = 'documents'
 
@@ -18,7 +21,6 @@ class Document(db.Model):
     employee = db.relationship('Employee', back_populates='documents')
     rider_id = db.Column(db.BigInteger, db.ForeignKey('riders.id'), nullable=True)
     rider = db.relationship('Rider', back_populates='documents')
-
 
     def __init__(self, title: str, type_id: int, format: str, upload_date: datetime, is_external: bool, allowed_operations: str, file_address: str, employee_id, rider_id):
         self.title = title

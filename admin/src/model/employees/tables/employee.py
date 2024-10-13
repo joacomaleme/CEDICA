@@ -1,6 +1,6 @@
 from datetime import datetime
 from src.model.database import db
-from src.model.employees.tables.document import Document  # Ensure this is imported
+from src.model.generic.tables.document import Document  # Ensure this is imported
 from src.model.employees.tables.job_position import JobPosition  # Ensure this is imported
 from src.model.employees.tables.profession import Profession  # Ensure this is imported
 from typing import Optional
@@ -21,6 +21,7 @@ class Employee(db.Model):
     
     # Relación con Profession
     profession_id = db.Column(db.BigInteger, db.ForeignKey('professions.id'), nullable=False)
+    profession = db.relationship('Profession', back_populates='employees')
 
     # Relación con JobPosition
     job_position_id = db.Column(db.BigInteger, db.ForeignKey('job_positions.id'), nullable=False)
@@ -49,7 +50,7 @@ class Employee(db.Model):
 
     def __init__(self, name: str, surname: str, dni: str, address_id: int, email: str, locality_id: int, phone: str, profession_id: int,
                 job_position_id: int, emergency_contact_name: str, emergency_contact_phone: str, obra_social: str, affiliate_number: str,
-                is_volunteer: bool, enabled: bool = True, user_id: Optional[int] = None, start_date: datetime = datetime.now(), end_date: datetime = None):
+                is_volunteer: bool, enabled: bool = True, user_id: Optional[int] = None, start_date: datetime = datetime.now(), end_date: Optional[datetime] = None):
         self.name = name
         self.surname = surname
         self.dni = dni

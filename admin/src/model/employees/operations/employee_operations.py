@@ -1,14 +1,12 @@
 from datetime import datetime
 from src.model.database import db
-from src.model.auth.tables.user import User
 from src.model.employees.tables.employee import Employee
-from src.model.auth.tables.role import Role
 from sqlalchemy.orm  import Query
-from typing import Optional
+from typing import List, Optional, Tuple
 
 def create_employee(name: str, surname: str, dni: str, address_id: int, email: str, locality_id: int, phone: str, profession_id: int, job_position_id: int, 
                     emergency_contact_name: str, emergency_contact_phone: str, obra_social: str, affiliate_number: str, is_volunteer: bool,
-                    user_id: Optional[int] = None, enabled: bool = True, start_date: datetime = datetime.now(), end_date: datetime = None) -> Employee:
+                    user_id: Optional[int] = None, enabled: bool = True, start_date: datetime = datetime.now(), end_date: Optional[datetime] = None) -> Employee:
     employee = Employee(name, surname, dni, address_id, email, locality_id, phone, profession_id, job_position_id, emergency_contact_name,
                         emergency_contact_phone, obra_social, affiliate_number, is_volunteer, enabled, user_id, start_date, end_date)
     db.session.add(employee)
@@ -101,58 +99,34 @@ def toggle_is_volunteer(id: int) -> Employee:       # cambiar el estado de "is_v
 def sorted_by_attribute(employees: Query, attribute: str = "email", ascending: bool = True) -> Query:
     return employees.order_by(getattr(Employee, attribute).asc() if ascending else getattr(Employee, attribute).desc())
 
-# Filtra empleados activos/inactivos
-def filter_active(employees: Query, show_enabled: bool = True, show_disabled: bool = True) -> Query:
-    # Si ambos son True, no aplica filtro, muestra todos
-    if show_enabled and show_disabled:
-        return employees
-    # Filtra solo empleados habilitados o deshabilitados
-    return employees.filter(Employee.activo == show_enabled)
 
-# Búsqueda por email
-def search_by_mail(employees: Query, email: str = "") -> Query:
-    if email:
-        return employees.filter(Employee.email.ilike(f"%{email}%"))
-    return employees
-
-# Búsqueda por nombre
-def search_by_name(employees: Query, name: str = "") -> Query:
-    if name:
-        return employees.filter(Employee.nombre.ilike(f"%{name}%"))
-    return employees
-
-# Búsqueda por apellido
-def search_by_surname(employees: Query, surname: str = "") -> Query:
-    if surname:
-        return employees.filter(Employee.apellido.ilike(f"%{surname}%"))
-    return employees
-
-# Búsqueda por profesión
-def search_by_profession(employees: Query, profession: str = "") -> Query:
-    if profession:
-        return employees.filter(Employee.profession.name.ilike(f"%{profession}%"))
-    return employees
+def search_by_attribute(employees: Query, search_attr: str = "email", search_value: str = "") -> Query:
+    match search_attr:
+        case "email":
+            return employees.filter(Employee.email.ilike(f"%{search_value}%"))
+        case "name":
+            return employees.filter(Employee.name.ilike(f"%{search_value}%"))
+        case "surname":
+            return employees.filter(Employee.surname.ilike(f"%{search_value}%"))
+        case "dni":
+            return employees.filter(Employee.dni.ilike(f"%{search_value}%"))
+        case "profession":
+            return employees.filter(Employee.profession.name.ilike(f"%{search_value}%"))
+        case _:
+            return employees.filter(Employee.email.ilike(f"%{search_value}%"))
 
 # Función final que combina los filtros y búsquedas
 def get_employees_filtered_list(page: int,
                                 limit: int = 25,
-                                show_enabled: bool = True,
-                                show_disabled: bool = True,
                                 sort_attr: str = "email",
                                 ascending: bool = True,
-                                search_mail: str = "",
-                                search_name: str = "",
-                                search_surname: str = "",
-                                search_profession: str = "") -> Query:
+                                search_attr: str = "email",
+                                search_value: str = "") -> Tuple[Employee, int]:
     # Inicia la consulta con Employee
     employees = Employee.query
     
     # Aplica los filtros y búsquedas
-    employees = filter_active(employees, show_enabled, show_disabled)
-    employees = search_by_mail(employees, search_mail)
-    employees = search_by_name(employees, search_name)
-    employees = search_by_surname(employees, search_surname)
-    employees = search_by_profession(employees, search_profession)
+    employees = search_by_attribute(employees, search_attr, search_value)
     
     # Ordena los resultados
     employees = sorted_by_attribute(employees, sort_attr, ascending)
@@ -163,4 +137,4 @@ def get_employees_filtered_list(page: int,
     # Expulsa los objetos de la sesión
     [db.session.expunge(employee) for employee in employee_list.items]
     
-    return employee_list
+    return (employee_list, ((employees.count()-1)//limit)+1)

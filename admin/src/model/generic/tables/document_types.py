@@ -7,8 +7,11 @@ from src.model.database import db
 
 class DocumentType(db.Model):
     __tablename__ = 'document_types'
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False, unique=True)
+
+    documents = db.relationship('Document', back_populates='type')
 
     def __init__(self, name: str):
         self.name = name

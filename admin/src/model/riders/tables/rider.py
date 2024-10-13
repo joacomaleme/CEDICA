@@ -87,7 +87,7 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
     track_assistant = db.relationship('Employee', foreign_keys=[track_assistant_id])
 
     # Relacion con sus Documentos
-    documents = db.relationship('Document', back_populates='employee')
+    documents = db.relationship('Document', back_populates='rider')
 
     def __init__(self, name, last_name, dni, age, birth_date, birth_locality_id, birth_province_id, address_id, current_locality_id, current_province_id, phone, emergency_contact_name, emergency_contact_phone, active, sede, has_scholarship=False, scholarship_percentage=None, has_disability_certificate=False, disability_diagnosis_id=None, disability_type_id=None, receives_family_allowance=False, family_allowance_type_id=None, receives_pension=False, pension_type_id=None, health_insurance=None, affiliate_number=None, has_guardianship=False, school_id=None, current_grade=None, attending_professionals=None, work_proposal=None, teacher_id=None, horse_conductor_id=None, horse_id=None, track_assistant_id=None):
         self.name = name
