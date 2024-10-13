@@ -48,6 +48,9 @@ class Employee(db.Model):
 
     payments = db.relationship('Payment', back_populates='beneficiary')
 
+    inserted_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
+
     def __init__(self, name: str, surname: str, dni: str, address_id: int, email: str, locality_id: int, phone: str, profession_id: int,
                 job_position_id: int, emergency_contact_name: str, emergency_contact_phone: str, obra_social: str, affiliate_number: str,
                 is_volunteer: bool, enabled: bool = True, user_id: Optional[int] = None, start_date: datetime = datetime.now(), end_date: Optional[datetime] = None):

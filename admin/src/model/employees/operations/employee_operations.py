@@ -96,9 +96,8 @@ def toggle_is_volunteer(id: int) -> Employee:       # cambiar el estado de "is_v
 ###INSTRUCCIONES DE LISTADO ESPECÍFICAS
 
 # Ordena por un atributo específico (email por defecto)
-def sorted_by_attribute(employees: Query, attribute: str = "email", ascending: bool = True) -> Query:
+def sorted_by_attribute(employees: Query, attribute: str = "inserted_at", ascending: bool = True) -> Query:
     return employees.order_by(getattr(Employee, attribute).asc() if ascending else getattr(Employee, attribute).desc())
-
 
 def search_by_attribute(employees: Query, search_attr: str = "email", search_value: str = "") -> Query:
     match search_attr:

@@ -11,20 +11,22 @@ import re
 bp = Blueprint("employee", __name__, url_prefix="/empleados")
 
 @bp.route("/")
-@permission_required('employee_index')
+# @permission_required('employee_index')
 def index():
-    roles = role_operations.list_roles()
-    roles = [role.name for role in roles]
+    professions = profession_operations.list_professions()
+    professions = [profession.name for profession in professions]
+    job_positions = job_position_operations.list_job_positions()
+    job_positions = [job_position.name for job_position in job_positions]
 
-    mail = request.args.get('mail')
     page = request.args.get('page')
-    role = request.args.get('role')
     ascending = request.args.get('ascending') is None
-    sort_attr = request.args.get('sort_attr')
+    sort_attr = request.args.get('sort_attr') or "inserted_at"
+    search_attr = request.args.get('search_attr') or "email"
+    search_value = request.args.get('search_value') or ""
 
-    retMail = ""
-    retRole = ""
-    orderMail = request.args.get('order_email') is not None
+    start_sort_attr = ""
+    start_search_attr = ""
+    start_search_val = ""
 
     try:
         if not page:
@@ -32,30 +34,18 @@ def index():
         else:
             page = int(page)
 
-        # if mail:
-        #     users = user_operations.search_by_mail(users, str(mail))
-        #     retMail=mail
-        # if role:
-        #     users = user_operations.filter_role(users, str(role))
-        #     retRole=role
-        # if not orderMail:
-        #     users = user_operations.sorted_by_attribute(users=users, attribute="email", ascending=ascending)
-        # else:
-        #     users = user_operations.sorted_by_attribute(users, "inserted_at", ascending)
+        data = employee_operations.get_employees_filtered_list(page=page, sort_attr=sort_attr, ascending=ascending, search_attr=search_attr, search_value=search_value)
 
-        # if request.args.get('status'):
-        #     users = user_operations.filter_active(users, bool(int(request.args.get('value'))))
-
-        # data = employee_operations.get_employees_filtered_list(page=page, sort_attr=sort_attr, ascending, search_attr, search_value)
-
-        # users = data[0]
-        # pages = data[1]
-        # return render_template("employees/index.html", pages=pages, users=users, roles=roles, status=request.args.get('status'),
-        #                         startMail=retMail, startRole=retRole, startAscending=(not ascending), enabled=request.args.get('value'),
-        #                           orderMail=orderMail, startPage=page)
+        employees = data[0]
+        pages = data[1]
+        
     except:
         flash("Uso inválido de parametros, no se pudo aplicar el filtro", "error")
         page = 0
+
+    return render_template("employees/index.html", pages=pages, employees=employees, professions=professions, job_positions=job_positions,
+                            start_sort_attr=start_sort_attr, start_search_attr=start_search_attr, start_search_val=start_search_val,
+                            start_ascending=(not ascending), start_page=page)
 
 # @bp.route("/")
 # def index():
