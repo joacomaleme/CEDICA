@@ -6,7 +6,7 @@
 .table-container {
     overflow-x: auto; /* Permite scroll horizontal */
     margin-inline: 2rem;
-    margin-top: 1rem;
+    margin-block: 1rem;
 }
 
 table {

@@ -15,8 +15,8 @@ class ProductionConfig(Config):
 
 class DevelopmentConfig(Config):
     MINIO_SERVER = "localhost:9000"
-    MINIO_ACCESS_KEY = "xdg4qu971EtGU1dHCwRA"
-    MINIO_SECRET_KEY = "vAWRO47HxY0AMztHIvrWj7Z3PgdD9ZuoXEEkEyf5"
+    MINIO_ACCESS_KEY = "E2vrqJtoPWpwTdXZexa1"
+    MINIO_SECRET_KEY = "lbr2NV57JVTCsyZYuwqwsaXWry2OiY7vv0kZv68v"
     MINIO_SECURE = False
     DB_USER = "postgres"
     DB_PASSWORD = "postgres"

@@ -14,7 +14,7 @@
 {% block content %}
   <section class="form-container">
     <h1 class="title">Registrar un empleado</h1>
-    <form action="{{ url_for('employee.create')}}" method="POST">
+    <form action="{{ url_for('employee.create')}}" method="POST" enctype="multipart/form-data">
       <div class="input-set">
         <input spellcheck=false id="name-field" class="input-field" name="name" type="text" placeholder="" required><br>
         <label id="name-label" class="input-label" for="name-field">NOMBRE</label>
@@ -147,6 +147,12 @@
           </symbol>
           </svg>
         </div>
+      </div>
+
+      <div class="input-set">
+        <input id="files-field" class="input-field" name="files" type="file" multiple><br>
+        <label id="files-label" class="input-label" for="files-field">ARCHIVOS</label>
+        <span id="files-error" class="input-error"></span>
       </div>
 
       <div class="submit-btn">

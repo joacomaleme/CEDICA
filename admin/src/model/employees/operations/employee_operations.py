@@ -29,17 +29,20 @@ def get_employee(id: int):      #devuelve un employee dado un id
 
 def get_employee_by_dni(dni: str):
     employee = Employee.query.filter(Employee.dni == dni).first()
-    db.session.expunge(Employee)
+    if employee:
+        db.session.expunge(employee)
     return employee # si no encuentra nada devuelve None
 
 def get_employee_by_affiliate_number(affiliate_number: str):
     employee = Employee.query.filter(Employee.affiliate_number == affiliate_number).first()
-    db.session.expunge(Employee)
+    if employee:
+        db.session.expunge(employee)
     return employee # si no encuentra nada devuelve None
 
 def get_employee_by_email(email: str):      #devuelve un employee dado un email (el email es unico)
     employee = Employee.query.filter(Employee.email == email).first()
-    db.session.expunge(Employee)
+    if employee:
+        db.session.expunge(employee)
     return employee # si no encuentra nada devuelve None
 
 def __update_employee__(to_update: Employee) -> Employee:

@@ -1,8 +1,11 @@
+from os import fstat, path
 from flask import redirect, render_template, request, url_for
-from flask import Blueprint, flash
+from flask import Blueprint, flash, current_app
 from src.model.employees.operations import employee_operations
 from src.model.employees.operations import job_position_operations
 from src.model.employees.operations import profession_operations
+from src.model.employees.operations import document_operations
+from uuid import uuid4
 import re
 
 bp = Blueprint("employee", __name__, url_prefix="/empleados")
@@ -59,7 +62,29 @@ def create():
         flash("La dirección de mail ingresada no es válida", "error")
         return redirect((url_for("employee.new")))
 
-    employee_operations.create_employee(**employee_data)
+    employee = employee_operations.create_employee(**employee_data)
+
+    if "files" in request.files:
+        files = request.files.getlist("files")
+        print(files)
+
+        # Tomo el cliente
+        client = current_app.storage.client
+
+        for file in files:
+            filename = remove_extension(file.filename)
+            path = f"{uuid4()}-{file.filename}" # Uso uuid4() para generar un número random y que no se repita el nombre
+            content_type = file.content_type
+
+            document_operations.create_document(filename, content_type, path, employee_id=employee.id)
+
+            # Tomo el tamaño del archivo
+            file_content = file.read()
+            size = len(file_content)
+            file.seek(0)
+
+            # Subo a MINIO
+            client.put_object("grupo03", path, file.stream, size, content_type=content_type)
 
     return redirect(url_for("employee.index"))
 
@@ -70,12 +95,15 @@ def update(id):
 
     return redirect(url_for("employee.index"))
 
-
 @bp.delete("/<int:id>/delete")
 def delete(id):
     employee_operations.delete_employee(id)
     return redirect(url_for("employee.index"))
 
-def is_valid_email(email:str):
+def is_valid_email(email :str) -> bool:
     pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     return re.match(pattern, email) is not None
+
+def remove_extension(path: str) -> str:
+    split = path.split(".")
+    return ".".join(split[:-1]) if len(split) > 1 else path
