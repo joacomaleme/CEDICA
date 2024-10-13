@@ -21,9 +21,8 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
     birth_province = db.relationship('Province', backref='birth_riders', foreign_keys=[birth_province_id])
 
     # Dirección actual del J&A
-    address_street = db.Column(db.String(255), nullable=False)  # Calle
-    address_number = db.Column(db.String(10), nullable=False)  # Número
-    address_apartment = db.Column(db.String(10))  # Departamento, opcional
+    address_id = db.Column(db.BigInteger, db.ForeignKey('addresses.id'), nullable=False)
+    address = db.relationship('Address', foreign_keys=[address_id])
 
     # Localidad y provincia actuales del J&A
     current_locality_id = db.Column(db.BigInteger, db.ForeignKey('localities.id'), nullable=False)  # Localidad actual
@@ -68,12 +67,16 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
 
     attending_professionals = db.Column(db.Text)  # Profesionales que lo atienden (campo libre)
 
-    # Información sobre el trabajo en la la institución
-    institution_work_proposal = db.Column(db.String(50))  # Hipoterapia, Monta Terapéutica, etc. 
-    active = db.Column(db.String(10), nullable=False)  # REGULAR, DE BAJA
-    institution_sede = db.Column(db.String(50), nullable=False)  # CASJ, HLP, OTRO MAKE TABLE
-    work_days = db.Column(db.String(100))  # Días: Lunes, Martes, etc
+    # Padre/Madre/Tutor, relacion N a N.
+    guardians = db.relationship('Guardian', secondary='rider_guardians')
 
+    # Información sobre el trabajo en la la institución
+
+    work_proposal = db.Column(db.String(50))  # Hipoterapia, Monta Terapéutica, etc. 
+    active = db.Column(db.String(10), nullable=False)  # REGULAR, DE BAJA
+    sede = db.Column(db.String(50), nullable=False)  # CASJ, HLP, OTRO MAKE TABLE
+    # Relacion N a N con WorkDay
+    work_days = db.relationship('WorkDay', secondary='rider_work_day', back_populates='riders')
     teacher_id = db.Column(db.BigInteger, db.ForeignKey('employees.id'))  # Profesor/Terapeuta 
     teacher = db.relationship('Employee', foreign_keys=[teacher_id])
     horse_conductor_id = db.Column(db.BigInteger, db.ForeignKey('employees.id'))  # Conductor/a del caballo
@@ -83,17 +86,10 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
     track_assistant_id = db.Column(db.BigInteger, db.ForeignKey('employees.id'))  # Auxiliar de pista
     track_assistant = db.relationship('Employee', foreign_keys=[track_assistant_id])
 
+    # Relacion con sus Documentos
+    documents = db.relationship('Document', back_populates='employee')
 
-
-    def __init__(self, name, last_name, dni, age, birth_date, birth_locality_id, birth_province_id, 
-                 address_street, address_number, address_apartment, current_locality_id, 
-                 current_province_id, phone, emergency_contact_name, emergency_contact_phone, 
-                 has_scholarship, scholarship_percentage, has_disability_certificate, 
-                 disability_diagnosis_id, disability_type_id, receives_family_allowance, 
-                 family_allowance_type_id, receives_pension, pension_type_id, health_insurance, 
-                 affiliate_number, has_guardianship, school_id, current_grade, 
-                 attending_professionals, institution_work_proposal, active, institution_sede, 
-                 work_days, teacher_id, horse_conductor_id, horse_id, track_assistant_id):
+    def __init__(self, name, last_name, dni, age, birth_date, birth_locality_id, birth_province_id, address_id, current_locality_id, current_province_id, phone, emergency_contact_name, emergency_contact_phone, active, sede, has_scholarship=False, scholarship_percentage=None, has_disability_certificate=False, disability_diagnosis_id=None, disability_type_id=None, receives_family_allowance=False, family_allowance_type_id=None, receives_pension=False, pension_type_id=None, health_insurance=None, affiliate_number=None, has_guardianship=False, school_id=None, current_grade=None, attending_professionals=None, work_proposal=None, teacher_id=None, horse_conductor_id=None, horse_id=None, track_assistant_id=None):
         self.name = name
         self.last_name = last_name
         self.dni = dni
@@ -101,14 +97,14 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
         self.birth_date = birth_date
         self.birth_locality_id = birth_locality_id
         self.birth_province_id = birth_province_id
-        self.address_street = address_street
-        self.address_number = address_number
-        self.address_apartment = address_apartment
+        self.address_id = address_id
         self.current_locality_id = current_locality_id
         self.current_province_id = current_province_id
         self.phone = phone
         self.emergency_contact_name = emergency_contact_name
         self.emergency_contact_phone = emergency_contact_phone
+        self.active = active
+        self.sede = sede
         self.has_scholarship = has_scholarship
         self.scholarship_percentage = scholarship_percentage
         self.has_disability_certificate = has_disability_certificate
@@ -124,10 +120,7 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
         self.school_id = school_id
         self.current_grade = current_grade
         self.attending_professionals = attending_professionals
-        self.institution_work_proposal = institution_work_proposal
-        self.active = active
-        self.institution_sede = institution_sede
-        self.work_days = work_days
+        self.work_proposal = work_proposal
         self.teacher_id = teacher_id
         self.horse_conductor_id = horse_conductor_id
         self.horse_id = horse_id

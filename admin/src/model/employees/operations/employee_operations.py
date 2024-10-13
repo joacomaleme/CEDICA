@@ -3,15 +3,13 @@ from src.model.auth.tables.user import User
 from src.model.employees.tables.employee import Employee
 from src.model.auth.tables.role import Role
 from sqlalchemy.orm  import Query
-from typing import List, Optional
-from datetime import datetime
+from typing import Optional
 
-def create_employee(name: str, surname: str, dni: str, address: str, email: str, locality: str, phone: str, profession_id: int, job_position_id: int, 
+def create_employee(name: str, surname: str, dni: int, address_id: int, email: str, locality_id: int, phone: str, profession_id: int, job_position_id: int, 
                     emergency_contact_name: str, emergency_contact_phone: str, obra_social: str, affiliate_number: str, is_volunteer: bool,
-                    enabled: bool = True, user_id = None, start_date: datetime = datetime.now(), end_date: datetime = None) -> Employee:
-
-    employee = Employee(name, surname, dni, address, email, locality, phone, profession_id, job_position_id, emergency_contact_name,
-                        emergency_contact_phone, obra_social, affiliate_number, is_volunteer, enabled, user_id, start_date, end_date)
+                    user_id: Optional[int] = None, enabled: bool = True) -> Employee:
+    employee = Employee(name, surname, dni, address_id, email, locality_id, phone, profession_id, job_position_id, emergency_contact_name,
+                        emergency_contact_phone, obra_social, affiliate_number, is_volunteer, enabled, user_id)
     db.session.add(employee)
     db.session.commit()
     db.session.expunge(employee)
@@ -50,9 +48,9 @@ def __update_employee__(to_update: Employee) -> Employee:
     employee.name = to_update.name or employee.name
     employee.surname = to_update.surname or employee.surname
     employee.dni = to_update.dni or employee.dni
-    employee.address = to_update.address or employee.address
+    employee.address_id = to_update.address_id or employee.address_id
     employee.email= to_update.email or employee.email
-    employee.locality = to_update.locality or employee.locality
+    employee.locality_id = to_update.locality_id or employee.locality_id
     employee.phone = to_update.phone or employee.phone
     employee.profession_id = to_update.profession_id or employee.profession_id
     employee.job_position_id = to_update.job_position_id or employee.job_position_id

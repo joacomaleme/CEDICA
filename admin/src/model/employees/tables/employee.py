@@ -3,6 +3,7 @@ from src.model.database import db
 from src.model.employees.tables.document import Document  # Ensure this is imported
 from src.model.employees.tables.job_position import JobPosition  # Ensure this is imported
 from src.model.employees.tables.profession import Profession  # Ensure this is imported
+from typing import Optional
 
 class Employee(db.Model):
     __tablename__ = 'employees'
@@ -10,17 +11,21 @@ class Employee(db.Model):
     id = db.Column(db.BigInteger, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     surname = db.Column(db.String(100), nullable=False)
-    dni = db.Column(db.String(255), unique=True, nullable=False)
-    address = db.Column(db.String(255), nullable=False)       # podria ser otra tabla
+    dni = db.Column(db.Int, unique=True, nullable=False)
+    address_id = db.Column(db.BigInteger, db.ForeignKey('addresses.id'), nullable=False)
+    address = db.relationship('Address', foreign_keys=[address_id])
     email = db.Column(db.String(120), unique=True, nullable=False)
-    locality = db.Column(db.String(100), nullable=False)    # podria ser otra tabla
+    locality_id = db.Column(db.BigInteger, db.ForeignKey('localities'), nullable=False)
+    locality = db.relationship('Locality', foreign_keys=[locality_id])
     phone = db.Column(db.String(20), nullable=False)
     
     # Relación con Profession
     profession_id = db.Column(db.BigInteger, db.ForeignKey('professions.id'), nullable=False)
+    profession = db.relationship('Profession', foreign_keys=[profession_id])
 
     # Relación con JobPosition
     job_position_id = db.Column(db.BigInteger, db.ForeignKey('job_positions.id'), nullable=False)
+    job_position = db.relationship('JobPosition', foreign_keys=[job_position_id])
 
     start_date = db.Column(db.Date, nullable=False, default=datetime.now())
     end_date = db.Column(db.Date, default=None)
@@ -37,25 +42,26 @@ class Employee(db.Model):
 
     # Relacion con la tabla de User (opcional)
     user_id = db.Column(db.BigInteger, db.ForeignKey('users.id'))
-    user = db.relationship('User', backref='employee', lazy=True)
+    user = db.relationship('User', backref='employee', lazy=True, foreign_keys=[user_id])
 
     # Relación con la documentación complementaria
-    documents = db.relationship('Document', backref='employee', lazy=True)
+    documents = db.relationship('Document', back_populates='employee')
 
     payments = db.relationship('Payment', back_populates='beneficiary')
 
-    def __init__(self, name: str, surname: str, dni: str, address: str, email: str, locality: str, phone: str, profession_id: int, 
-                job_position_id: int, emergency_contact_name: str, emergency_contact_phone: str, obra_social: str, affiliate_number: str,
-                is_volunteer: bool = False, enabled: bool = True, user_id=None, start_date: datetime = datetime.now(), end_date: datetime=None):
+    def __init__(self, name: str, surname: str, dni: int, address_id: int, email: str, locality_id: int, phone: str, profession_id: int, job_position_id: int,
+                 emergency_contact_name: str, emergency_contact_phone: str, obra_social: str, affiliate_number: str, is_volunteer: bool, enabled: bool = True, user_id: Optional[int] = None):
         self.name = name
         self.surname = surname
         self.dni = dni
-        self.address = address
+        self.address_id = address_id
         self.email = email
-        self.locality = locality
+        self.locality_id = locality_id
         self.phone = phone
         self.profession_id = profession_id
         self.job_position_id = job_position_id
+        self.start_date = datetime.now().date()
+        self.end_date = None
         self.emergency_contact_name = emergency_contact_name
         self.emergency_contact_phone = emergency_contact_phone
         self.obra_social = obra_social
@@ -63,9 +69,7 @@ class Employee(db.Model):
         self.is_volunteer = is_volunteer
         self.enabled = enabled
         self.user_id = user_id
-        self.start_date = start_date
-        if (end_date != ""):
-            self.end_date = end_date
+
 
     def __repr__(self):
         return f'<Employee {self.name} {self.surname}>'

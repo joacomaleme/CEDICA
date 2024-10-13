@@ -1,10 +1,15 @@
 from src.model.database import db
 
-class PensionType(db.Model):  # Tabla para Tipos de Pensión
+"""
+    Tabla para la representacion de los tipos de pensiones, en la consigna se nombran:
+    Provincial - Nacional
+"""
+
+class PensionType(db.Model):
     __tablename__ = 'pension_types'
 
     id = db.Column(db.BigInteger, primary_key=True)  # Identificador único
-    name = db.Column(db.String(50), nullable=False, unique=True)  # Nombre de la pensión (Provincial, Nacional)
+    name = db.Column(db.String(50), nullable=False, unique=True)
 
     def __repr__(self):
         return f'<PensionType {self.name}>'
