@@ -49,4 +49,4 @@ def index():
         data = user_operations.get_paginated_list(users, page, 2)
         users = data[0]
         pages = data[1]
-        return render_template("home.html", pages=pages, users=users, roles=roles, status=request.args.get('status'), startMail=retMail, startRole=retRole, startAscending=(not ascending), enabled=request.args.get('value'), orderMail=orderMail, startPage=page)
+        return render_template("user_search.html", pages=pages, users=users, roles=roles, status=request.args.get('status'), startMail=retMail, startRole=retRole, startAscending=(not ascending), enabled=request.args.get('value'), orderMail=orderMail, startPage=page)
