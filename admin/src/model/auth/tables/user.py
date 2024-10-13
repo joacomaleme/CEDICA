@@ -13,9 +13,15 @@ class User(db.Model):
     inserted_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
-    # Relaciones con las tablas de roles y pagos
+
     role = db.relationship('Role', back_populates='users', lazy='joined')
-    pagos = db.relationship('Pago', back_populates='beneficiario')
+
+    pagos = db.relationship('Pago', back_populates='beneficiario') # PASAR A EMPLEADO (ESTÁ ACA PORQUE TODAVÍA NO EXISTE LA TABLA)
+    # PASAR A EMPLEADO (ESTÁ ACA PORQUE TODAVÍA NO EXISTE LA TABLA)
+    cobros = db.relationship('Cobro', back_populates='recibe_dinero', foreign_keys='Cobro.recibe_dinero_id') 
+     # PASAR A J&A COMO COBROS SIN EL 1 (ESTÁ ACA PORQUE TODAVÍA NO EXISTE LA TABLA)
+    cobros1 = db.relationship('Cobro', back_populates='jinete_y_amazona', foreign_keys='Cobro.jinete_y_amazona_id')
+
 
     __table_args__ = (
         db.Index('idx_user_role', 'role_id'),
