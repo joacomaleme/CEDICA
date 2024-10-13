@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='riderProfile.css')}}"/>
+{% endblock %}
+
+{% block title %} Perfil de {{rider.name}} {% endblock %}
+
+{% block content %}
+
+<div class="profile-container">
+    <h2 class="profile-name">{{ rider.name }}</h2>
+    
+    <div class="profile-details">
+        <div class="profile-info">
+            <p><strong>Rol:</strong> {{ rider.role }}</p>
+            <p><strong>Biografía:</strong> {{ rider.bio }}</p>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block footer %}
+    <p>Contactanos en nuestras redes sociales</p>
+    
+{% endblock %}
