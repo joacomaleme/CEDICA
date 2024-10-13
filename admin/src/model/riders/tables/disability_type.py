@@ -1,6 +1,11 @@
 from src.model.database import db
 
-class DisabilityType(db.Model):  # Tabla para Tipos de Discapacidades
+"""
+    Tabla que representa a los distintos TIPOS de discapacidades, en la consigna se nombran:
+    Mental, Motora, Sensorial, Visceral.
+"""
+
+class DisabilityType(db.Model):
     __tablename__ = 'disability_types'
 
     id = db.Column(db.BigInteger, primary_key=True)  # Identificador único
