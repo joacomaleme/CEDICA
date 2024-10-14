@@ -14,7 +14,7 @@
 {% block content %}
   <section class="form-container">
     <h1 class="title">Registrar un empleado</h1>
-    <form action="{{ url_for('employee.create')}}" method="POST" enctype="multipart/form-data">
+    <form class="form" action="{{ url_for('employee.create')}}" method="POST" enctype="multipart/form-data">
       <div class="input-set">
         <input spellcheck=false id="name-field" class="input-field" name="name" type="text" placeholder="" required><br>
         <label id="name-label" class="input-label" for="name-field">NOMBRE</label>

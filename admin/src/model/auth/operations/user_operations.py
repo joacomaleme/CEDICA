@@ -14,7 +14,7 @@ def create_user(email: str, alias: str, password: str, role_id:Optional[int] = N
 
 def list_users():   # lista TODOS los usuarios (solo usar cuando sea estrictamente necesario)
     users = User.query.all()
-    [db.session.expunge(user) for user in users.items]
+    [db.session.expunge(user) for user in users]
     return users # puede devolver una lista vacia
 
 def get_user(id: int):      #devuelve un usuario dado un id

@@ -20,14 +20,17 @@ def index():
 
     page = request.args.get('page')
     ascending = request.args.get('ascending') is None
-    sort_attr = request.args.get('sort_attr') or "inserted_at"
+    sort_attr = request.args.get('sort_attr') or "email"
     search_attr = request.args.get('search_attr') or "email"
     search_value = request.args.get('search_value') or ""
+    start_profession = request.args.get('profession') or ""
 
-    start_sort_attr = ""
-    start_search_attr = ""
-    start_search_val = ""
-    start_profession = ""
+    print(start_profession)
+    start_sort_attr = sort_attr if sort_attr else ""
+    start_search_attr = search_attr if search_attr else ""
+    start_search_val = search_value if search_value else ""
+    pages = 1
+    employees = []
 
     try:
         if not page:
@@ -35,12 +38,12 @@ def index():
         else:
             page = int(page)
 
-        data = employee_operations.get_employees_filtered_list(page=page, sort_attr=sort_attr, ascending=ascending, search_attr=search_attr, search_value=search_value)
+        data = employee_operations.get_employees_filtered_list(page=page, sort_attr=sort_attr, ascending=ascending, search_attr=search_attr,
+                                                                search_value=search_value, search_profession=start_profession)
 
         employees = data[0]
         pages = data[1]
-        
-    except:
+    except Exception as e:
         flash("Uso inválido de parametros, no se pudo aplicar el filtro", "error")
         page = 0
 
@@ -48,13 +51,8 @@ def index():
                             start_sort_attr=start_sort_attr, start_search_attr=start_search_attr, start_search_val=start_search_val,
                             start_profession=start_profession, start_ascending=(not ascending), start_page=page)
 
-# @bp.route("/")
-# def index():
-#     employees = employee_operations.list_employees()
-#     return render_template("employees/index.html", employees=employees)
-
 @bp.get("/nuevo")
-@permission_required('employee_new')
+#@permission_required('employee_new')
 def new():
     employees = employee_operations.list_employees()
     professions = profession_operations.list_professions()

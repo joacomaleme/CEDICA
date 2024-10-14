@@ -3,8 +3,9 @@
 {% block head %}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='dropdownSearch.css')}}"/>
-  <link rel="stylesheet" href="{{ url_for('static', filename='pagination.css')}}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dropdownSearch.css')}}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pagination.css')}}"/>
 {% endblock %}
 
 {% block title %}Empleados - CEDICA{% endblock %}
@@ -17,7 +18,7 @@
         <button class="btn">
             <a href="{{ url_for('employee.new') }}">Nuevo</a>
         </button>
-        <form id="search-options" class="search-options" action="{{ url_for('user.index')}}" method="GET">
+        <form id="search-options" class="search-options" action="{{ url_for('employee.index')}}" method="GET">
 
             <div class="empty">
                 <label class="title-cont" for="controllers">Ordenar por:</label>
@@ -33,7 +34,7 @@
                     </label>
                 </div>
             </div>
-            
+
             <input id="atLeastOne" name="status" {% if status == "0" %}checked{% endif %} value="0" type="checkbox" style="display:none">
             <input id="page" type="number" name="page" style="display:none;">
             <div class="serach-bar">
@@ -71,7 +72,6 @@
                 <tr>
                     <th>Nombre completo</th>
                     <th>DNI</th>
-                    <th>Dirección</th>
                     <th>Email</th>
                     <th>Telefono</th>
                     <th>Profession ID</th>
@@ -87,7 +87,6 @@
                 <tr>
                     <td>{{ employee.name }} {{ employee.surname }}</td>
                     <td>{{ employee.dni }}</td>
-                    <td>{{ employee.address }}</td>
                     <td>{{ employee.email }}</td>
                     <td>{{ employee.phone }}</td>
                     <td>{{ professions[employee.profession_id - 1] }}</td>
@@ -123,7 +122,7 @@
         const startPage = {{ start_page }};
         const pages = {{ pages }};
     </script>
-    <script src="{{ url_for('static', filename='dropdownSearch.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dropdownSearch.js') }}"></script>
     <script src="{{ url_for('static', filename='js/indexEmployee.js') }}"></script>
 {% endblock %}
 

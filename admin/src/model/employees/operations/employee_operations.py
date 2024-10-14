@@ -1,6 +1,7 @@
 from datetime import datetime
 from src.model.database import db
 from src.model.employees.tables.employee import Employee
+from src.model.employees.operations.profession_operations import search_name
 from sqlalchemy.orm  import Query
 from typing import List, Optional, Tuple
 
@@ -114,18 +115,27 @@ def search_by_attribute(employees: Query, search_attr: str = "email", search_val
         case _:
             return employees.filter(Employee.email.ilike(f"%{search_value}%"))
 
+def filter_profession(employees: Query, profession_name: str) -> Query:
+    profession = search_name(profession_name)
+    if profession:
+        return employees.filter(db.and_(Employee.profession_id.isnot(None), Employee.profession_id == profession.id))
+    else:
+        return employees
+
 # Función final que combina los filtros y búsquedas
 def get_employees_filtered_list(page: int,
                                 limit: int = 25,
                                 sort_attr: str = "email",
                                 ascending: bool = True,
                                 search_attr: str = "email",
-                                search_value: str = "") -> Tuple[Employee, int]:
+                                search_value: str = "",
+                                search_profession: str = "") -> Tuple[Employee, int]:
     # Inicia la consulta con Employee
     employees = Employee.query
     
     # Aplica los filtros y búsquedas
     employees = search_by_attribute(employees, search_attr, search_value)
+    employees = filter_profession(employees, search_profession)
     
     # Ordena los resultados
     employees = sorted_by_attribute(employees, sort_attr, ascending)
