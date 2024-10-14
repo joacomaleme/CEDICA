@@ -1,4 +1,5 @@
 from src.model.database import db
+from src.model.riders.tables.rider_guardian import rider_guardians
 
 class Guardian(db.Model):
     __tablename__ = 'guardians'
@@ -27,6 +28,4 @@ class Guardian(db.Model):
     # Actividad u ocupación del familiar/tutor
     occupation = db.Column(db.String(100), nullable=False)
 
-
-    riders = db.relationship('Rider', secondary='rider_guardians', back_populates='guardians')
-    rider_guardians = db.relationship('RiderGuardian', back_populates='guardian')
+    riders = db.relationship('Rider', secondary=rider_guardians, back_populates='guardians') # el atributo back_populates es para indicar que ambas tablas pueden acceder a la otra via atributos y el atributo secondary define una relacion N a N.

@@ -212,6 +212,7 @@
   padding-right: 0.8rem;
   padding-top: 0.8rem;
   padding-bottom: 0.8rem;
+  width: 19%;
   background-color: white;
   cursor: pointer;
 }
@@ -238,14 +239,16 @@
 
 .search-options {
   display: grid;
-  grid-template-columns: 1fr 3fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr;
   margin-right: 5%;
   margin-left: 5%;
+  align-items: center;
+  justify-items: center;
   width: 90%;
   margin-bottom: 1.5rem;
   margin-top: 1rem;
-  grid-template-areas: "empt search-bar dropselect booleanValidators";
+  grid-template-areas: "empt empt2 search-bar dropselect";
 }
 
 @media only screen and (max-width: 650px) {
@@ -258,7 +261,7 @@
     width: 90%;
     margin-bottom: 1.5rem;
     margin-top: 1rem;
-    grid-template-areas: "empt" "search-bar" "dropselect" "booleanValidators";
+    grid-template-areas: "empt empt2 search-bar dropselect";
   }
 
   .search-options > * {
@@ -268,13 +271,18 @@
 
 .dropselect {
   grid-area: dropselect;
-  margin-right: 20px;
+  width: 15rem;
 }
 
 .empty {
+  position: relative;
   grid-area: empt;
-  display: flex;
-  align-items: center;
+  gap: 0.5rem;
+}
+
+.empty2 {
+  position: relative;
+  grid-area: empt2;
   gap: 0.5rem;
 }
 
@@ -290,15 +298,21 @@
 }
 
 .title-cont {
+  position: absolute;
+  top: -1.5rem;
+  left: 0;
   font-size: 0.85rem;
+}
+
+.search-bar {
+  width: 15rem;
 }
 
 .search-bar {
   grid-area: search-bar;
   display: flex;
   align-items: center;
-  width: 100%;
-  max-width: 600px;
+  width: 80%;
   margin: auto;
 }
 
@@ -462,6 +476,7 @@
   border-radius: 25px;
   padding-top: 0.8rem;
   padding-bottom: 0.8rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   transform: rotateY(-180deg);
 }
 
@@ -469,6 +484,7 @@
   content: attr(data-tg-off);
 
   background: #f5f5f5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   border-radius: 25px;
   padding-top: 0.8rem;
   padding-bottom: 0.8rem;
@@ -491,4 +507,16 @@
 
 .checkbox-wrapper-10 .tgl-flip:checked + .tgl-btn:active:after {
   transform: rotateY(20deg);
+}
+
+@media (max-width: 1250px) {
+  .search-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas: 
+      "empt empt2"
+      "dropselect search-bar";
+    row-gap: 1.5rem;
+  }
 }

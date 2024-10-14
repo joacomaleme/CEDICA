@@ -38,27 +38,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
   });
 
-  const checkOne = document.getElementById("check-banned");
-  const checkTwo = document.getElementById("check-unbanned");
+  const ascending = document.getElementById("ascending");
+  const sortAttr = document.getElementById("sortAttr");
 
-  const atLeastOne = document.getElementById("atLeastOne");
-
-  const dateCheck = document.getElementById("cb5");
-
-  const descending = document.getElementById("descending");
-
-  descending.addEventListener('change', submitForm)
-  dateCheck.addEventListener('change', () => setTimeout(() => {submitForm();}, 300))
-
-  checkOne.addEventListener('change', () => {
-    checkTwo.checked = false; atLeastOne.checked = checkOne.checked;
-  });
-  checkTwo.addEventListener('change', () => {
-    checkOne.checked = false; atLeastOne.checked = checkTwo.checked;
-  });
-
-  checkOne.addEventListener('change', () => setTimeout(() => {submitForm();}, 605));
-  checkTwo.addEventListener('change', () => setTimeout(() => {submitForm();}, 605));
+  ascending.addEventListener('change', submitForm)
+  sortAttr.addEventListener('change', submitForm)
 
   function submitForm() {
       form.submit();

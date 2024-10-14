@@ -3,9 +3,11 @@ from src.model.database import db
 from src.model.riders.tables.family_allowance_type import FamilyAllowanceType
 from src.model.riders.tables.disability_diagnosis import DisabilityDiagnosis
 from src.model.riders.tables.disability_type import DisabilityType
+from src.model.riders.tables.rider_guardian import rider_guardians
 from src.model.riders.tables.pension_type import PensionType
 from src.model.riders.tables.school import School
 from src.model.riders.tables.horse import Horse
+
 
 class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
     __tablename__ = 'riders'
@@ -76,16 +78,14 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
     attending_professionals = db.Column(db.Text)  # Profesionales que lo atienden (campo libre)
 
     # Padre/Madre/Tutor, relacion N a N.
-
-    guardians = db.relationship('Guardian', secondary='rider_guardians', back_populates='riders')
-    rider_guardians = db.relationship('RiderGuardian', back_populates='rider')
+    guardians = db.relationship('Guardian', secondary=rider_guardians, back_populates='riders') # el atributo back_populates es para indicar que ambas tablas pueden acceder a la otra via atributos y el atributo secondary define una relacion N a N.
 
     # Información sobre el trabajo en la la institución
     work_proposal = db.Column(db.String(50))  # Hipoterapia, Monta Terapéutica, etc. 
     active = db.Column(db.String(10), nullable=False)  # REGULAR, DE BAJA
     sede = db.Column(db.String(50), nullable=False)  # CASJ, HLP, OTRO MAKE TABLE
     # Relacion N a N con WorkDay
-    #work_days = db.relationship('WorkDay', secondary='rider_work_day', back_populates='riders')
+    work_days = db.relationship('WorkDay', secondary='rider_work_day', back_populates='riders')
 
     teacher_id = db.Column(db.BigInteger, db.ForeignKey('employees.id'))  # Profesor/Terapeuta 
     teacher = db.relationship('Employee', foreign_keys=[teacher_id])

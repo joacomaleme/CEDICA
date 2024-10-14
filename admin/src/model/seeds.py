@@ -29,7 +29,6 @@ from src.model.riders.tables.horse import Horse
 from src.model.riders.tables.school import School
 from src.model.riders.tables.guardian import Guardian
 from src.model.riders.tables.work_day import WorkDay
-from src.model.riders.tables.rider_guardian import RiderGuardian
 from src.model.riders.tables.rider_work_day import RiderWorkDay
 from src.model.riders.tables.sede import Sede
 from src.model.riders.tables.disability_type import DisabilityType
@@ -42,9 +41,6 @@ from src.model.generic.tables.province import Province
 from src.model.generic.tables.document_types import DocumentType
 from src.model.registers.tables.payment import Payment
 from src.model.registers.tables.payment_type import PaymentType
-
-
-
 
 from datetime import datetime
 

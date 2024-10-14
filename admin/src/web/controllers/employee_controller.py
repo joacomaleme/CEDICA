@@ -19,16 +19,17 @@ def index():
     job_positions = [job_position.name for job_position in job_positions]
 
     page = request.args.get('page')
-    ascending = request.args.get('ascending') is None
-    sort_attr = request.args.get('sort_attr') or "email"
+    start_ascending = request.args.get('ascending') is None
+    sort_attr = request.args.get('sort_attr') or "inserted_at"
     search_attr = request.args.get('search_attr') or "email"
     search_value = request.args.get('search_value') or ""
     start_profession = request.args.get('profession') or ""
 
-    print(start_profession)
+
     start_sort_attr = sort_attr if sort_attr else ""
     start_search_attr = search_attr if search_attr else ""
     start_search_val = search_value if search_value else ""
+    search_attr_esp = to_spanish(start_search_attr)
     pages = 1
     employees = []
 
@@ -38,7 +39,7 @@ def index():
         else:
             page = int(page)
 
-        data = employee_operations.get_employees_filtered_list(page=page, sort_attr=sort_attr, ascending=ascending, search_attr=search_attr,
+        data = employee_operations.get_employees_filtered_list(page=page, sort_attr=sort_attr, ascending=start_ascending, search_attr=search_attr,
                                                                 search_value=search_value, search_profession=start_profession)
 
         employees = data[0]
@@ -47,9 +48,9 @@ def index():
         flash("Uso inválido de parametros, no se pudo aplicar el filtro", "error")
         page = 0
 
-    return render_template("employees/index.html", pages=pages, employees=employees, professions=professions, job_positions=job_positions,
-                            start_sort_attr=start_sort_attr, start_search_attr=start_search_attr, start_search_val=start_search_val,
-                            start_profession=start_profession, start_ascending=(not ascending), start_page=page)
+    return render_template("employees/index.html", pages=pages, employees=employees, professions=professions, job_positions=job_positions, start_sort_attr=start_sort_attr,
+                            start_search_attr=start_search_attr, search_attr_esp=search_attr_esp, start_search_val=start_search_val,
+                            start_profession=start_profession, start_ascending=(not start_ascending), start_page=page)
 
 @bp.get("/nuevo")
 #@permission_required('employee_new')
@@ -148,3 +149,12 @@ def is_valid_email(email :str) -> bool:
 def remove_extension(path: str) -> str:
     split = path.split(".")
     return ".".join(split[:-1]) if len(split) > 1 else path
+
+def to_spanish(attr: str) -> str:
+    match attr:
+        case "name":
+            return "nombre"
+        case "surname":
+            return "apellido"
+        case _:
+            return attr
