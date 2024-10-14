@@ -34,4 +34,4 @@ class Document(db.Model):
         self.rider_id = rider_id
 
     def __repr__(self):
-        return f'<Document {self.titulo} ({self.tipo})>'
+        return f'<Document {self.title} ({self.type})>'

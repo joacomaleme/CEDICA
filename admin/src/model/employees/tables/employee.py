@@ -44,7 +44,7 @@ class Employee(db.Model):
     user = db.relationship('User', backref='employee', lazy=True, foreign_keys=[user_id])
 
     # Relación con la documentación complementaria
-    documents = db.relationship('Document', backref='employee', lazy=True)
+    documents = db.relationship('Document', back_populates='employee')
 
     payments = db.relationship('Payment', back_populates='beneficiary')
 

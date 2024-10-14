@@ -27,6 +27,7 @@ def index():
     start_sort_attr = ""
     start_search_attr = ""
     start_search_val = ""
+    start_profession = ""
 
     try:
         if not page:
@@ -45,7 +46,7 @@ def index():
 
     return render_template("employees/index.html", pages=pages, employees=employees, professions=professions, job_positions=job_positions,
                             start_sort_attr=start_sort_attr, start_search_attr=start_search_attr, start_search_val=start_search_val,
-                            start_ascending=(not ascending), start_page=page)
+                            start_profession=start_profession, start_ascending=(not ascending), start_page=page)
 
 # @bp.route("/")
 # def index():

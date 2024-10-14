@@ -1,5 +1,11 @@
 from datetime import date
 from src.model.database import db
+from src.model.riders.tables.family_allowance_type import FamilyAllowanceType
+from src.model.riders.tables.disability_diagnosis import DisabilityDiagnosis
+from src.model.riders.tables.disability_type import DisabilityType
+from src.model.riders.tables.pension_type import PensionType
+from src.model.riders.tables.school import School
+from src.model.riders.tables.horse import Horse
 
 class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
     __tablename__ = 'riders'
@@ -49,10 +55,12 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
     # Información sobre asignaciones familiares
     receives_family_allowance = db.Column(db.Boolean, nullable=False, default=False)  # Si recibe asignaciones familiares
     family_allowance_type_id = db.Column(db.BigInteger, db.ForeignKey('family_allowance_types.id')) # Tipo de asignación: Universal, Discapacidad, Escolar
-    family_allowance_type = db.relationship('FamilyAllowanceType', db.ForeignKey('family_allowance_type_id'))
+    family_allowance_type = db.relationship('FamilyAllowanceType', foreign_keys=[family_allowance_type_id])
+
+    #family_allowance_type = db.relationship('FamilyAllowanceType', db.ForeignKey('family_allowance_type_id'))
     receives_pension = db.Column(db.Boolean, nullable=False, default=False)  # Si recibe pensión o no
     pension_type_id = db.Column(db.BigInteger, db.ForeignKey('pension_types.id'))
-    pension_type = db.relationship('PensionType', backref='riders', foreign_keys=['pension_type_id'])  # Tipo de pensión: Provincial o Nacional
+    pension_type = db.relationship('PensionType', backref='riders', foreign_keys=[pension_type_id])  # Tipo de pensión: Provincial o Nacional
 
     # Información sobre la obra social y salud
     health_insurance = db.Column(db.String(100))  # Obra social del alumno
@@ -61,14 +69,14 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
 
     # Información escolar
     school_id = db.Column(db.BigInteger, db.ForeignKey('schools.id'))
-    school = db.relationship('School', backref='riders', foreign_keys=['school_id'])
+    school = db.relationship('School', backref='riders', foreign_keys=[school_id])
     current_grade = db.Column(db.String(50))  # Grado o año escolar actual
 
 
     attending_professionals = db.Column(db.Text)  # Profesionales que lo atienden (campo libre)
 
     # Padre/Madre/Tutor, relacion N a N.
-    guardians = db.relationship('Guardian', secondary='rider_guardians')
+    #guardians = db.relationship('Guardian', secondary='rider_guardians')
 
     # Información sobre el trabajo en la la institución
 
@@ -76,13 +84,15 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
     active = db.Column(db.String(10), nullable=False)  # REGULAR, DE BAJA
     sede = db.Column(db.String(50), nullable=False)  # CASJ, HLP, OTRO MAKE TABLE
     # Relacion N a N con WorkDay
-    work_days = db.relationship('WorkDay', secondary='rider_work_day', back_populates='riders')
+    #work_days = db.relationship('WorkDay', secondary='rider_work_day', back_populates='riders')
+
     teacher_id = db.Column(db.BigInteger, db.ForeignKey('employees.id'))  # Profesor/Terapeuta 
     teacher = db.relationship('Employee', foreign_keys=[teacher_id])
     horse_conductor_id = db.Column(db.BigInteger, db.ForeignKey('employees.id'))  # Conductor/a del caballo
     horse_conductor = db.relationship('Employee', foreign_keys=[horse_conductor_id])
     horse_id = db.Column(db.BigInteger, db.ForeignKey('horses.id'))  # Caballo
-    horse = db.relationship('Horse')
+    horse = db.relationship('Horse', backref='riders', foreign_keys=[horse_id])
+
     track_assistant_id = db.Column(db.BigInteger, db.ForeignKey('employees.id'))  # Auxiliar de pista
     track_assistant = db.relationship('Employee', foreign_keys=[track_assistant_id])
 
