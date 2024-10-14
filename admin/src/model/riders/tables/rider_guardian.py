@@ -11,5 +11,5 @@ class RiderGuardian(db.Model):
     guardian_id = db.Column(db.BigInteger, db.ForeignKey('guardians.id'), primary_key=True)
 
     # Relaciones
-    rider = db.relationship('Rider', backref=db.backref('rider_guardians', cascade="all, delete-orphan"))
-    guardian = db.relationship('Guardian', backref=db.backref('rider_guardians', cascade="all, delete-orphan"))
+    rider = db.relationship('Rider', back_populates='rider_guardians')
+    guardian = db.relationship('Guardian', back_populates='rider_guardians')

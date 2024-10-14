@@ -26,3 +26,7 @@ class Guardian(db.Model):
 
     # Actividad u ocupación del familiar/tutor
     occupation = db.Column(db.String(100), nullable=False)
+
+
+    riders = db.relationship('Rider', secondary='rider_guardians', back_populates='guardians')
+    rider_guardians = db.relationship('RiderGuardian', back_populates='guardian')

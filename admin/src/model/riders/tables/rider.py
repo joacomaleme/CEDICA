@@ -47,20 +47,20 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
 
     # Información sobre discapacidad
     has_disability_certificate = db.Column(db.Boolean, nullable=False, default=False)  # Certificado de discapacidad
-    disability_diagnosis_id = db.Column(db.BigInteger, db.ForeignKey('disability_diagnoses.id'))
+    disability_diagnosis_id = db.Column(db.BigInteger, db.ForeignKey('disability_diagnoses.id'), nullable=True)
     disability_diagnosis = db.relationship('DisabilityDiagnosis', backref='current_riders', foreign_keys=[disability_diagnosis_id])  # Diagnóstico de la discapacidad
-    disability_type_id = db.Column(db.BigInteger, db.ForeignKey('disability_types.id'))
+    disability_type_id = db.Column(db.BigInteger, db.ForeignKey('disability_types.id'), nullable=True)
     disability_type = db.relationship('DisabilityType', backref='current_riders', foreign_keys=[disability_type_id])
 
     # Información sobre asignaciones familiares
     receives_family_allowance = db.Column(db.Boolean, nullable=False, default=False)  # Si recibe asignaciones familiares
-    family_allowance_type_id = db.Column(db.BigInteger, db.ForeignKey('family_allowance_types.id')) # Tipo de asignación: Universal, Discapacidad, Escolar
-    family_allowance_type = db.relationship('FamilyAllowanceType', foreign_keys=[family_allowance_type_id])
 
-    #family_allowance_type = db.relationship('FamilyAllowanceType', db.ForeignKey('family_allowance_type_id'))
+    family_allowance_type_id = db.Column(db.BigInteger, db.ForeignKey('family_allowance_types.id'))# Tipo de asignación: Universal, Discapacidad, Escolar
+    family_allowance_type = db.relationship('FamilyAllowanceType', foreign_keys=[family_allowance_type_id])
     receives_pension = db.Column(db.Boolean, nullable=False, default=False)  # Si recibe pensión o no
     pension_type_id = db.Column(db.BigInteger, db.ForeignKey('pension_types.id'))
-    pension_type = db.relationship('PensionType', backref='riders', foreign_keys=[pension_type_id])  # Tipo de pensión: Provincial o Nacional
+    pension_type = db.relationship('PensionType', back_populates='riders', foreign_keys=[pension_type_id])
+
 
     # Información sobre la obra social y salud
     health_insurance = db.Column(db.String(100))  # Obra social del alumno
@@ -76,10 +76,11 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
     attending_professionals = db.Column(db.Text)  # Profesionales que lo atienden (campo libre)
 
     # Padre/Madre/Tutor, relacion N a N.
-    #guardians = db.relationship('Guardian', secondary='rider_guardians')
+
+    guardians = db.relationship('Guardian', secondary='rider_guardians', back_populates='riders')
+    rider_guardians = db.relationship('RiderGuardian', back_populates='rider')
 
     # Información sobre el trabajo en la la institución
-
     work_proposal = db.Column(db.String(50))  # Hipoterapia, Monta Terapéutica, etc. 
     active = db.Column(db.String(10), nullable=False)  # REGULAR, DE BAJA
     sede = db.Column(db.String(50), nullable=False)  # CASJ, HLP, OTRO MAKE TABLE
@@ -97,7 +98,7 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
     track_assistant = db.relationship('Employee', foreign_keys=[track_assistant_id])
 
     # Relacion con sus Documentos
-    documents = db.relationship('Document', back_populates='rider')
+    documents = db.relationship('Document', primaryjoin="Rider.id == Document.rider_id")
 
     def __init__(self, name, last_name, dni, age, birth_date, birth_locality_id, birth_province_id, address_id, current_locality_id, current_province_id, phone, emergency_contact_name, emergency_contact_phone, active, sede, has_scholarship=False, scholarship_percentage=None, has_disability_certificate=False, disability_diagnosis_id=None, disability_type_id=None, receives_family_allowance=False, family_allowance_type_id=None, receives_pension=False, pension_type_id=None, health_insurance=None, affiliate_number=None, has_guardianship=False, school_id=None, current_grade=None, attending_professionals=None, work_proposal=None, teacher_id=None, horse_conductor_id=None, horse_id=None, track_assistant_id=None):
         self.name = name
