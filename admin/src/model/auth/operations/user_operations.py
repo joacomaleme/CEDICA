@@ -5,8 +5,8 @@ from sqlalchemy.orm  import Query
 from typing import List, Optional
 
 
-def create_user(email: str, alias: str, password: str, role_id:Optional[int] = None, enabled:bool = True, system_admin:bool = False) -> User:
-    user = User(email, alias, password, role_id, enabled, system_admin)
+def create_user(email: str, alias: str, password: str, role_id:Optional[int] = None, enabled:bool = True) -> User:
+    user = User(email, alias, password, role_id, enabled)
     db.session.add(user)
     db.session.commit()
     db.session.expunge(user)
@@ -14,7 +14,7 @@ def create_user(email: str, alias: str, password: str, role_id:Optional[int] = N
 
 def list_users():   # lista TODOS los usuarios (solo usar cuando sea estrictamente necesario)
     users = User.query.all()
-    [db.session.expunge(user) for user in users.items]
+    [db.session.expunge(user) for user in users]
     return users # puede devolver una lista vacia
 
 def get_user(id: int):      #devuelve un usuario dado un id
@@ -35,7 +35,6 @@ def __update_user__(to_update: User) -> User:
     user.alias = to_update.alias or user.alias
     user.password = to_update.password or user.password
     user.enabled = to_update.enabled if to_update.enabled is not None else user.enabled
-    user.system_admin = to_update.system_admin if to_update.system_admin is not None else user.system_admin
     user.role = to_update.role #debería en vez solo copiar la foreign key? En el video lo hacen así
     db.session.commit()
     db.session.expunge(user)
@@ -54,7 +53,7 @@ def toggle_block(id: int) -> User:
     user = User.query.get(id)
     if user is None:
         raise ValueError("No se encontro un usuario con ese ID") 
-    if user.system_admin == False:
+    if user.role == False:
         user.enabled = not user.enabled
         db.session.commit()
     else:
@@ -73,6 +72,15 @@ def assign_role(id: int, role: Optional[Role] = None) -> User: #Enviar role = No
         raise PermissionError("No se permite asignar roles a administradores del sistema")
     db.session.expunge(user)
     return user
+
+### CHECKEO DE PERMISOS
+
+def has_permission(user_email: str, permission_name:str) -> bool:
+    # verifica que el rol del usuario tenga el permiso especificado
+    user = get_user_by_email(user_email);
+    role = Role.query.get(user.role_id)
+    return any(permission.name == permission_name for permission in role.permissions)
+
 
 ###INSTRUCCIONES DE LISTADO ESPECÍFICAS
 

@@ -1,13 +1,13 @@
 from src.model.database import db
-from src.model.registros.tables.pago import Pago
-from src.model.registros.tables.tipo_pago import TipoPago
+from src.model.registers.tables.payment import Payment
+from src.model.registers.tables.payment_type import PaymentType
 from sqlalchemy.orm import Query
 from sqlalchemy import desc
 
 from typing import List, Optional
 from datetime import datetime
 
-def create_pago(beneficiario, monto: float, fecha_pago: datetime, descripcion: str, tipo_pago: TipoPago) -> Pago:
+def create_payment(amount: float, date: datetime, description: str, payment_type_id: int, beneficiary_id: Optional[int] = None) -> Payment:
     """
     Crea un nuevo pago (Pago), lo agrega a la base de datos y retorna el objeto expurgado.
 
@@ -27,13 +27,13 @@ def create_pago(beneficiario, monto: float, fecha_pago: datetime, descripcion: s
     Pago
         El objeto Pago recién creado y expurgado.
     """
-    pago = Pago(beneficiario, monto, fecha_pago, descripcion, tipo_pago)
-    db.session.add(pago)
+    payment = Payment(amount, date, description, payment_type_id, beneficiary_id)
+    db.session.add(payment)
     db.session.commit()
-    db.session.expunge(pago)
-    return pago
+    db.session.expunge(payment)
+    return payment
 
-def list_pagos() -> List[Pago]:   
+def list_payments() -> List[Payment]:   
     """
     Lista todos los pagos (Pago) de la base de datos. 
     Retorna una lista vacía si no hay registros.
@@ -42,11 +42,11 @@ def list_pagos() -> List[Pago]:
     List[Pago]
         Una lista de objetos Pago expurgados.
     """
-    pagos = Pago.query.all()
-    [db.session.expunge(pago) for pago in pagos]
-    return pagos
+    payments = Payment.query.all()
+    [db.session.expunge(payment) for payment in payments]
+    return payments
 
-def get_pago(id: int) -> Optional[Pago]:
+def get_payment(id: int) -> Optional[Payment]:
     """
     Recupera un pago (Pago) por su ID.
     Si no se encuentra el ID, retorna None.
@@ -59,12 +59,12 @@ def get_pago(id: int) -> Optional[Pago]:
     Pago
         El objeto Pago expurgado si se encuentra, de lo contrario None.
     """
-    pago = Pago.query.get(id)
-    if pago:
-        db.session.expunge(pago)
-    return pago
+    payment = Payment.query.get(id)
+    if payment:
+        db.session.expunge(payment)
+    return payment
 
-def update_pago(to_update: Pago) -> Pago:
+def update_payment(to_update: Payment) -> Payment:
     """
     Actualiza un pago (Pago) existente con nuevos atributos
     y guarda los cambios en la base de datos.
@@ -81,21 +81,21 @@ def update_pago(to_update: Pago) -> Pago:
     ValueError
         Si no se encuentra un Pago con el ID proporcionado.
     """
-    pago = Pago.query.get(to_update.id)
-    if pago is None:
+    payment = Payment.query.get(to_update.id)
+    if payment is None:
         raise ValueError("No se encontró un pago con ese ID")
     
-    pago.beneficiario = to_update.beneficiario
-    pago.monto = to_update.monto or pago.monto
-    pago.fecha_pago = to_update.fecha_pago or pago.fecha_pago
-    pago.descripcion = to_update.descripcion or pago.descripcion
-    pago.tipo_pago = to_update.tipo_pago
+    payment.beneficiary = to_update.beneficiary
+    payment.amount = to_update.amount or payment.amount
+    payment.date = to_update.date or payment.date
+    payment.description = to_update.description or payment.description
+    payment.payment_type = to_update.payment_type
 
     db.session.commit()
-    db.session.expunge(pago)
-    return pago
+    db.session.expunge(payment)
+    return payment
 
-def delete_pago(id: int):
+def delete_payment(id: int):
     """
     Elimina un pago (Pago) por su ID.
     Si no se encuentra el registro, lanza una excepción.
@@ -108,14 +108,14 @@ def delete_pago(id: int):
     ValueError
         Si no se encuentra un Pago con el ID proporcionado.
     """
-    pago = Pago.query.get(id)
-    if pago is None:
+    payment = Payment.query.get(id)
+    if payment is None:
         raise ValueError("No se encontró un pago con ese ID")
 
-    db.session.delete(pago)
+    db.session.delete(payment)
     db.session.commit()
 
-def filter_fecha_pago(pagos: Query, fecha_inicio: datetime, fecha_fin: datetime) -> Query:
+def filter_date(payments: Query, start_date: datetime, end_date: datetime) -> Query:
     """
     Filtra los pagos (Pago) entre un rango de fechas.
 
@@ -131,9 +131,9 @@ def filter_fecha_pago(pagos: Query, fecha_inicio: datetime, fecha_fin: datetime)
     Query
         Query filtrado con los pagos dentro del rango de fechas.
     """
-    return pagos.filter(db.and_((Pago.fecha_pago > fecha_inicio), (Pago.fecha_pago < fecha_fin)))
+    return payments.filter(db.and_((Payment.date > start_date), (Payment.date < end_date)))
 
-def filter_tipo_pago(pagos: Query, tipos_pago: List[TipoPago]) -> Query:
+def filter_payment_type(payments: Query, payment_types: List[PaymentType]) -> Query:
     """
     Filtra los pagos (Pago) por tipo de pago (TipoPago).
 
@@ -147,9 +147,9 @@ def filter_tipo_pago(pagos: Query, tipos_pago: List[TipoPago]) -> Query:
     Query
         Query filtrado con los pagos que coinciden con los tipos de pago especificados.
     """
-    return pagos.filter(Pago.tipo_pago.id.in_(tipo_pago.id for tipo_pago in tipos_pago))
+    return payments.filter(Payment.payment_type.id.in_(payment_type.id for payment_type in payment_types))
 
-def sorted_by_fecha_pago(pagos: Query, ascending: bool = True) -> Query:
+def sorted_by_date(payments: Query, ascending: bool = True) -> Query:
     """
     Ordena los pagos (Pago) por fecha.
 
@@ -164,12 +164,12 @@ def sorted_by_fecha_pago(pagos: Query, ascending: bool = True) -> Query:
         Query ordenado por la fecha de los pagos.
     """
     if ascending:
-        return pagos.order_by(Pago.fecha_pago)
+        return payments.order_by(Payment.date)
     else:
-        return pagos.order_by(desc(Pago.fecha_pago))
+        return payments.order_by(desc(Payment.date))
 
-def get_filtered_list(page: int, limit: int = 25, tipos_pago: List[TipoPago] = [],
-                       ascending: bool = True, fecha_inicio: datetime = None, fecha_fin: datetime = None) -> List[Pago]:
+def get_filtered_list(page: int, limit: int = 25, payment_types: List[PaymentType] = [],
+                       ascending: bool = True, start_date: datetime = None, end_date: datetime = None) -> List[Payment]:        # hacer las datetimes Optional[]
     """
     Obtiene una lista paginada de pagos (Pago) filtrada por fecha y tipos de pago,
     y ordenada por fecha.
@@ -192,13 +192,13 @@ def get_filtered_list(page: int, limit: int = 25, tipos_pago: List[TipoPago] = [
     List[Pago]
         Lista paginada de pagos filtrados y ordenados.
     """
-    if tipos_pago == []:
-        tipos_pago = TipoPago.query.all()
+    if payment_types == []:
+        payment_types = PaymentType.query.all()
 
-    pago_list = sorted_by_fecha_pago(
-                filter_tipo_pago(
-                filter_fecha_pago(Pago.query, fecha_inicio, fecha_fin), tipos_pago), ascending)\
+    payment_list = sorted_by_date(
+                filter_payment_type(
+                filter_date(Payment.query, start_date, end_date), payment_types), ascending)\
                 .paginate(page=page, per_page=limit, error_out=False)
 
-    [db.session.expunge(pago) for pago in pago_list.items]
-    return pago_list
+    [db.session.expunge(payment) for payment in payment_list.items]
+    return payment_list
