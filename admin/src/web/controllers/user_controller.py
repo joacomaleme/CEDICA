@@ -59,26 +59,26 @@ def myprofile():
 def update(id):
     params = request.form
     mail = str(params.get("email"))
+    alias = str(params.get("alias"))
     password = str(params.get("password"))
     checkMail = user_operations.get_user_by_email(mail)
-    checkAlias = user_operations.get_user_by_alias(str(params.get("alias")))
+    checkAlias = user_operations.get_user_by_alias(alias)
     enabled = params.get("enabled") is None
     role = str(params.get("role"))
-    print(role)
 
     try:
         real_id = int(id)
         user = user_operations.get_user(real_id)
-        if ((mail or str(params.get("alias")) or password) and user.email != session.get("user")):
+        if ((mail != "None" and mail != "") or (alias != "None" and alias != "") or (password != "None" and password != "")) and user.email != session.get("user"):
             flash("No se puede modificar información privada de los usuarios", "error")
             return redirect((url_for("user.view_user", alias=user.alias)))
         if not (not checkMail or (checkMail.id == real_id)) and (not checkAlias or (checkAlias.id == real_id)):
             flash("Lo lamentamos, ha habido un error inesperado", "error")
             return redirect((url_for("user.view_user", alias=user.alias)))
-        if (password and not password_is_valid(password)):
+        if (password != "None" and password != "" and not password_is_valid(password)):
             flash("La contraseña no cumple con los patrones solicitados", "error")
             return redirect((url_for("user.view_user", alias=user.alias)))
-        if (not is_valid_email(mail)) or (not domain_exists(mail)):
+        if (mail != "None" and mail != "") and ((not is_valid_email(mail)) or (not domain_exists(mail))):
             flash("La dirección de mail ingresada no es válida", "error")
             return redirect((url_for("user.view_user", alias=user.alias)))
         if params["role"] == "Administrador de Sistema":
@@ -87,10 +87,16 @@ def update(id):
         role_id = None
         if role:
             role_id = role.id
-        user = User(mail, str(params.get("alias")), password, enabled=enabled, role_id=role_id)
+        if mail == "None" or mail == "":
+            mail = user.email
+        if password == "None" or password == "":
+            password = None
+        if alias == "None" or alias == "":
+            alias = user.alias
+        user = User(mail, alias, password, enabled=enabled, role_id=role_id)
         user.id = real_id
         user_operations.update_user(user)
-        if mail:
+        if mail != "None" and mail == "":
             del session["user"]
             session.clear()
             session["user"] = user.email
@@ -102,7 +108,6 @@ def update(id):
 @bp.get("/")
 @permission_required('user_index')
 def index():
-    print(":()")
     roles = role_operations.list_roles()
     roles = [role.name for role in roles]
 
