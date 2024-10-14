@@ -31,7 +31,7 @@ def authenticate():
 
     session["user"] = user.email
     flash('Sesión iniciada con éxito', 'success')
-    return redirect(url_for("user.index"))
+    return redirect(url_for("home"))
 
 @bp.get("/logout")
 def logout():

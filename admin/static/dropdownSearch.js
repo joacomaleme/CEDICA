@@ -110,7 +110,6 @@ window.onload = function(){
   var form = document.getElementById("search-options")
   form.submit();
     select_.selectedIndex = indx;
-    select_.onchange();
     salir_select(selc);
   }
   

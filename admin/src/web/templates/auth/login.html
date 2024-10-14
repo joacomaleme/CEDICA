@@ -13,14 +13,14 @@
     <br>
     <form action="{{ url_for('auth.authenticate')}}" method="POST">
         <div class="input-set">
+            <input placeholder="" spellcheck=false id="email-field" class="input-field" name="email" type="email" required><br>
             <label id="email-label" for="email-field" class="input-label">EMAIL</label>
-            <input spellcheck=false id="email-field" class="input-field" name="email" type="email" required><br>
             <span id="email-error" class="input-error"></span>
         </div>
         <br>
         <div class="input-set">
+            <input placeholder="" id="password-field" class="input-field" name="password" type="password" required><br>
             <label id="password-label" class="input-label" for="password-field">CONTRASEÑA</label>
-            <input id="password-field" class="input-field" name="password" type="password" required><br>
             <span id="password-error" class="input-error"></span>
         </div>
         <button id="button-submit" class="submit" type="submit" disabled>Iniciar Sesión</button>
@@ -30,11 +30,9 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var emailField = document.getElementById("email-field");
-            var emailLabel = document.getElementById("email-label");
             var emailError = document.getElementById("email-error");
 
             var passwordField = document.getElementById("password-field");
-            var passwordLabel = document.getElementById("password-label");
             var passwordError = document.getElementById("password-error");
 
             var button = document.getElementById('button-submit');
@@ -55,7 +53,6 @@
             }
 
             function validateEmail(){
-                emailLabel.style.top = "-0.2rem";
 
                 if(!emailField.value.match(/^[A-Za-z\._\-0-9]*[@][A-Za-z]*[\.][a-z]{2,4}$/)){
                     emailError.innerHTML = "Mail invalido";
@@ -76,7 +73,6 @@
             }
 
             function validatePassword(){
-                passwordLabel.style.top = "-0.2rem";
 
                 if(passwordField.value.length == 0){
                     passwordError.innerHTML = "Este campo es obligatorio";

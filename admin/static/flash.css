@@ -4,20 +4,27 @@
   padding: 0;
   box-sizing: border-box;
 }
+.flashcontainer{
+  top: 18%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  width: 100%;
+}
 
 .flash {
   font-family: Quicksand;
   width: 50%;
   margin: 20px auto;
   padding: 15px;
-  position: relative;
   border-radius: 5px;
   box-shadow: 0 0 15px 5px #ccc;
   transition: opacity 0.8s ease;
-  position: absolute;
-  left: 25%;
+  position: relative;
   opacity: 0.9;
+  z-index: 999;
 }
+
 
 .flash.fade-out {
   opacity: 0;

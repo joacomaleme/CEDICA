@@ -10,7 +10,6 @@ from typing import List, Optional
 def create_user(email: str, alias: str, password: str, role_id:Optional[int] = None, enabled:bool = True) -> User:
     user = User(email, alias, bcrypt.generate_password_hash(password.encode("utf-8")).decode("utf-8"), role_id, enabled)
     db.session.add(user)
-    db.session.add(user)
     db.session.commit()
     db.session.expunge(user)
     return user
@@ -45,15 +44,15 @@ def authenticate_user(email: str, password: str) -> User:
     return None
     
 
-def __update_user__(to_update: User) -> User:
+def update_user(to_update: User) -> User:
     user = User.query.get(to_update.id)
     if not user:
         raise ValueError("No se encontro un usuario con ese ID") 
-    user.email = to_update.email or user.email
-    user.alias = to_update.alias or user.alias
-    user.password = to_update.password or user.password
-    user.enabled = to_update.enabled if to_update.enabled is not None else user.enabled
-    user.role = to_update.role #debería en vez solo copiar la foreign key? En el video lo hacen así
+    user.email = to_update.email
+    user.alias = to_update.alias
+    user.password = bcrypt.generate_password_hash(to_update.password.encode("utf-8")).decode("utf-8") if to_update.password else user.password
+    user.enabled = to_update.enabled
+    user.role_id = to_update.role_id
     db.session.commit()
     db.session.expunge(user)
     return user
@@ -97,8 +96,11 @@ def assign_role(id: int, role: Optional[Role] = None) -> User: #Enviar role = No
 def has_permission(user_email: str, permission_name:str) -> bool:
     # verifica que el rol del usuario tenga el permiso especificado
     user = get_user_by_email(user_email)
-    role = Role.query.get(user.role_id)
-    return any(permission.name == permission_name for permission in role.permissions)
+    if user.role_id:
+        role = Role.query.get(user.role_id)
+        return any(permission.name == permission_name for permission in role.permissions)
+    else:
+        return False
 
 
 ###INSTRUCCIONES DE LISTADO ESPECÍFICAS

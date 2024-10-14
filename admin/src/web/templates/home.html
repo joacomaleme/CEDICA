@@ -1,3 +1,19 @@
 {% extends "layout.html" %}
-{% block head %}{% endblock head %}
-{% block content %}<h1>Diseñenme porfis, soy lit la página principall</h1>{% endblock  %}
+{% block head %}<link rel="stylesheet" href="{{ url_for('static', filename='start_page.css')}}"/>{% endblock head %}
+{% block title %}Inicio - CEDICA{% endblock title %}
+{% block content %}
+<div class="page">
+    <div class="present">
+        <h1>¡Bienvenidos a equinoterapia!</h1>
+        <br>
+        <h2>Cumplimos 30 años:</h2>
+    </div>
+    <article class="content">
+        <p>Nos llena de orgullo llevar 30 años intentando hacer esta página con ustedes! &lt;3</p>
+    </article>
+    <nav class="links">
+        {% if is_authenticated(session) %}{% if is_permitted(session, 'user_new') %} <a href="{{ url_for('auth.register')}}">Registar Usuario</a>{% endif %}
+        {% if is_permitted(session, 'user_index') %}<a href="{{ url_for('user.index')}}">Listado Usuarios</a>{% endif %} {% endif %}
+    </nav>
+</div>
+{% endblock  %}

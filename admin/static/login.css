@@ -75,3 +75,10 @@ h1{
     color: red;
     transition: top 0.4s;
 }
+
+.input-field:focus ~ .input-label,
+.input-field:not(:placeholder-shown) ~ .input-label {
+  top: -0.7rem;
+  font-size: 0.7em;
+  color: #555;
+}

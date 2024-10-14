@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='pagination.css')}}"/>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 {% endblock %}
-{% block title %}Listado de usuarios{% endblock %}
+{% block title %}Listado de Usuarios - CEDICA{% endblock %}
 {% block navbar %}
 {% endblock %}
 {% block content %}
@@ -168,7 +168,7 @@
         </thead>
         <tbody>
             {% for user in users %}
-                <tr>
+                <tr {% if is_permitted(session, 'user_show') %} onclick="window.location='{{ url_for('user.view_user', alias=user.alias) }}'" style="cursor:pointer;"{% endif %}>
                     <td>
                         {{user.email}}
                     </td>

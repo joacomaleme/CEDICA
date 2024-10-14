@@ -14,20 +14,20 @@
         <br>
         <form action="{{ url_for('auth.upload')}}" method="POST">
             <div class="input-set">
+                <input placeholder="" spellcheck=false id="email-field" class="input-field" name="email" type="email" required><br>
                 <label id="email-label" for="email-field" class="input-label">EMAIL</label>
-                <input spellcheck=false id="email-field" class="input-field" name="email" type="email" required><br>
                 <span id="email-error" class="input-error"></span>
             </div>
             <br>
             <div class="input-set">
+                <input placeholder="" spellcheck=false id="alias-field" class="input-field" name="alias" type="text" required><br>
                 <label id="alias-label" class="input-label" for="alias-field">ALIAS</label>
-                <input spellcheck=false id="alias-field" class="input-field" name="alias" type="text" required><br>
                 <span id="alias-error" class="input-error"></span>
             </div>
             <br>
             <div class="input-set">
+                <input placeholder="" id="password-field" class="input-field" name="password" type="password" required><br>
                 <label id="password-label" class="input-label" for="password-field">CONTRASEÑA</label>
-                <input id="password-field" class="input-field" name="password" type="password" required><br>
                 <span id="password-error" class="input-error"></span>
             </div>
             <br>
@@ -88,15 +88,12 @@
         const aliases = {{ aliases|tojson }};
 
         var emailField = document.getElementById("email-field");
-        var emailLabel = document.getElementById("email-label");
         var emailError = document.getElementById("email-error");
 
         var passwordField = document.getElementById("password-field");
-        var passwordLabel = document.getElementById("password-label");
         var passwordError = document.getElementById("password-error");
 
         var aliasField = document.getElementById("alias-field");
-        var aliasLabel = document.getElementById("alias-label");
         var aliasError = document.getElementById("alias-error");
 
         var button = document.getElementById('button-submit');
@@ -122,7 +119,6 @@
         
         
         function validateEmail(){
-            emailLabel.style.top = "-0.2rem";
 
             if(!emailField.value.match(/^[A-Za-z\._\-0-9]+[@][A-Za-z]+[\.][a-z]{2,4}$/)){
                 emailError.innerHTML = "Mail invalido";
@@ -153,7 +149,6 @@
         }
 
         function validateAlias(){
-            aliasLabel.style.top = "-0.2rem";
 
             if(aliasField.value.length == 0){
                 aliasError.innerHTML = "Este campo es obligatorio";
@@ -184,7 +179,6 @@
         }   
 
         function validatePassword(){
-            passwordLabel.style.top = "-0.2rem";
 
             if(passwordField.value.length < 7){
                 passwordError.innerHTML = "Contraseña demasiado corta, faltan " + (7-passwordField.value.length) + " caracteres.";

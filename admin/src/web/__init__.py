@@ -4,7 +4,7 @@ from src.model.encrypt import bcrypt
 from src.web.handlers import error
 from src.web.controllers.user_controller import bp as user_bp
 from src.web.controllers.auth import bp as auth_bp
-from src.web.handlers.auth import is_authenticated
+from src.web.handlers.auth import is_authenticated, is_permitted, is_self
 from src.model import database
 from src.model.config import config
 from src.model import seeds
@@ -37,6 +37,8 @@ def create_app(env="development", static_folder="../../static"):
 
     # Registro funciones en jinja
     app.jinja_env.globals.update(is_authenticated=is_authenticated)
+    app.jinja_env.globals.update(is_permitted=is_permitted)
+    app.jinja_env.globals.update(is_self=is_self)
     
     #COMANDOS:
     @app.cli.command(name="reset-db")

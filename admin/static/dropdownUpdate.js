@@ -1,5 +1,13 @@
 window.onload = function(){
     crear_select();
+    if(!(role != 'Administrador de Sistema' && has_update_permission)){
+      var select = $('.selecionado_opcion');
+      var opt = $('.cont_select_int');
+      opt.css('cursor', 'default');
+      select.css('cursor', 'default');
+      opt.css('pointer-events', 'none');
+      select.css('pointer-events', 'none');
+    }
   }
   
   function isMobileDevice() {
@@ -46,37 +54,40 @@ window.onload = function(){
   
   var cont_slc = 0;
   function open_select(idx){
-  var idx1 =  idx.getAttribute('data-n-select');
-    var ul_cont_li = document.querySelectorAll("[data-indx-select='"+idx1+"'] .cont_select_int > li");
-  var hg = 0;
-  var slect_open = document.querySelectorAll("[data-indx-select='"+idx1+"']")[0].getAttribute('data-selec-open');
-  var slect_element_open = document.querySelectorAll("[data-indx-select='"+idx1+"'] select")[0];
-   if (isMobileDevice()) { 
-    if (window.document.createEvent) { // All
-    var evt = window.document.createEvent("MouseEvents");
-    evt.initMouseEvent("mousedown", false, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-    slect_element_open.dispatchEvent(evt);
-  } else if (slect_element_open.fireEvent) { // IE
-    slect_element_open.fireEvent("onmousedown");
-  }else {
-    slect_element_open.click();
-  }
-  }else {
-  
-    
-    for (var i = 0; i < ul_cont_li.length; i++) {
-  hg += ul_cont_li[i].offsetHeight;
-  }; 
-   if (slect_open == 'false') {  
-   document.querySelectorAll("[data-indx-select='"+idx1+"']")[0].setAttribute('data-selec-open','true');
-   document.querySelectorAll("[data-indx-select='"+idx1+"'] > .cont_list_select_mate > ul")[0].style.height = hg+"px";
-   document.querySelectorAll("[data-indx-select='"+idx1+"'] > .icon_select_mate")[0].style.transform = 'rotate(180deg)';
-  }else{
-   document.querySelectorAll("[data-indx-select='"+idx1+"']")[0].setAttribute('data-selec-open','false');
-   document.querySelectorAll("[data-indx-select='"+idx1+"'] > .icon_select_mate")[0].style.transform = 'rotate(0deg)';
-   document.querySelectorAll("[data-indx-select='"+idx1+"'] > .cont_list_select_mate > ul")[0].style.height = "0px";
-   }
-  }
+    var checkbox = document.getElementById('enabled-checkbox');
+    if (role != 'Administrador de Sistema' && has_update_permission){
+        var idx1 =  idx.getAttribute('data-n-select');
+            var ul_cont_li = document.querySelectorAll("[data-indx-select='"+idx1+"'] .cont_select_int > li");
+        var hg = 0;
+        var slect_open = document.querySelectorAll("[data-indx-select='"+idx1+"']")[0].getAttribute('data-selec-open');
+        var slect_element_open = document.querySelectorAll("[data-indx-select='"+idx1+"'] select")[0];
+        if (isMobileDevice()) { 
+            if (window.document.createEvent) { // All
+            var evt = window.document.createEvent("MouseEvents");
+            evt.initMouseEvent("mousedown", false, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            slect_element_open.dispatchEvent(evt);
+        } else if (slect_element_open.fireEvent) { // IE
+            slect_element_open.fireEvent("onmousedown");
+        }else {
+            slect_element_open.click();
+        }
+        }else {
+        
+            
+            for (var i = 0; i < ul_cont_li.length; i++) {
+        hg += ul_cont_li[i].offsetHeight;
+        }; 
+        if (slect_open == 'false') {  
+        document.querySelectorAll("[data-indx-select='"+idx1+"']")[0].setAttribute('data-selec-open','true');
+        document.querySelectorAll("[data-indx-select='"+idx1+"'] > .cont_list_select_mate > ul")[0].style.height = hg+"px";
+        document.querySelectorAll("[data-indx-select='"+idx1+"'] > .icon_select_mate")[0].style.transform = 'rotate(180deg)';
+        }else{
+        document.querySelectorAll("[data-indx-select='"+idx1+"']")[0].setAttribute('data-selec-open','false');
+        document.querySelectorAll("[data-indx-select='"+idx1+"'] > .icon_select_mate")[0].style.transform = 'rotate(0deg)';
+        document.querySelectorAll("[data-indx-select='"+idx1+"'] > .cont_list_select_mate > ul")[0].style.height = "0px";
+        }
+    }
+    }
   
   } // fin function open_select
   
@@ -106,13 +117,26 @@ window.onload = function(){
   li_s[indx].className = 'active';
   };
   select_optiones[indx].selected = true;
-  if(select_.value === "Administrador de Sistema"){
-    checkbox.checked = false;
-    checkbox.disabled = true;
-  }
-  else{
-    checkbox.disabled = false;
-  }
+  //Agregar código relacionado al value si es necesario.
+    if (select_.value === role){
+      modified4 = false;
+      if (!(modified1 || modified2 || modified3 || modified5)){
+        button.disabled = true;
+      }
+    }
+    else{
+      modified4 = true;
+      if (!(modified1 || modified2 || modified3 || modified5)){
+        button.disabled = false;
+      }
+    }
+    if(select_.value === "Administrador de Sistema"){
+      checkbox.checked = false;
+      checkbox.disabled = true;
+    }
+    else{
+      checkbox.disabled = false;
+    }
     select_.selectedIndex = indx;
     salir_select(selc);
   }

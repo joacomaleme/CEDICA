@@ -40,7 +40,7 @@
         {% endif %}
         <div class="nav-dropdown display-none">
             <ul>
-                <li><a href="#">Perfil</a></li>
+                <li><a href="{{ url_for('user.myprofile')}}">Perfil</a></li>
                 <li><a href="{{ url_for('auth.logout') }}">Cerrar sesión</a></li>
             </ul>
         </div>
@@ -50,9 +50,11 @@
         {% with messages = get_flashed_messages(with_categories=True) %}
             {% if messages %}
                 {% for category, message in messages %}
-                <div class="flash flash-{{category}}">
-                    <p>{{ message }}</p>
-                    <span class="close">&times;</span>
+                <div class="flashcontainer">
+                    <div class="flash flash-{{category}}">
+                        <p>{{ message }}</p>
+                        <span class="close">&times;</span>
+                    </div>
                 </div>
                 {% endfor %}
             {% endif %}
