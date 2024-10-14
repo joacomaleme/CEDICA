@@ -85,7 +85,7 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
     active = db.Column(db.String(10), nullable=False)  # REGULAR, DE BAJA
     sede = db.Column(db.String(50), nullable=False)  # CASJ, HLP, OTRO MAKE TABLE
     # Relacion N a N con WorkDay
-    #work_days = db.relationship('WorkDay', secondary='rider_work_day', back_populates='riders')
+    work_days = db.relationship('WorkDay', secondary='rider_work_day', back_populates='riders')
 
     teacher_id = db.Column(db.BigInteger, db.ForeignKey('employees.id'))  # Profesor/Terapeuta 
     teacher = db.relationship('Employee', foreign_keys=[teacher_id])

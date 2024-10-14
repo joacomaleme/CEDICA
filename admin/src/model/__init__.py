@@ -19,4 +19,3 @@ def permission_required(permission: str, user_email: str):
             return func(*args, **kwargs)
         return wrapper
     return decorator
-
