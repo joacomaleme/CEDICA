@@ -13,8 +13,8 @@ class Cobro(db.Model):
     jinete_y_amazona_id = db.Column(db.BigInteger, db.ForeignKey('users.id'))
 
     medio_pago = db.relationship('MedioPago', back_populates='cobros')
-    recibe_dinero = db.relationship('User', back_populates='cobros', foreign_keys=[recibe_dinero_id])     # CAMBIAR A EMPLEADO
-    jinete_y_amazona = db.relationship('User', back_populates='cobros1', foreign_keys=[jinete_y_amazona_id])  # CAMBIAR A J&A Y A COBROS SIN EL 1
+    # recibe_dinero = db.relationship('User', back_populates='cobros', foreign_keys=[recibe_dinero_id])     # CAMBIAR A EMPLEADO
+    # jinete_y_amazona = db.relationship('User', back_populates='cobros1', foreign_keys=[jinete_y_amazona_id])  # CAMBIAR A J&A Y A COBROS SIN EL 1
 
     def __init__(self, monto: float, fecha_pago: datetime, observaciones: str, recibe_dinero_id: int, medio_pago_id: int, jinete_y_amazona_id: int):
         self.monto = monto

@@ -86,9 +86,6 @@ def run():
         created_permissions[perm] = permissions.create_permission(name=perm)
 
 
-
-    print("INICIA")
-
     # Asignacion de permisos a roles de usuario
     roles.assign_permission(system_admin, list(created_permissions.values()))
     roles.assign_permission(rol_tecnica, [created_permissions[p] for p in ['user_index', 'user_show', 'rider_index', 'rider_show', 'rider_update', 'rider_create', 'rider_destroy']])
@@ -96,11 +93,8 @@ def run():
     roles.assign_permission(rol_voluntariado, [created_permissions['user_index']])
     roles.assign_permission(rol_administracion, [created_permissions[p] for p in user_permissions if p not in ['user_destroy']])
 
-    print("INICIA2")
-
 
     # Creado de usuarios
-
     users_data = [
         ('Juan', '123a', 'juan@gmail.com', True, None),
         ('Martin', '123a', 'martin@gmail.com', True, 1),
@@ -195,12 +189,9 @@ def run():
         ('Melina', '123a', 'melina@gmail.com', True, 2),
         ('Emmanuel', '123a', 'emmanuel@gmail.com', True, 4),
     ]
-    print("INICIA4")
 
     for user_data in users_data:
         users.create_user(alias=user_data[0], password=user_data[1], email=user_data[2], enabled=user_data[3], role_id=user_data[4])
-
-    print("INICIA3")
 
     ############
     # Generics #
@@ -465,8 +456,6 @@ def run():
             "end_date": None
         },
     ]
-
-    print("MITAD")
 
     for emp in employees:
         employee_operations.create_employee(
@@ -759,5 +748,3 @@ def run():
         rider_id = (i // 2) + 1  # Riders 1..8
         relationship = "Father" if i % 2 == 0 else "Mother"
         guardians_riders.assign_guardian_to_rider(rider_id=rider_id, guardian_id=guardian.id, relationship=relationship)
-    
-    print("FINAL")
