@@ -31,9 +31,19 @@
         <span id="dni-error" class="input-error"></span>
       </div>
       <div class="input-set">
-        <input id="address-field" class="input-field" name="address" placeholder="" type="text" required><br>
-        <label id="address-label" class="input-label" for="address-field">DOMICILIO</label>
-        <span id="address-error" class="input-error"></span>
+        <input id="street-field" class="input-field" name="street" placeholder="" type="text" required><br>
+        <label id="street-label" class="input-label" for="street-field">CALLE</label>
+        <span id="street-error" class="input-error"></span>
+      </div>
+      <div class="input-set">
+        <input id="number-field" class="input-field" name="number" placeholder="" type="text" required><br>
+        <label id="number-label" class="input-label" for="number-field">NÚMERO</label>
+        <span id="number-error" class="input-error"></span>
+      </div>
+      <div class="input-set">
+        <input id="apartment-field" class="input-field" name="apartment" placeholder="" type="text"><br>
+        <label id="apartment-label" class="input-label" for="apartment-field">DEPARTAMENTO</label>
+        <span id="apartment-error" class="input-error"></span>
       </div>
       <div class="input-set">
         <input id="email-field" class="input-field" name="email" type="email" placeholder="" required><br>
@@ -41,22 +51,46 @@
         <span id="email-error" class="input-error"></span>
       </div>
       <div class="input-set">
-        <input id="locality-field" class="input-field" name="locality" placeholder="" type="text" required><br>
-        <label id="locality-label" class="input-label" for="locality-field">LOCALIDAD</label>
-        <span id="locality-error" class="input-error"></span>
-      </div>
-    
-      <div class="input-set">
         <input id="phone-field" class="input-field" name="phone" placeholder="" type="text" required><br>
         <label id="phone-label" class="input-label" for="phone-field">TELÉFONO</label>
         <span id="phone-error" class="input-error"></span>
       </div>
+      <div class="input-set">
+        <input id="obra-social-field" class="input-field" name="obra-social" type="text" placeholder="" required><br>
+        <label id="obra-social-label" class="input-label" for="obra-social-field">OBRA SOCIAL</label>
+        <span id="obra-social-error" class="input-error"></span>
+      </div>
 
       <div class="order">
         <div class="input-set">
+          <label id="locality-label" class="select-label" for="locality-field">LOCALIDAD</label>
           <div class="select_mate" data-mate-select="active" >
-            <select name="profession" id="mySelect" required>
-              <option value="">PROFESION</option>
+            <select name="locality" id="locality-field" required>
+              {% for locality in localitys %}
+                <option value="{{ locality.id }}">{{ locality.name | upper }}</option>
+              {% endfor %}
+            </select>
+            
+            <p class="selecionado_opcion" onclick="open_select(this)" ></p>
+            <span onclick="open_select(this)" class="icon_select_mate" >
+              <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                <path d="M0-.75h24v24H0z" fill="none"/>
+              </svg>
+            </span>
+
+            <div class="cont_list_select_mate">
+              <ul class="cont_select_int"></ul> 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="order">
+        <div class="input-set">
+          <label id="profession-label" class="select-label" for="profession-field">PROFESIÓN</label>
+          <div class="select_mate" data-mate-select="active" >
+            <select name="profession" id="profession-field" required>
               {% for profession in professions %}
                 <option value="{{ profession.id }}">{{ profession.name | upper }}</option>
               {% endfor %}
@@ -76,11 +110,12 @@
           </div>
         </div>
       </div>
+
       <div class="order">
         <div class="input-set">
+          <label id="job-position-label" class="select-label" for="job-position-field">PUESTO LABORAL</label>
           <div class="select_mate" data-mate-select="active" >
-            <select name="job-position" id="mySelect" required>
-              <option value="">PUESTO LABORAL</option>
+            <select name="job-position" id="job-position-field" required>
               {% for job_position in job_positions %}
                 <option value="{{ job_position.id }}">{{ job_position.name | upper  }}</option>
               {% endfor %}
@@ -120,11 +155,6 @@
         <input id="emergency-contact-phone-field" class="input-field" name="emergency-contact-phone" type="text" placeholder=""><br>
         <label id="emergency-contact-phone-label" class="input-label" for="emergency-contact-phone-field">TELÉFONO DE EMERGENCIA</label>
         <span id="emergency-contact-phone-error" class="input-error"></span>
-      </div>
-      <div class="input-set">
-        <input id="obra-social-field" class="input-field" name="obra-social" type="text" placeholder="" required><br>
-        <label id="obra-social-label" class="input-label" for="obra-social-field">OBRA SOCIAL</label>
-        <span id="obra-social-error" class="input-error"></span>
       </div>
       <div class="input-set">
         <input id="affiliate-number-field" class="input-field" name="affiliate-number" type="text" placeholder="" required><br>

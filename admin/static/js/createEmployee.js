@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const addressStreetField = document.getElementById("street-field");
   const addressNumberField = document.getElementById("number-field");
   const emailField = document.getElementById("email-field");
-  const localityField = document.getElementById("locality-field");
   const phoneField = document.getElementById("phone-field");
   const emergencyContactNameField = document.getElementById("emergency-contact-name-field");
   const emergencyContactPhoneField = document.getElementById("emergency-contact-phone-field");
@@ -14,11 +13,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const submitBtn = document.getElementById("button-submit");
 
-  const MAXVALIDOS = 12;
+  const MAXVALIDOS = 11;
   let validos = 0;
 
   // Se valida que ninguno de estos inputs esté vacío
-  const inputs = [nameField, surnameField, addressStreetField, addressNumberField, localityField, emergencyContactNameField, obraSocialField, affiliateNumberField];
+  const inputs = [nameField, surnameField, addressStreetField, emergencyContactNameField, obraSocialField, affiliateNumberField];
   inputs.forEach((e) => {
     e.addEventListener("input", validateEmpty);
     e.addEventListener("focus", validateEmpty);
@@ -28,10 +27,12 @@ document.addEventListener("DOMContentLoaded", function () {
   emailField.addEventListener("focus", validateEmail);
   dniField.addEventListener("input", validateDNI);
   dniField.addEventListener("focus", validateDNI);
-  phoneField.addEventListener("input", validateNumber);
-  phoneField.addEventListener("focus", validateNumber);
-  emergencyContactPhoneField.addEventListener("input", validateNumber);
-  emergencyContactPhoneField.addEventListener("focus", validateNumber);
+  addressNumberField.addEventListener("input", validateNumber);
+  addressNumberField.addEventListener("focus", validateNumber);
+  phoneField.addEventListener("input", validatePhone);
+  phoneField.addEventListener("focus", validatePhone);
+  emergencyContactPhoneField.addEventListener("input", validatePhone);
+  emergencyContactPhoneField.addEventListener("focus", validatePhone);
   affiliateNumberField.addEventListener("input", validateAffiliateNumber);
   affiliateNumberField.addEventListener("focus", validateAffiliateNumber);
 
@@ -50,6 +51,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const field = event.target;
 
     if (!field.value.match(/^\d+$/)) {
+      activateError(field, "Formato inválido");
+    } else {
+      deactivateError(field);
+    }
+  }
+
+  function validatePhone(event) {
+    const field = event.target;
+
+    if (!field.value.match(/^[\d\-]+$/)) {
       activateError(field, "Formato inválido");
     } else {
       deactivateError(field);

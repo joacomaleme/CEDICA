@@ -61,16 +61,17 @@ def new():
     employees = employee_operations.list_employees()
     professions = profession_operations.list_professions()
     job_positions = job_position_operations.list_job_positions()
+    localitys = locality_operations.list_localitys()
 
     mails = [employee.email for employee in employees]
     dnis = [employee.dni for employee in employees]
     affiliate_numbers = [employee.affiliate_number for employee in employees]
 
-    return render_template("employees/new.html", professions=professions, job_positions=job_positions,
+    return render_template("employees/new.html", professions=professions, job_positions=job_positions, localitys=localitys,
                            mails=mails, dnis=dnis, affiliate_numbers=affiliate_numbers)
 
 @bp.post("/create")
-@permission_required('employee_create')
+# @permission_required('employee_create')
 def create():
     params = request.form
 
@@ -78,7 +79,9 @@ def create():
         "name": params.get("name"),
         "surname": params.get("surname"),
         "dni": params.get("dni"),
-        "address": params.get("address"),
+        "street": params.get("street"),
+        "number": params.get("number"),
+        "apartment": params.get("apartment"),
         "email": params.get("email"),
         "locality": params.get("locality"),
         "phone": params.get("phone"),
@@ -103,29 +106,54 @@ def create():
     if (not is_valid_email(employee_data["email"])):
         flash("La dirección de mail ingresada no es válida", "error")
         return redirect((url_for("employee.new")))
+    
+    try:
+        address = address_operations.create_address(employee_data["street"], employee_data["number"], employee_data["apartment"])
 
-    employee = employee_operations.create_employee(**employee_data)
+        employee = employee_operations.create_employee(
+            name = employee_data["name"],
+            surname = employee_data["surname"],
+            dni = employee_data["dni"],
+            address_id = address.id,
+            email = employee_data["email"],
+            locality_id = employee_data["locality"],
+            phone = employee_data["phone"],
+            profession_id = employee_data["profession_id"],
+            job_position_id = employee_data["job_position_id"],
+            emergency_contact_name = employee_data["emergency_contact_name"],
+            emergency_contact_phone = employee_data["emergency_contact_phone"],
+            obra_social = employee_data["obra_social"],
+            affiliate_number = employee_data["affiliate_number"],
+            is_volunteer = employee_data["is_volunteer"],
+            start_date = employee_data["start_date"],
+            end_date = employee_data["end_date"],
+        )
 
-    if "files" in request.files:
-        files = request.files.getlist("files")
+        if "files" in request.files:
+            files = request.files.getlist("files")
 
-        # Tomo el cliente
-        client = current_app.storage.client
+            # Tomo el cliente
+            client = current_app.storage.client
 
-        for file in files:
-            filename = remove_extension(file.filename)
-            path = f"{uuid4()}-{file.filename}" # Uso uuid4() para generar un número random y que no se repita el nombre
-            content_type = file.content_type
+            for file in files:
+                filename = remove_extension(file.filename)
+                path = f"{uuid4()}-{file.filename}" # Uso uuid4() para generar un número random y que no se repita el nombre
+                content_type = file.content_type
 
-            document_operations.create_document(filename, content_type, path, employee_id=employee.id)
+                document_operations.create_document(title=filename, format="", is_external=False, allowed_operations="",
+                                                    file_address=path, employee_id=employee.id)
 
-            # Tomo el tamaño del archivo
-            file_content = file.read()
-            size = len(file_content)
-            file.seek(0)
+                # Tomo el tamaño del archivo
+                file_content = file.read()
+                size = len(file_content)
+                file.seek(0)
 
-            # Subo a MINIO
-            client.put_object("grupo03", path, file.stream, size, content_type=content_type)
+                # Subo a MINIO
+                client.put_object("grupo03", path, file.stream, size, content_type=content_type)
+    except Exception as e:
+        print(e)
+        flash("Uso inválido de parametros, no se pudo actualizar al usuario", "error")
+        return redirect(url_for("home"))
 
     return redirect(url_for("employee.index"))
 
@@ -229,15 +257,14 @@ def update(id):
             obra_social = employee_data["obra_social"],
             affiliate_number = employee_data["affiliate_number"],
             is_volunteer = employee_data["is_volunteer"],
-            start_date = employee_data["start_date"],  # Fallback to current datetime if start_date is None
-            end_date = employee_data["end_date"],  # Can be None, if no value provided
+            start_date = employee_data["start_date"],
+            end_date = employee_data["end_date"],
         )
         employee.id = real_id
         employee_operations.update_employee(employee)
 
         return redirect(url_for("employee.show", id=employee.id))
-    except Exception as e:
-        print(e)
+    except:
         flash("Uso inválido de parametros, no se pudo actualizar al usuario", "error")
         return redirect(url_for("home"))
 

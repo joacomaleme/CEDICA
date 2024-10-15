@@ -1,3 +1,4 @@
+from typing import Optional
 from src.model.database import db
 from datetime import datetime
 from src.model.generic.tables.document_types import DocumentType  # Ensure this is imported
@@ -8,7 +9,7 @@ class Document(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
-    type_id = db.Column(db.BigInteger, db.ForeignKey('document_types.id'), nullable=False)  # Relacion con la tabla de tipo de docs
+    type_id = db.Column(db.BigInteger, db.ForeignKey('document_types.id'), nullable=True)  # Relacion con la tabla de tipo de docs
     type = db.relationship('DocumentType', back_populates='documents')
     format = db.Column(db.String(10), nullable=False) # No se si el formato es necesario
     upload_date = db.Column(db.DateTime, nullable = False)
@@ -22,7 +23,8 @@ class Document(db.Model):
     rider_id = db.Column(db.BigInteger, db.ForeignKey('riders.id'), nullable=True)
     rider = db.relationship('Rider', back_populates='documents')
 
-    def __init__(self, title: str, type_id: int, format: str, upload_date: datetime, is_external: bool, allowed_operations: str, file_address: str, employee_id, rider_id):
+    def __init__(self, title: str, format: str, is_external: bool, allowed_operations: str, file_address: str,
+                employee_id: Optional[int], rider_id: Optional[int], type_id: Optional[int]=None, upload_date: datetime = datetime.now()):
         self.title = title
         self.type_id = type_id
         self.format = format

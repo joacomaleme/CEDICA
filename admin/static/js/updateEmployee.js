@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const addressStreetField = document.getElementById("street-field");
   const addressNumberField = document.getElementById("number-field");
   const emailField = document.getElementById("email-field");
-  const localityField = document.getElementById("locality-field");
   const phoneField = document.getElementById("phone-field");
   const emergencyContactNameField = document.getElementById("emergency-contact-name-field");
   const emergencyContactPhoneField = document.getElementById("emergency-contact-phone-field");
@@ -19,11 +18,11 @@ document.addEventListener("DOMContentLoaded", function () {
     "surname-field": [surnameField, validateEmpty],
     "dni-field": [dniField, validateDNI],
     "street-field": [addressStreetField, validateEmpty],
-    "number-field": [addressNumberField, validateEmpty],
+    "number-field": [addressNumberField, validateNumber],
     "email-field": [emailField, validateEmail],
-    "phone-field": [phoneField, validateNumber],
+    "phone-field": [phoneField, validatePhone],
     "emergency-contact-name-field": [emergencyContactNameField, validateEmpty],
-    "emergency-contact-phone-field": [emergencyContactPhoneField, validateNumber],
+    "emergency-contact-phone-field": [emergencyContactPhoneField, validatePhone],
     "obra-social-field": [obraSocialField, validateEmpty],
     "affiliate-number-field": [affiliateNumberField, validateAffiliateNumber]
   };
@@ -53,6 +52,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const field = event.target;
 
     if (!field.value.match(/^\d+$/)) {
+      activateError(field, "Formato inválido");
+    } else {
+      deactivateError(field);
+    }
+  }
+
+  function validatePhone(event) {
+    const field = event.target;
+
+    if (!field.value.match(/^[\d\-]+$/)) {
       activateError(field, "Formato inválido");
     } else {
       deactivateError(field);

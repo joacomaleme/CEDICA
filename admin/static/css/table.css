@@ -52,3 +52,10 @@ th:first-child, td:first-child {
 th:last-child, td:last-child {
     border-right: 3px solid var(--blue-bg);
 }
+
+@media only screen and (max-width: 525px) {
+    .table-header {
+      flex-direction: column;
+      gap: 2rem;
+    }
+  }

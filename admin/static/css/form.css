@@ -195,7 +195,6 @@
   border: none;
   border-radius: 4px;
   padding: 10px;
-  margin-top: 10px;
   margin-inline: auto;
   width: 220px;
   transition-duration: 0.4s;
@@ -215,7 +214,6 @@
   border: none;
   border-radius: 4px;
   padding: 10px;
-  margin-top: 10px;
   margin-inline: auto;
   width: 220px;
   transition-duration: 0.4s;
@@ -236,7 +234,6 @@
   background-color: #f06f7e;
 }
 
-
 .search-button {
   margin-left: -1.5%;
   border-radius: 0px 25px 25px 0;
@@ -247,7 +244,7 @@
   padding-right: 0.8rem;
   padding-top: 0.8rem;
   padding-bottom: 0.8rem;
-  width: 19%;
+  width: 20%;
   background-color: white;
   cursor: pointer;
 }
@@ -283,24 +280,6 @@
   width: 90%;
   margin-block: 1rem;
   grid-template-areas: "empt empt2 search-bar dropselect";
-}
-
-@media only screen and (max-width: 650px) {
-  .search-options {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
-    margin-right: 5%;
-    margin-left: 5%;
-    width: 90%;
-    margin-bottom: 1.5rem;
-    margin-top: 1rem;
-    grid-template-areas: "empt empt2 search-bar dropselect";
-  }
-
-  .search-options > * {
-    margin-bottom: 1rem;
-  }
 }
 
 .dropselect {
@@ -339,14 +318,10 @@
 }
 
 .search-bar {
-  width: 15rem;
-}
-
-.search-bar {
   grid-area: search-bar;
   display: flex;
   align-items: center;
-  width: 80%;
+  width: 15rem;
   margin: auto;
 }
 
@@ -358,17 +333,19 @@
 }
 
 .container {
-  --color: #a5a5b0;
-  --size: 20px;
+  position: absolute;
+  right: -1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
+  --color: #a5a5b0;
+  --size: 20px;
   cursor: pointer;
   font-size: var(--size);
-  user-select: none;
   fill: var(--color);
-  margin-right: 1rem;
+  user-select: none;
 }
 
 .container .chevron-down {
@@ -543,7 +520,7 @@
   transform: rotateY(20deg);
 }
 
-@media (max-width: 1250px) {
+@media (max-width: 1400px) {
   .search-options {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -552,5 +529,29 @@
       "empt empt2"
       "dropselect search-bar";
     row-gap: 1.5rem;
+  }
+}
+
+@media only screen and (max-width: 785px) {
+  .search-options {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, 1fr);
+    width: 90%;
+    grid-template-areas: 
+      "empt"
+      "empt2"
+      "search-bar"
+      "dropselect";
+  }
+
+  .search-options > * {
+    margin-bottom: 1rem; 
+  }
+}
+
+@media only screen and (max-width: 525px) {
+  .submit-btn {
+    flex-direction: column;
+    gap: 0.5rem;
   }
 }

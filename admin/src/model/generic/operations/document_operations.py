@@ -1,9 +1,11 @@
+from typing import Optional
 from src.model.database import db
 from src.model.generic.tables.document import Document
 from datetime import datetime
 from sqlalchemy.orm  import Query
 
-def create_document(title: str, type_id: int, format: str, upload_date: datetime, is_external: bool, allowed_operations: str, file_address: str, employee_id=None, rider_id=None) -> Document:
+def create_document(title: str, format: str, is_external: bool, allowed_operations: str, file_address: str, employee_id=None,
+                    rider_id=None, type_id: Optional[int] = None, upload_date: datetime = datetime.now()) -> Document:
     document = Document(
         title=title,
         type_id=type_id,
