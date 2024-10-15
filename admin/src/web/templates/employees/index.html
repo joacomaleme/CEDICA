@@ -130,7 +130,8 @@
             </thead>
             <tbody>
                 {% for employee in employees %}
-                <tr>
+                <!-- {% if is_permitted(session, 'employee_show') %} onclick="window.location='{{ url_for('employee.show', id=employee.id) }}'" style="cursor:pointer;"{% endif %} -->
+                <tr onclick="window.location='{{ url_for('employee.show', id=employee.id) }}'" style="cursor:pointer;">
                     <td>{{ employee.name }} {{ employee.surname }}</td>
                     <td>{{ employee.dni }}</td>
                     <td>{{ employee.email }}</td>

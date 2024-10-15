@@ -19,12 +19,14 @@ def list_users():   # lista TODOS los usuarios (solo usar cuando sea estrictamen
 
 def get_user(id: int):      #devuelve un usuario dado un id
     user = User.query.get(id)
-    db.session.expunge(user)
+    if user:
+        db.session.expunge(user)
     return user # si no encuentra nada devuelve None
 
 def get_user_by_email(email: str):      #devuelve un usuario dado un email (el email es unico)
     user = User.query.filter(User.email == email).first()
-    db.session.expunge(user)
+    if user:
+        db.session.expunge(user)
     return user # si no encuentra nada devuelve None
 
 def __update_user__(to_update: User) -> User:
@@ -77,10 +79,12 @@ def assign_role(id: int, role: Optional[Role] = None) -> User: #Enviar role = No
 
 def has_permission(user_email: str, permission_name:str) -> bool:
     # verifica que el rol del usuario tenga el permiso especificado
-    user = get_user_by_email(user_email);
-    role = Role.query.get(user.role_id)
-    return any(permission.name == permission_name for permission in role.permissions)
-
+    user = get_user_by_email(user_email)
+    if user:
+        role = Role.query.get(user.role_id)
+        return any(permission.name == permission_name for permission in role.permissions)
+    else:
+        return False
 
 ###INSTRUCCIONES DE LISTADO ESPECÍFICAS
 

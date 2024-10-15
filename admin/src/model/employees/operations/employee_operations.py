@@ -43,7 +43,7 @@ def get_employee_by_email(email: str):      #devuelve un employee dado un email 
         db.session.expunge(employee)
     return employee # si no encuentra nada devuelve None
 
-def __update_employee__(to_update: Employee) -> Employee:
+def update_employee(to_update: Employee) -> Employee:
     employee = Employee.query.get(to_update.id)
     if employee is None:
         raise ValueError("No se encontro un empleado con ese ID")

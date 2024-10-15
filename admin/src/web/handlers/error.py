@@ -17,3 +17,4 @@ def error_unauthorized(e):
 
 def error_forbidden(e):
     error = Error(403, "Prohibido", "No posee las credenciales adecuadas para acceder a esta página")
+    return render_template("error.html", error=error), 403

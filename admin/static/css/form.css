@@ -9,7 +9,7 @@
   justify-content: center;
   align-items: center;
   margin-inline: 2rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .form {
@@ -61,7 +61,8 @@
   font-size: 1em;
 }
 
-.input-label {
+.input-label,
+.select-label {
   display: block;
   position: absolute;
   top: 1rem;
@@ -75,6 +76,12 @@
 .input-field:focus ~ .input-label,
 .input-field:not(:placeholder-shown) ~ .input-label {
   top: -0.7rem;
+  font-size: 0.7em;
+  color: #555;
+}
+
+.select-label {
+  top: -1.2rem;
   font-size: 0.7em;
   color: #555;
 }
@@ -192,15 +199,43 @@
   margin-inline: auto;
   width: 220px;
   transition-duration: 0.4s;
+  cursor: pointer;
 }
 
 .submit:hover {
-  background-color: #ba8e4f;
+  background-color: #ffc97e;
 }
 
 .submit[disabled]:hover {
   background-color: #f7bc6c;
 }
+
+.del {
+  background-color: #ef233c;
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  margin-top: 10px;
+  margin-inline: auto;
+  width: 220px;
+  transition-duration: 0.4s;
+  color:aliceblue;
+}
+
+.del:hover {
+  background-color: rgb(242, 83, 83);
+  cursor: pointer;
+}
+
+.del[disabled]:hover {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  cursor: not-allowed;
+}
+
+.del[disabled] {
+  background-color: #f06f7e;
+}
+
 
 .search-button {
   margin-left: -1.5%;
@@ -246,8 +281,7 @@
   align-items: center;
   justify-items: center;
   width: 90%;
-  margin-bottom: 1.5rem;
-  margin-top: 1rem;
+  margin-block: 1rem;
   grid-template-areas: "empt empt2 search-bar dropselect";
 }
 
