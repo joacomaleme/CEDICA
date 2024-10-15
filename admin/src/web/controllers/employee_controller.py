@@ -15,7 +15,7 @@ import re
 bp = Blueprint("employee", __name__, url_prefix="/empleados")
 
 @bp.route("/")
-# @permission_required('employee_index')
+@permission_required('employee_index')
 def index():
     professions = profession_operations.list_professions()
     professions = [profession.name for profession in professions]
@@ -56,7 +56,7 @@ def index():
                             start_profession=start_profession, start_ascending=(not start_ascending), start_page=page)
 
 @bp.get("/nuevo")
-#@permission_required('employee_new')
+@permission_required('employee_new')
 def new():
     employees = employee_operations.list_employees()
     professions = profession_operations.list_professions()
@@ -71,7 +71,7 @@ def new():
                            mails=mails, dnis=dnis, affiliate_numbers=affiliate_numbers)
 
 @bp.post("/create")
-# @permission_required('employee_create')
+@permission_required('employee_create')
 def create():
     params = request.form
 
@@ -158,7 +158,7 @@ def create():
     return redirect(url_for("employee.index"))
 
 @bp.get("/<int:id>")
-# @permission_required('employee_show')
+@permission_required('employee_show')
 def show(id):
     employee = employee_operations.get_employee(id)
     if employee:
@@ -188,7 +188,7 @@ def show(id):
         return abort(404)
 
 @bp.post("/<int:id>/update")
-# @permission_required('employee_update')
+@permission_required('employee_update')
 def update(id):
     real_id = int(id)
     params = request.form
@@ -270,7 +270,7 @@ def update(id):
 
 
 @bp.get("/<int:id>/delete")
-# @permission_required('employee_delete')
+@permission_required('employee_destroy')
 def delete(id):
     employee_operations.delete_employee(id)
     return redirect(url_for("employee.index"))

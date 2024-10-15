@@ -14,7 +14,7 @@ class User(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
     # Relaciones con las tablas de roles y pagos
-    role = db.relationship('Role', back_populates='users')
+    role = db.relationship('Role', back_populates='users', lazy='joined')
 
     __table_args__ = (
         db.Index('idx_user_role', 'role_id'),

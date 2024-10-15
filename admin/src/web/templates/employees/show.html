@@ -180,11 +180,13 @@
       </div>
 
       <div class="submit-btn">
-        <button type="submit"  id="button-submit" class="submit" disabled>Aplicar cambios</button>
-        <button type="button" id="button-delete" class="del">Eliminar Usuario</button>
+        {% if is_permitted(session, 'employee_update') %}
+          <button type="submit"  id="button-submit" class="submit" disabled>Aplicar cambios</button>
+        {% endif %}
+        {% if is_permitted(session, 'employee_destroy') %}
+          <button type="button" id="button-delete" class="del">Eliminar Usuario</button>
+        {% endif %}
       </div>
-      <!-- {% if is_permitted(session, 'employee_update') %}{% endif %}
-      {% if is_permitted(session, 'employee_destroy') %}{% endif %} -->
     </form>
   </section>
  

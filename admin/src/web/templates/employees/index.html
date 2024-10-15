@@ -15,9 +15,11 @@
 
 {% block content %}
     <div class="table-header">
-        <button class="btn">
-            <a href="{{ url_for('employee.new') }}">Nuevo</a>
-        </button>
+        {% if is_permitted(session, 'employee_new') %}
+            <button class="btn">
+                <a href="{{ url_for('employee.new') }}">Nuevo</a>
+            </button>
+        {% endif %}
         <form id="search-options" class="search-options" action="{{ url_for('employee.index')}}" method="GET">
 
             <div class="empty">
@@ -130,8 +132,7 @@
             </thead>
             <tbody>
                 {% for employee in employees %}
-                <!-- {% if is_permitted(session, 'employee_show') %} onclick="window.location='{{ url_for('employee.show', id=employee.id) }}'" style="cursor:pointer;"{% endif %} -->
-                <tr onclick="window.location='{{ url_for('employee.show', id=employee.id) }}'" style="cursor:pointer;">
+                <tr {% if is_permitted(session, 'employee_show') %} onclick="window.location='{{ url_for('employee.show', id=employee.id) }}'" style="cursor:pointer;"{% endif %}>
                     <td>{{ employee.name }} {{ employee.surname }}</td>
                     <td>{{ employee.dni }}</td>
                     <td>{{ employee.email }}</td>

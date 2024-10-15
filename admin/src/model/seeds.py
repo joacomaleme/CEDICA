@@ -65,7 +65,7 @@ def run():
     ############
 
     # Creado de roles
-    system_admin = roles.create_role(name='Administrador de Sistema')
+    system_admin = roles.create_role(name='system_admin')
     rol_tecnica = roles.create_role(name='Tecnica')
     rol_ecuestre = roles.create_role(name='Ecuestre')
     rol_voluntariado = roles.create_role(name='Voluntariado')
@@ -86,6 +86,8 @@ def run():
         created_permissions[perm] = permissions.create_permission(name=perm)
 
 
+
+
     # Asignacion de permisos a roles de usuario
     roles.assign_permission(system_admin, list(created_permissions.values()))
     roles.assign_permission(rol_tecnica, [created_permissions[p] for p in ['user_index', 'user_show', 'rider_index', 'rider_show', 'rider_update', 'rider_create', 'rider_destroy']])
@@ -94,7 +96,9 @@ def run():
     roles.assign_permission(rol_administracion, [created_permissions[p] for p in user_permissions if p not in ['user_destroy']])
 
 
+
     # Creado de usuarios
+
     users_data = [
         ('Juan', '123a', 'juan@gmail.com', True, None),
         ('Martin', '123a', 'martin@gmail.com', True, 1),
@@ -189,9 +193,9 @@ def run():
         ('Melina', '123a', 'melina@gmail.com', True, 2),
         ('Emmanuel', '123a', 'emmanuel@gmail.com', True, 4),
     ]
-
     for user_data in users_data:
         users.create_user(alias=user_data[0], password=user_data[1], email=user_data[2], enabled=user_data[3], role_id=user_data[4])
+
 
     ############
     # Generics #
@@ -738,8 +742,8 @@ def run():
         # Guardians for Rider 8
         ("Ricardo", "Ruiz", 66789012, 8, 8, 8, "cel15", "ricardo.ruiz@mail.com", "Terciario", "Electrician"),
         ("Angela", "Morales", 77890123, 8, 8, 8, "cel16", "angela.morales@mail.com", "Secundario", "Psychologist")
-    ]
-    # Create guardians and assign them to riders
+]
+# Create guardians and assign them to riders
     for i, data in enumerate(guardian_data):
         name, last_name, dni, address_id, locality_id, province_id, phone, email, education_level, occupation = data
         guardian = guardians.create_guardian(name, last_name, dni, address_id, locality_id, province_id, phone, email, education_level, occupation)
