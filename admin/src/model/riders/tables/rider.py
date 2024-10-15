@@ -3,7 +3,7 @@ from src.model.database import db
 from src.model.riders.tables.family_allowance_type import FamilyAllowanceType
 from src.model.riders.tables.disability_diagnosis import DisabilityDiagnosis
 from src.model.riders.tables.disability_type import DisabilityType
-from src.model.riders.tables.rider_guardian import rider_guardians
+from src.model.riders.tables.rider_guardian import RiderGuardian
 from src.model.riders.tables.pension_type import PensionType
 from src.model.riders.tables.school import School
 from src.model.riders.tables.horse import Horse

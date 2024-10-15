@@ -1,5 +1,5 @@
 from src.model.database import db
-from src.model.riders.tables.rider_guardian import rider_guardians
+from src.model.riders.tables.rider_guardian import RiderGuardian
 
 class Guardian(db.Model):
     __tablename__ = 'guardians'
