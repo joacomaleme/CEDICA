@@ -78,11 +78,12 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
     attending_professionals = db.Column(db.Text)  # Profesionales que lo atienden (campo libre)
 
     # Padre/Madre/Tutor, relacion N a N.
-    guardians = db.relationship('Guardian', secondary=rider_guardians, back_populates='riders') # el atributo back_populates es para indicar que ambas tablas pueden acceder a la otra via atributos y el atributo secondary define una relacion N a N.
+
+    guardians = db.relationship('Guardian', secondary='rider_guardians', back_populates='riders')
 
     # Información sobre el trabajo en la la institución
     work_proposal = db.Column(db.String(50))  # Hipoterapia, Monta Terapéutica, etc. 
-    active = db.Column(db.String(10), nullable=False)  # REGULAR, DE BAJA
+    active = db.Column(db.Boolean, nullable=False)
     sede = db.Column(db.String(50), nullable=False)  # CASJ, HLP, OTRO MAKE TABLE
     # Relacion N a N con WorkDay
     work_days = db.relationship('WorkDay', secondary='rider_work_day', back_populates='riders')

@@ -13,7 +13,7 @@ def create_rider(name: str, last_name: str, dni: str, age: int, birth_date: date
                  birth_locality_id: int, birth_province_id: int, address_id: int,
                  current_locality_id: int, current_province_id: int, phone: str,
                  emergency_contact_name: str, emergency_contact_phone: str,
-                 active: str, sede: str, has_scholarship: bool = False, scholarship_percentage: Optional[float] = None,
+                 active: bool, sede: str, has_scholarship: bool = False, scholarship_percentage: Optional[float] = None,
                  has_disability_certificate: bool = False, disability_diagnosis_id: Optional[int] = None,
                  disability_type_id: Optional[int] = None, receives_family_allowance: bool = False,
                  family_allowance_type_id: Optional[int] = None, receives_pension: bool = False,
@@ -141,7 +141,7 @@ def toggle_active(id: int) -> Rider:
     rider = Rider.query.get(id)
     if not rider:
         raise ValueError("No se encontró un jinete con ese ID")
-    rider.active = 'DE BAJA' if rider.active == 'REGULAR' else 'REGULAR'
+    rider.active = not rider.active
     db.session.commit()
     db.session.expunge(rider)
     return rider
