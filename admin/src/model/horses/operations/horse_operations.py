@@ -1,5 +1,5 @@
 from src.model.database import db
-from src.model.riders.tables.horse import Horse
+from src.model.horses.tables.horse import Horse
 
 def create_horse(name, gender, breed, age, active):
     horse = Horse(name=name, gender=gender, breed=breed, age=age, active=active)

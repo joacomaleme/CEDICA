@@ -6,7 +6,7 @@ from src.model.riders.tables.disability_type import DisabilityType
 from src.model.riders.tables.rider_guardian import RiderGuardian
 from src.model.riders.tables.pension_type import PensionType
 from src.model.riders.tables.school import School
-from src.model.riders.tables.horse import Horse
+from src.model.horses.tables.horse import Horse
 
 
 class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)

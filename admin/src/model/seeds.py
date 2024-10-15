@@ -14,11 +14,11 @@ from src.model.generic.operations import province_operations as province
 from src.model.generic.operations import document_operations as documents
 from src.model.generic.operations import document_types_operations as document_types
 from src.model.riders.operations import rider_operations as riders
-from src.model.riders.operations import horse_operations as horses
+from src.model.horses.operations import horse_operations as horses
 from src.model.riders.operations import guardian_operations as guardians
 from src.model.riders.operations import guardian_rider_operations as guardians_riders
 from src.model.riders.operations import work_day_operations as work_days
-from src.model.riders.operations import sede_operations as sedes
+from src.model.generic.operations import sede_operations as sedes
 from src.model.riders.operations import disability_type_operations as disability_types
 from src.model.riders.operations import disability_diagnosis_operations as disability_diagnoses
 from src.model.riders.operations import work_proposal_operations as work_proposals
@@ -40,12 +40,12 @@ from src.model.riders.tables.rider import Rider
 from src.model.riders.tables.family_allowance_type import FamilyAllowanceType
 from src.model.riders.tables.pension_type import PensionType
 from src.model.riders.tables.disability_type import DisabilityType
-from src.model.riders.tables.horse import Horse
+from src.model.horses.tables.horse import Horse
 from src.model.riders.tables.school import School
 from src.model.riders.tables.guardian import Guardian
 from src.model.riders.tables.work_day import WorkDay
 from src.model.riders.tables.rider_work_day import RiderWorkDay
-from src.model.riders.tables.sede import Sede
+from src.model.generic.tables.sede import Sede
 from src.model.riders.tables.disability_type import DisabilityType
 from src.model.riders.tables.disability_diagnosis import DisabilityDiagnosis
 from src.model.riders.tables.work_proposal import WorkProposal
@@ -80,7 +80,8 @@ def run():
         'employee_index', 'employee_new', 'employee_destroy', 'employee_show', 'employee_update',
         'payment_index', 'payment_show', 'payment_update', 'payment_create', 'payment_destroy',
         'rider_index', 'rider_show', 'rider_update', 'rider_create', 'rider_destroy',
-        'document_index', 'document_show', 'document_update', 'document_create', 'document_destroy'
+        'document_index', 'document_show', 'document_update', 'document_create', 'document_destroy',
+        'collection_index', 'collection_show', 'collection_update', 'collection_create', 'collection_destroy'
     ]
 
     created_permissions = {}
@@ -92,7 +93,7 @@ def run():
 
     # Asignacion de permisos a roles de usuario
     roles.assign_permission(system_admin, list(created_permissions.values()))
-    roles.assign_permission(rol_tecnica, [created_permissions[p] for p in ['user_index', 'user_show', 'rider_index', 'rider_show', 'rider_update', 'rider_create', 'rider_destroy']])
+    roles.assign_permission(rol_tecnica, [created_permissions[p] for p in ['user_index', 'user_show', 'rider_index', 'rider_show', 'rider_update', 'rider_create', 'rider_destroy', 'collection_index', 'collection_show']])
     roles.assign_permission(rol_ecuestre, [created_permissions[p] for p in ['user_index', 'user_show', 'rider_index', 'rider_show']])
     roles.assign_permission(rol_voluntariado, [created_permissions['user_index']])
     roles.assign_permission(rol_administracion, [created_permissions[p] for p in user_permissions if p not in ['user_destroy']])
