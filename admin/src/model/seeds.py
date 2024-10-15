@@ -6,9 +6,13 @@ from src.model.employees.operations import job_position_operations as job_positi
 from src.model.employees.operations import profession_operations as professions
 from src.model.registers.operations import payment_operations as payments
 from src.model.registers.operations import payment_type_operations as payment_type
+from src.model.registers.operations import collection_operations as collections
+from src.model.registers.operations import collection_medium_operations as collection_medium
 from src.model.generic.operations import address_operations as address
 from src.model.generic.operations import locality_operations as locality
 from src.model.generic.operations import province_operations as province
+from src.model.generic.operations import document_operations as documents
+from src.model.generic.operations import document_types_operations as document_types
 from src.model.riders.operations import rider_operations as riders
 from src.model.riders.operations import horse_operations as horses
 from src.model.riders.operations import guardian_operations as guardians
@@ -20,8 +24,6 @@ from src.model.riders.operations import disability_diagnosis_operations as disab
 from src.model.riders.operations import work_proposal_operations as work_proposals
 from src.model.riders.operations import family_allowance_type_operations as family_allowance_types
 from src.model.riders.operations import pension_type_operations as pension_types
-from src.model.generic.operations import document_operations as documents
-from src.model.generic.operations import document_types_operations as document_types
 from src.model.riders.operations import school_operations as schools
 
 """
@@ -55,7 +57,7 @@ from src.model.generic.tables.document_types import DocumentType
 from src.model.registers.tables.payment import Payment
 from src.model.registers.tables.payment_type import PaymentType
 
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 
 
@@ -232,7 +234,6 @@ def run():
     ]
     for prov in provinces:
         province.create_province(prov)
-
 
 
 
@@ -483,9 +484,9 @@ def run():
             end_date=emp["end_date"],
         )
 
-    #####################
-    # REGISTRO DE PAGOS #
-    #####################
+    ##############################
+    # REGISTRO DE PAGOS Y COBROS #
+    ##############################
 
     # Creado de tipos de pago
     payment_types = ["Honorarios", "Proveedor", "Gastos Varios", "Donación", "Materiales", "Alquiler"]
@@ -505,6 +506,8 @@ def run():
     ]
     for payment in payments_data:
         payments.create_payment(*payment)
+
+
 
 
     ##################
@@ -594,7 +597,7 @@ def run():
 
 
 
-
+    from datetime import date
     # Create riders
     # Example 1
     riders.create_rider(
@@ -742,8 +745,8 @@ def run():
         # Guardians for Rider 8
         ("Ricardo", "Ruiz", 66789012, 8, 8, 8, "cel15", "ricardo.ruiz@mail.com", "Terciario", "Electrician"),
         ("Angela", "Morales", 77890123, 8, 8, 8, "cel16", "angela.morales@mail.com", "Secundario", "Psychologist")
-]
-# Create guardians and assign them to riders
+    ]
+    # Create guardians and assign them to riders
     for i, data in enumerate(guardian_data):
         name, last_name, dni, address_id, locality_id, province_id, phone, email, education_level, occupation = data
         guardian = guardians.create_guardian(name, last_name, dni, address_id, locality_id, province_id, phone, email, education_level, occupation)
@@ -752,3 +755,34 @@ def run():
         rider_id = (i // 2) + 1  # Riders 1..8
         relationship = "Father" if i % 2 == 0 else "Mother"
         guardians_riders.assign_guardian_to_rider(rider_id=rider_id, guardian_id=guardian.id, relationship=relationship)
+
+
+
+
+    ##########
+    # COBROS #
+    ##########
+
+
+    # Creacion de metodos de pago
+    mediums = ['Cash', 'Credit Card', 'Bank Transfer', 'PayPal', 'Bitcoin']
+    collection_mediums = []
+
+    for name in mediums:
+        medium = collection_medium.create_collection_medium(name)
+        collection_mediums.append(medium)
+
+
+    # Crecion de 20 cobros
+    for i in range(5):
+        for j in range(4):
+            amount = (i + 1) * 100.0  # Example amounts
+            date = datetime.now() - timedelta(days=j*i)  # Different dates
+            observations = f"Collection observation"
+            medium_id = collection_mediums[i % 5].id
+            received_by_id = i+1  # Assuming you have user with id 1
+            paid_by_id = i+1  # Assuming you have rider with id 2
+            
+            collections.create_collection(amount, date, observations, medium_id, received_by_id, paid_by_id)
+
+
