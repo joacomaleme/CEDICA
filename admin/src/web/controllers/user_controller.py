@@ -140,7 +140,7 @@ def index():
         flash("Uso inválido de parametros, no se pudo aplicar el filtro", "error")
         page = 0
     finally:
-        data = user_operations.get_paginated_list(users, page)
+        data = user_operations.get_paginated_list(users, page, 2)
 
         users = data[0]
         pages = data[1]
