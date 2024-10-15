@@ -101,7 +101,12 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
     # Relacion con sus Documentos
     documents = db.relationship('Document', primaryjoin="Rider.id == Document.rider_id")
 
-    def __init__(self, name, last_name, dni, age, birth_date, birth_locality_id, birth_province_id, address_id, current_locality_id, current_province_id, phone, emergency_contact_name, emergency_contact_phone, active, sede, has_scholarship=False, scholarship_percentage=None, has_disability_certificate=False, disability_diagnosis_id=None, disability_type_id=None, receives_family_allowance=False, family_allowance_type_id=None, receives_pension=False, pension_type_id=None, health_insurance=None, affiliate_number=None, has_guardianship=False, school_id=None, current_grade=None, attending_professionals=None, work_proposal=None, teacher_id=None, horse_conductor_id=None, horse_id=None, track_assistant_id=None):
+    # Informacion sobre su deuda
+    is_indebt = db.Column(db.Boolean, nullable = False, default=False)
+    debt = db.Column(db.Float, nullable=False, default=0.0)
+
+
+    def __init__(self, name, last_name, dni, age, birth_date, birth_locality_id, birth_province_id, address_id, current_locality_id, current_province_id, phone, emergency_contact_name, emergency_contact_phone, active, sede, has_scholarship=False, scholarship_percentage=None, has_disability_certificate=False, disability_diagnosis_id=None, disability_type_id=None, receives_family_allowance=False, family_allowance_type_id=None, receives_pension=False, pension_type_id=None, health_insurance=None, affiliate_number=None, has_guardianship=False, school_id=None, current_grade=None, attending_professionals=None, work_proposal=None, teacher_id=None, horse_conductor_id=None, horse_id=None, track_assistant_id=None, is_indebt=False, debt=0.0):
         self.name = name
         self.last_name = last_name
         self.dni = dni
@@ -137,6 +142,8 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
         self.horse_conductor_id = horse_conductor_id
         self.horse_id = horse_id
         self.track_assistant_id = track_assistant_id
+        self.is_indebt = is_indebt
+        self.debt = debt
 
 
     # Definición de cómo se muestra la instancia al llamarla
