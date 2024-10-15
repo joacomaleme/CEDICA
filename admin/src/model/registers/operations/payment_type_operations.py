@@ -1,8 +1,8 @@
 from typing import List, Optional
 from src.model.database import db
-from src.model.registros.tables.tipo_pago import TipoPago
+from src.model.registers.tables.payment_type import PaymentType
 
-def create_tipo_pago(name: str) -> TipoPago:
+def create_payment_type(name: str) -> PaymentType:
     """
     Crea un nuevo tipo de pago (TipoPago), lo agrega a la base de datos
     y retorna el objeto expurgado.
@@ -15,13 +15,13 @@ def create_tipo_pago(name: str) -> TipoPago:
     TipoPago
         El objeto TipoPago recién creado y expurgado.
     """
-    tipo_pago = TipoPago(name)
-    db.session.add(tipo_pago)
+    payment_type = PaymentType(name)
+    db.session.add(payment_type)
     db.session.commit()
-    db.session.expunge(tipo_pago)
-    return tipo_pago
+    db.session.expunge(payment_type)
+    return payment_type
 
-def list_tipos_pago() -> List[TipoPago]:
+def list_payment_types() -> List[PaymentType]:
     """
     Recupera todos los tipos de pago (TipoPago) de la base de datos.
     Si no se encuentran registros, retorna una lista vacía.
@@ -30,11 +30,11 @@ def list_tipos_pago() -> List[TipoPago]:
     List[TipoPago]
         Una lista de objetos TipoPago expurgados.
     """
-    tipos_pago = TipoPago.query.all()
-    [db.session.expunge(tipo_pago) for tipo_pago in tipos_pago]
-    return tipos_pago
+    payment_types = PaymentType.query.all()
+    [db.session.expunge(payment_type) for payment_type in payment_types]
+    return payment_types 
 
-def get_tipo_pago(id: int) -> Optional[TipoPago]:
+def get_payment_type(id: int) -> Optional[PaymentType]:
     """
     Recupera un tipo de pago (TipoPago) por su ID.
     Si no se encuentra el ID, retorna None.
@@ -47,12 +47,12 @@ def get_tipo_pago(id: int) -> Optional[TipoPago]:
     Optional[TipoPago]
         El objeto TipoPago expurgado si se encuentra, de lo contrario None.
     """
-    tipo_pago = TipoPago.query.get(id)
-    if tipo_pago:
-        db.session.expunge(tipo_pago)
-    return tipo_pago
+    payment_type = PaymentType.query.get(id)
+    if payment_type:
+        db.session.expunge(payment_type)
+    return payment_type
 
-def update_pago(to_update: TipoPago) -> TipoPago:
+def update_payment(to_update: PaymentType) -> PaymentType:
     """
     Actualiza un tipo de pago (TipoPago) existente con nuevos atributos
     y guarda los cambios en la base de datos.
@@ -69,17 +69,17 @@ def update_pago(to_update: TipoPago) -> TipoPago:
     ValueError
         Si no se encuentra un TipoPago con el ID proporcionado.
     """
-    tipo_pago = TipoPago.query.get(to_update.id)
-    if tipo_pago is None:
+    payment_type = PaymentType.query.get(to_update.id)
+    if payment_type is None:
         raise ValueError("No se encontró un tipo de pago con ese ID")
     
-    tipo_pago.name = to_update.name
+    payment_type.name = to_update.name
 
     db.session.commit()
-    db.session.expunge(tipo_pago)
-    return tipo_pago
+    db.session.expunge(payment_type)
+    return payment_type
 
-def delete_tipo_pago(id: int):
+def delete_payment_type(id: int):
     """
     Elimina un tipo de pago (TipoPago) por su ID.
     Si no se encuentra el registro, lanza una excepción.
@@ -92,9 +92,9 @@ def delete_tipo_pago(id: int):
     ValueError
         Si no se encuentra un TipoPago con el ID proporcionado.
     """
-    tipo_pago = TipoPago.query.get(id)
-    if tipo_pago is None:
+    payment_type= PaymentType.query.get(id)
+    if payment_type is None:
         raise ValueError("No se encontró un tipo de pago con ese ID")
 
-    db.session.delete(tipo_pago)
+    db.session.delete(payment_type)
     db.session.commit()

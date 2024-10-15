@@ -25,7 +25,7 @@
             <li><a href="{{ url_for('home') }}">Inicio</a></li>
             <li><a href="#">J&#38;A</a></li>
             <li><a href="#">Ecuestre</a></li>
-            <li><a href="#">Equipo</a></li>
+            <li><a href="{{ url_for('employee.index') }}">Equipo</a></li>
         </ul>
         <div class="gray-background"></div>
         {% if is_authenticated(session) %}
@@ -67,7 +67,7 @@
         {% block footer %}
         {% endblock %}
     </footer>
-    <script src="{{ url_for('static', filename='layout.js') }}"></script>
     <script src="{{ url_for('static', filename='flash.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/layout.js') }}"></script>
 </body>
 </html>

@@ -96,12 +96,11 @@ def assign_role(id: int, role: Optional[Role] = None) -> User: #Enviar role = No
 def has_permission(user_email: str, permission_name:str) -> bool:
     # verifica que el rol del usuario tenga el permiso especificado
     user = get_user_by_email(user_email)
-    if user.role_id:
+    if user:
         role = Role.query.get(user.role_id)
         return any(permission.name == permission_name for permission in role.permissions)
     else:
         return False
-
 
 ###INSTRUCCIONES DE LISTADO ESPECÍFICAS
 

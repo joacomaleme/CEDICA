@@ -12,7 +12,16 @@ class Profession(db.Model):
     name = db.Column(db.String(100), nullable=False, unique=True)
 
     # Relación inversa con Employee
-    employees = db.relationship('Employee', backref='profession', lazy=True)    # no se si esta hace falta tbh
+    employees = db.relationship('Employee', back_populates='profession')
+
+    def __init__(self, name: str):
+        self.name = name
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name
+        }
 
     def __repr__(self):
-        return f'<Profesion {self.nombre}>'
+        return f'<Profesion {self.name}>'
