@@ -87,6 +87,7 @@ def run():
 
 
 
+    print("INICIA")
 
     # Asignacion de permisos a roles de usuario
     roles.assign_permission(system_admin, list(created_permissions.values()))
@@ -95,6 +96,7 @@ def run():
     roles.assign_permission(rol_voluntariado, [created_permissions['user_index']])
     roles.assign_permission(rol_administracion, [created_permissions[p] for p in user_permissions if p not in ['user_destroy']])
 
+    print("INICIA2")
 
 
     # Creado de usuarios
@@ -193,9 +195,12 @@ def run():
         ('Melina', '123a', 'melina@gmail.com', True, 2),
         ('Emmanuel', '123a', 'emmanuel@gmail.com', True, 4),
     ]
+    print("INICIA4")
+
     for user_data in users_data:
         users.create_user(alias=user_data[0], password=user_data[1], email=user_data[2], enabled=user_data[3], role_id=user_data[4])
 
+    print("INICIA3")
 
     ############
     # Generics #
@@ -460,6 +465,8 @@ def run():
             "end_date": None
         },
     ]
+
+    print("MITAD")
 
     for emp in employees:
         employee_operations.create_employee(
@@ -742,8 +749,8 @@ def run():
         # Guardians for Rider 8
         ("Ricardo", "Ruiz", 66789012, 8, 8, 8, "cel15", "ricardo.ruiz@mail.com", "Terciario", "Electrician"),
         ("Angela", "Morales", 77890123, 8, 8, 8, "cel16", "angela.morales@mail.com", "Secundario", "Psychologist")
-]
-# Create guardians and assign them to riders
+    ]
+    # Create guardians and assign them to riders
     for i, data in enumerate(guardian_data):
         name, last_name, dni, address_id, locality_id, province_id, phone, email, education_level, occupation = data
         guardian = guardians.create_guardian(name, last_name, dni, address_id, locality_id, province_id, phone, email, education_level, occupation)
@@ -752,6 +759,5 @@ def run():
         rider_id = (i // 2) + 1  # Riders 1..8
         relationship = "Father" if i % 2 == 0 else "Mother"
         guardians_riders.assign_guardian_to_rider(rider_id=rider_id, guardian_id=guardian.id, relationship=relationship)
-
-
-
+    
+    print("FINAL")
