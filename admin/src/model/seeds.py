@@ -65,7 +65,7 @@ def run():
     ############
 
     # Creado de roles
-    system_admin = roles.create_role(name='system_admin')
+    system_admin = roles.create_role(name='Administrador de Sistema')
     rol_tecnica = roles.create_role(name='Tecnica')
     rol_ecuestre = roles.create_role(name='Ecuestre')
     rol_voluntariado = roles.create_role(name='Voluntariado')

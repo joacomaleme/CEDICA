@@ -67,7 +67,7 @@ def reset():
 
 
     print("Eliminando base de datos...")
-    # db.session.execute(text('DROP TABLE IF EXISTS users CASCADE;'))
+    db.session.execute(text('DROP TABLE IF EXISTS users CASCADE;'))
     db.session.commit()
     db.drop_all()  # Drop other tables
     print("Creando base nuevamente...")

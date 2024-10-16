@@ -9,12 +9,13 @@
   left: 50%;
   transform: translate(-50%, -50%);
   position: absolute;
-  width: 100%;
+  width: 50%;
+  z-index: 999;
 }
 
 .flash {
   font-family: Quicksand;
-  width: 50%;
+  width: 100%;
   margin: 20px auto;
   padding: 15px;
   border-radius: 5px;
