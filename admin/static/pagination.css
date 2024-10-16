@@ -7,6 +7,8 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  position: relative;
+  margin-top: 5rem;
 }
 li{
   list-style-type: none;
@@ -14,11 +16,24 @@ li{
 .pagination {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+}
+
+@media only screen and (max-width: 650px){
+
+}
+
+.theNav{
+  border: none; /* Remove any border */
+  outline: none; /* Remove any outline */
+
 }
 .pagination-item {
   margin-right: 18px;
+  margin-top: 1.5rem;
   border-radius: 10px;
   border: solid 1px #ececec;
+  
 }
 .pagination-item .pageNum {
   padding: 11px 16px 11px 16px;

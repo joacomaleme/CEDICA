@@ -126,8 +126,8 @@
                     <th>Puesto laboral</th>
                     <th>Obra Social</th>
                     <th>Número de afiliado</th>
-                    <th>voluntario</th>
-                    <th>Habilitado</th>
+                    <th>Condición</th>
+                    <th>Activo</th>
                 </tr>
             </thead>
             <tbody>
@@ -141,8 +141,20 @@
                     <td>{{ job_positions[employee.job_position_id - 1] }}</td>
                     <td>{{ employee.obra_social }}</td>
                     <td>{{ employee.affiliate_number }}</td>
-                    <td>{{ employee.is_volunteer }}</td>
-                    <td>{{ employee.enabled }}</td>
+                    <td>
+                        {% if employee.is_volunteer %}
+                            Voluntario
+                        {% else %}
+                            Personal Rentado
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if employee.enabled %}
+                            Sí
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

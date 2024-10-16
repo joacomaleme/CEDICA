@@ -45,20 +45,17 @@ def reset():
     # Desabilito los checkeos de ForeignKeys
     with engine.connect() as conn:
         conn.execute(text('SET CONSTRAINTS ALL DEFERRED'))
-
         # Elimino todas las tablas
         for table in table_names:
             conn.execute(text(f'DROP TABLE IF EXISTS "{table}" CASCADE'))
-
         conn.commit()
 
     # Creo todas las tablas
+    print("Creando Base de Datos...")
     db.create_all()
 
-    print("Creando Base de Datos...")
     # Habilito los checkeos de ForeignKeys
     with engine.connect() as conn:
         conn.execute(text('SET CONSTRAINTS ALL IMMEDIATE'))
         conn.commit()
-
     print("Base de Datos Creada.")

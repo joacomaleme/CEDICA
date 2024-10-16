@@ -232,7 +232,7 @@ html{
     }
     
     th {
-        background-color: #4CAF50;
+        background-color: #78b9bf;;
         color: white;
         text-transform: uppercase;
         max-width: 100px; /* Limit max width for headers */
@@ -254,11 +254,11 @@ html{
     }
     
     th:first-child, td:first-child {
-        border-left: 3px solid #4CAF50;
+        border-left: 3px solid #78b9bf;
     }
     
     th:last-child, td:last-child {
-        border-right: 3px solid #4CAF50;
+        border-right: 3px solid #78b9bf;
     }
     
     /* Optional: Responsive design for small screens */
