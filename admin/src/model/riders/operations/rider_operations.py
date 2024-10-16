@@ -1,7 +1,7 @@
 from src.model.database import db
 from src.model.riders.tables.rider import Rider
 from sqlalchemy.orm  import Query
-from typing import List, Optional
+from typing import Optional
 from datetime import date
 
 """

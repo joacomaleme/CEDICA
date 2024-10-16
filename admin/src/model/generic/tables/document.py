@@ -1,5 +1,4 @@
 from src.model.database import db
-from sqlalchemy.ext.declarative import declared_attr
 from typing import Optional
 from datetime import datetime
 
@@ -20,17 +19,6 @@ class Document(db.Model):
     allowed_operations = db.Column(db.String(20), nullable=False) # Esto podria ser otra tabla aparte
     file_path = db.Column(db.String(255), nullable=False)  # Ruta al archivo almacenado
 
-    # Informacion para el polimorfismo
-    entity_type = db.Column(db.String(50))
-    entity_id = db.Column(db.BigInteger)
-
-#   ESTA ES LA FORMA VIEJA DE HACER LAS RELACIONES CON LOS DOCUMENTOS, NO DESCOMENTAR.
-
-#    Relaciones con las entidades Employee y Rider
-#    employee_id = db.Column(db.BigInteger, db.ForeignKey('employees.id'), nullable=True)
-#    employee = db.relationship('Employee', back_populates='documents')
-#    rider_id = db.Column(db.BigInteger, db.ForeignKey('riders.id'), nullable=True)
-#    rider = db.relationship('Rider', back_populates='documents')
 
     def __init__(self, title: str, format: str, is_external: bool, allowed_operations: str, file_path: str, type_id: Optional[int]=None, upload_date: datetime = datetime.now()):
         self.title = title
