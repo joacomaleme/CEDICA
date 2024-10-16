@@ -7,7 +7,7 @@ from src.model.riders.tables.rider_guardian import RiderGuardian
 from src.model.riders.tables.pension_type import PensionType
 from src.model.riders.tables.school import School
 from src.model.horses.tables.horse import Horse
-
+from src.model.riders.tables.rider_document import RiderDocument
 
 class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
     __tablename__ = 'riders'
@@ -99,7 +99,9 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
     track_assistant = db.relationship('Employee', foreign_keys=[track_assistant_id])
 
     # Relacion con sus Documentos
-    documents = db.relationship('Document', primaryjoin="Rider.id == Document.rider_id")
+    rider_documents = db.relationship("RiderDocument", back_populates="rider")
+    documents = db.relationship("Document", secondary="rider_documents", viewonly=True)
+
 
     # Informacion sobre su deuda
     is_indebt = db.Column(db.Boolean, nullable = False, default=False)

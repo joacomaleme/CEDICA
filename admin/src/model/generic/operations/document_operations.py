@@ -1,11 +1,12 @@
 from typing import Optional
 from src.model.database import db
 from src.model.generic.tables.document import Document
+from src.model.generic.tables.document_types import DocumentType
 from datetime import datetime
 from sqlalchemy.orm  import Query
 
-def create_document(title: str, format: str, is_external: bool, allowed_operations: str, file_address: str, employee_id=None,
-                    rider_id=None, type_id: Optional[int] = None, upload_date: datetime = datetime.now()) -> Document:
+def create_document(title: str, format: str, is_external: bool, allowed_operations: str, file_path: str,
+                    type_id: Optional[int] = None, upload_date: datetime = datetime.now()) -> Document:
     document = Document(
         title=title,
         type_id=type_id,
@@ -13,9 +14,7 @@ def create_document(title: str, format: str, is_external: bool, allowed_operatio
         upload_date=upload_date,
         is_external=is_external,
         allowed_operations=allowed_operations,
-        file_address=file_address,
-        employee_id=employee_id,
-        rider_id=rider_id
+        file_path=file_path,
     )
     db.session.add(document)
     db.session.commit()
@@ -42,9 +41,7 @@ def update_document(to_update: Document) -> Document:
     document.upload_date = to_update.upload_date or document.upload_date
     document.is_external = to_update.is_external if to_update.is_external is not None else document.is_external
     document.allowed_operations = to_update.allowed_operations or document.allowed_operations
-    document.file_address = to_update.file_address or document.file_address
-    document.employee_id = to_update.employee_id or document.employee_id
-    document.rider_id = to_update.rider_id or document.rider_id
+    document.file_path= to_update.file_path or document.file_path
     db.session.commit()
     db.session.expunge(document)
     return document

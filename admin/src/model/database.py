@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import text
+from sqlalchemy import text, inspect
 
 
 
@@ -31,15 +31,34 @@ def config(app):
 def reset():
 
     """
-    Resetea la base de datos.
-    Los imports son NECESARIOS para la funcionalidad.
-    Si se agregan nuevas entidades a la bd, debe agregarse el import aca.
+        Funcion para reiniciar la base de datos. Hace uso del engine de SQLAlchemy para acceder a la base de datos y usando la funcion text (para enviar comandos SQLs como texto a la db) realizar las operaciones de DDL
     """
 
-    print("Eliminando base de datos...")
-    db.session.execute(text('DROP TABLE IF EXISTS users CASCADE;'))
-    db.session.commit()
-    db.drop_all()  # Drop other tables
-    print("Creando base nuevamente...")
+    print("Borrando Base de Datos...")
+    # Recupero la database engine
+    engine = db.engine
+    # Recupero el inspector de la db
+    inspector = inspect(engine)
+    # Recupero todos los nombres de las tablas
+    table_names = inspector.get_table_names()
+
+    # Desabilito los checkeos de ForeignKeys
+    with engine.connect() as conn:
+        conn.execute(text('SET CONSTRAINTS ALL DEFERRED'))
+
+        # Elimino todas las tablas
+        for table in table_names:
+            conn.execute(text(f'DROP TABLE IF EXISTS "{table}" CASCADE'))
+
+        conn.commit()
+
+    # Creo todas las tablas
     db.create_all()
-    print("Done!")
+
+    print("Creando Base de Datos...")
+    # Habilito los checkeos de ForeignKeys
+    with engine.connect() as conn:
+        conn.execute(text('SET CONSTRAINTS ALL IMMEDIATE'))
+        conn.commit()
+
+    print("Base de Datos Creada.")

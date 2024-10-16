@@ -13,18 +13,18 @@ from src.model.generic.operations import locality_operations as locality
 from src.model.generic.operations import province_operations as province
 from src.model.generic.operations import document_operations as documents
 from src.model.generic.operations import document_types_operations as document_types
+from src.model.generic.operations import sede_operations as sedes
+from src.model.generic.operations import work_proposal_operations as work_proposals
 from src.model.riders.operations import rider_operations as riders
-from src.model.horses.operations import horse_operations as horses
 from src.model.riders.operations import guardian_operations as guardians
 from src.model.riders.operations import guardian_rider_operations as guardians_riders
 from src.model.riders.operations import work_day_operations as work_days
-from src.model.generic.operations import sede_operations as sedes
 from src.model.riders.operations import disability_type_operations as disability_types
 from src.model.riders.operations import disability_diagnosis_operations as disability_diagnoses
-from src.model.riders.operations import work_proposal_operations as work_proposals
 from src.model.riders.operations import family_allowance_type_operations as family_allowance_types
 from src.model.riders.operations import pension_type_operations as pension_types
 from src.model.riders.operations import school_operations as schools
+from src.model.horses.operations import horse_operations as horses
 
 """
     IMPORTS DE LAS CLASES PORQUE SI NO EXPLOTA
@@ -48,7 +48,7 @@ from src.model.riders.tables.rider_work_day import RiderWorkDay
 from src.model.generic.tables.sede import Sede
 from src.model.riders.tables.disability_type import DisabilityType
 from src.model.riders.tables.disability_diagnosis import DisabilityDiagnosis
-from src.model.riders.tables.work_proposal import WorkProposal
+from src.model.generic.tables.work_proposal import WorkProposal
 from src.model.generic.tables.address import Address
 from src.model.generic.tables.document import Document
 from src.model.generic.tables.locality import Locality
@@ -81,7 +81,8 @@ def run():
         'payment_index', 'payment_show', 'payment_update', 'payment_create', 'payment_destroy',
         'rider_index', 'rider_show', 'rider_update', 'rider_create', 'rider_destroy',
         'document_index', 'document_show', 'document_update', 'document_create', 'document_destroy',
-        'collection_index', 'collection_show', 'collection_update', 'collection_create', 'collection_destroy'
+        'collection_index', 'collection_show', 'collection_update', 'collection_create', 'collection_destroy',
+        'horse_index', 'horse_show', 'horse_update', 'horse_create', 'horse_destroy'
     ]
 
     created_permissions = {}
@@ -93,15 +94,14 @@ def run():
 
     # Asignacion de permisos a roles de usuario
     roles.assign_permission(system_admin, list(created_permissions.values()))
-    roles.assign_permission(rol_tecnica, [created_permissions[p] for p in ['user_index', 'user_show', 'rider_index', 'rider_show', 'rider_update', 'rider_create', 'rider_destroy', 'collection_index', 'collection_show']])
-    roles.assign_permission(rol_ecuestre, [created_permissions[p] for p in ['user_index', 'user_show', 'rider_index', 'rider_show']])
+    roles.assign_permission(rol_tecnica, [created_permissions[p] for p in ['user_index', 'user_show', 'rider_index', 'rider_show', 'rider_update', 'rider_create', 'rider_destroy', 'collection_index', 'collection_show', 'horse_index', 'horse_show']])
+    roles.assign_permission(rol_ecuestre, [created_permissions[p] for p in ['user_index', 'user_show', 'rider_index', 'rider_show', 'horse_index', 'horse_show', 'horse_update', 'horse_create', 'horse_destroy']])
     roles.assign_permission(rol_voluntariado, [created_permissions['user_index']])
-    roles.assign_permission(rol_administracion, [created_permissions[p] for p in user_permissions if p not in ['user_destroy']])
+    roles.assign_permission(rol_administracion, [created_permissions[p] for p in user_permissions if p not in ['user_destroy', 'horse_update', 'horse_create', 'horse_destroy']])
 
 
 
     # Creado de usuarios
-
     users_data = [
         ('Juan', '123a', 'juan@gmail.com', True, None),
         ('Martin', '123a', 'martin@gmail.com', True, 1),
@@ -511,9 +511,9 @@ def run():
 
 
 
-    ##################
-    # Riders Section #
-    ##################
+    #############################
+    # Riders and horses Section #
+    #############################
 
     # Create disability types
     disability_types_list = ["Física", "Intelectual", "Sensorial", "Psíquica", "Visceral", "Múltiple"]
@@ -525,34 +525,40 @@ def run():
     for diag in diagnoses_list:
         disability_diagnoses.create_disability_diagnosis(diag)
 
-    # Create horses
-    horses_data = [
-        ("Luna", "Yegua", "Criolla", 12, True),
-        ("Trueno", "Caballo", "Cuarto de Milla", 8, True),
-        ("Estrella", "Yegua", "Appaloosa", 10, False),
-        ("Relámpago", "Caballo", "Árabe", 6, True),
-        ("Tormenta", "Yegua", "Cuarto de Milla", 6, True),
-        ("Locura", "Yegua", "Pinto", 9, True),
-        ("Rayo", "Caballo", "Appaloosa", 10, True),
-        ("Fuego", "Caballo", "Pinto", 7, False)
-    ]
-    for horse in horses_data:
-        horses.create_horse(*horse)
-
     # Create sedes
     sedes_list = ["Sede Central", "Sede Norte", "Sede Sur", "Sede Este", "Sede Oeste"]
     for sede in sedes_list:
         sedes.create_sede(sede)
+
+    # Create work proposals
+    proposals = ["Hipoterapia", "Monta Terapéutica", "Equitación Adaptada", "Volteo Adaptado", "Carruaje Adaptado"]
+    for prop in proposals:
+        work_proposals.create_work_proposal(prop)
+
+    # Create horses
+
+    horses.create_horse(name="Trueno", birth=datetime(2015, 6, 1), sex="Macho", breed="Árabe", coat="Bayo", is_donated=False, sede_id=1, active=True, activity_id=1)
+    horses.create_horse(name="Relámpago", birth=datetime(2017, 3, 15), sex="Hembra", breed="Pura Sangre", coat="Alazán", is_donated=True, sede_id=2, active=True, activity_id=2)
+    horses.create_horse(name="Tormenta", birth=datetime(2016, 9, 25), sex="Macho", breed="Appaloosa", coat="Negro", is_donated=False, sede_id=4, active=True, activity_id=3)
+    horses.create_horse(name="Fuego", birth=datetime(2014, 12, 5), sex="Hembra", breed="Quarter Horse", coat="Dorado", is_donated=True, sede_id=3, active=True, activity_id=4)
+    horses.create_horse(name="Sombra", birth=datetime(2013, 7, 11), sex="Macho", breed="Mustang", coat="Gris", is_donated=False, sede_id=2, active=True, activity_id=5)
+    horses.create_horse(name="Espíritu", birth=datetime(2018, 5, 21), sex="Hembra", breed="Morgan", coat="Palomino", is_donated=True, sede_id=1, active=True, activity_id=1)
+    horses.create_horse(name="Místico", birth=datetime(2019, 2, 18), sex="Macho", breed="Frisón", coat="Negro", is_donated=False, sede_id=3, active=True, activity_id=2)
+    horses.create_horse(name="Cometa", birth=datetime(2020, 8, 10), sex="Hembra", breed="Hanoveriano", coat="Castaño", is_donated=True, sede_id=4, active=True, activity_id=3)
+    horses.create_horse(name="Margarita", birth=datetime(2015, 11, 30), sex="Hembra", breed="Poni Galés", coat="Bayo", is_donated=False, sede_id=1, active=True, activity_id=4)
+    horses.create_horse(name="Jack", birth=datetime(2016, 4, 22), sex="Macho", breed="Clydesdale", coat="Alazán", is_donated=True, sede_id=3, active=True, activity_id=5)
+    horses.create_horse(name="Rubí", birth=datetime(2018, 1, 9), sex="Hembra", breed="Poni Shetland", coat="Negro", is_donated=False, sede_id=2, active=True, activity_id=1)
+    horses.create_horse(name="Ahumado", birth=datetime(2017, 10, 16), sex="Macho", breed="Percherón", coat="Gris", is_donated=True, sede_id=4, active=True, activity_id=2)
+    horses.create_horse(name="Tornado", birth=datetime(2014, 6, 29), sex="Macho", breed="Belga", coat="Dorado", is_donated=False, sede_id=3, active=True, activity_id=3)
+    horses.create_horse(name="Aurora", birth=datetime(2019, 8, 7), sex="Hembra", breed="Connemara", coat="Palomino", is_donated=True, sede_id=2, active=True, activity_id=4)
+    horses.create_horse(name="Estrella", birth=datetime(2020, 12, 3), sex="Hembra", breed="Islandés", coat="Castaño", is_donated=False, sede_id=1, active=True, activity_id=5)
+
 
     # Create work days
     days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]
     for day in days:
         work_days.create_work_day(day)
 
-    # Create work proposals
-    proposals = ["Hipoterapia", "Monta Terapéutica", "Equitación Adaptada", "Volteo Adaptado", "Carruaje Adaptado"]
-    for prop in proposals:
-        work_proposals.create_work_proposal(prop)
 
     # Create family allowance types
     allowance_types = ["Universal", "Discapacidad", "Escolar"]

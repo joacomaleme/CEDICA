@@ -1,19 +1,47 @@
 from src.model.database import db
+from src.model.generic.tables.sede import Sede
+from src.model.horses.tables.horse_document import HorseDocument
+from datetime import datetime
 
 class Horse(db.Model):
     __tablename__ = 'horses'
 
     id = db.Column(db.BigInteger, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    gender = db.Column(db.String(8), nullable=False)
+    birth = db.Column(db.Date, nullable=False)
+    sex = db.Column(db.String(8), nullable=False)
     breed = db.Column(db.String(100), nullable=False)
-    age = db.Column(db.Integer, nullable=False)
+    coat = db.Column(db.String(64), nullable=False)
+
+    #   boolean para saber si el caballo es donado o si se compro
+    is_donated = db.Column(db.Boolean, nullable=False, default=False)
+
+    entry_date = db.Column(db.DateTime, nullable=False, default=datetime.now())
+
+    # relacion con la tabla de sede
+    sede_id = db.Column(db.BigInteger, db.ForeignKey('sedes.id'), nullable=False)
+    sede = db.relationship('Sede', backref='horses', foreign_keys=[sede_id])
+
     active = db.Column(db.Boolean, default=True)
 
-    def __init__(self, name, gender, breed, age, owner_id=None, active=True):
+    # relacion con employees (entrenadores y conductores)
+    employees = db.relationship('Employee', secondary='horses_employees', back_populates='horses')
+
+    # relacion con la tabla de WorkProposal (la actividad asignada al caballo)
+    activity_id = db.Column(db.BigInteger, db.ForeignKey('work_proposals.id'), nullable=False)
+    activity = db.relationship('WorkProposal', backref='horses', foreign_keys=[activity_id])
+
+
+    horse_documents = db.relationship("HorseDocument", back_populates="horse")
+    documents = db.relationship("Document", secondary="horse_documents", viewonly=True)
+
+    def __init__(self, name, birth, sex, breed, coat, is_donated, sede_id, active, activity_id):
         self.name = name
-        self.gender = gender
+        self.birth = birth
+        self.sex = sex
         self.breed = breed
-        self.age = age
-        self.owner_id = owner_id
+        self.coat = coat
+        self.is_donated = is_donated
+        self.sede_id = sede_id
         self.active = active
+        self.activity_id = activity_id
