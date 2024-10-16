@@ -25,7 +25,9 @@
             <li><a href="{{ url_for('home') }}">Inicio</a></li>
             <li><a href="#">J&#38;A</a></li>
             <li><a href="#">Ecuestre</a></li>
-            <li><a href="{{ url_for('employee.index') }}">Equipo</a></li>
+            {% if is_permitted(session, 'employee_index') %}
+                <li><a href="{{ url_for('employee.index') }}">Equipo</a></li>
+            {% endif %}
         </ul>
         <div class="gray-background"></div>
         {% if is_authenticated(session) %}

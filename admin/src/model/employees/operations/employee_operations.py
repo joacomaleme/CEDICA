@@ -2,8 +2,8 @@ from datetime import datetime
 from src.model.database import db
 from src.model.employees.tables.employee import Employee
 from src.model.employees.operations.profession_operations import search_name
-from sqlalchemy.orm  import Query
-from typing import List, Optional, Tuple
+from sqlalchemy.orm import Query
+from typing import Optional, Tuple
 
 def create_employee(name: str, surname: str, dni: str, address_id: int, email: str, locality_id: int, phone: str, profession_id: int, job_position_id: int, 
                     emergency_contact_name: str, emergency_contact_phone: str, obra_social: str, affiliate_number: str, is_volunteer: bool,
