@@ -3,9 +3,11 @@ from src.model.database import db
 from src.model.riders.tables.family_allowance_type import FamilyAllowanceType
 from src.model.riders.tables.disability_diagnosis import DisabilityDiagnosis
 from src.model.riders.tables.disability_type import DisabilityType
+from src.model.riders.tables.rider_guardian import RiderGuardian
 from src.model.riders.tables.pension_type import PensionType
 from src.model.riders.tables.school import School
 from src.model.riders.tables.horse import Horse
+
 
 class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
     __tablename__ = 'riders'
@@ -78,11 +80,10 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
     # Padre/Madre/Tutor, relacion N a N.
 
     guardians = db.relationship('Guardian', secondary='rider_guardians', back_populates='riders')
-    rider_guardians = db.relationship('RiderGuardian', back_populates='rider')
 
     # Información sobre el trabajo en la la institución
     work_proposal = db.Column(db.String(50))  # Hipoterapia, Monta Terapéutica, etc. 
-    active = db.Column(db.String(10), nullable=False)  # REGULAR, DE BAJA
+    active = db.Column(db.Boolean, nullable=False)
     sede = db.Column(db.String(50), nullable=False)  # CASJ, HLP, OTRO MAKE TABLE
     # Relacion N a N con WorkDay
     work_days = db.relationship('WorkDay', secondary='rider_work_day', back_populates='riders')

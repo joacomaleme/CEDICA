@@ -3,6 +3,7 @@ from src.web.storage import storage
 from src.web.handlers import error
 from src.web.controllers.user_controller import bp as user_bp
 from src.web.controllers.employee_controller import bp as employee_bp
+from src.web.handlers.auth import is_authenticated, is_permitted, is_self
 from src.web.controllers.rider_controller import bp as rider_bp
 from src.model import database
 from src.model.config import config
@@ -28,6 +29,15 @@ def create_app(env="development", static_folder="../../static"):
     app.register_blueprint(rider_bp)
 
     app.register_error_handler(404, error.error_not_found)
+    app.register_error_handler(401, error.error_unauthorized)
+    app.register_error_handler(403, error.error_forbidden)
+    #---
+
+    # Registro funciones en jinja
+    app.jinja_env.globals.update(is_authenticated=is_authenticated)
+    app.jinja_env.globals.update(is_permitted=is_permitted)
+    app.jinja_env.globals.update(is_self=is_self)
+
     
     @app.cli.command(name="reset-db")
     def reset_db():

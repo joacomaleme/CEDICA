@@ -1,10 +1,10 @@
 from src.model.database import db
+from src.model.riders.tables.rider_guardian import RiderGuardian
 
 class Guardian(db.Model):
     __tablename__ = 'guardians'
 
     id = db.Column(db.BigInteger, primary_key=True)
-    relationship = db.Column(db.String(50), nullable=False)  # Relación con el jinete (Padre, Madre, Tutor/a)
     name = db.Column(db.String(100), nullable=False)
     last_name = db.Column(db.String(100), nullable=False)
     dni = db.Column(db.String(16), unique=True, nullable=False)
@@ -27,6 +27,17 @@ class Guardian(db.Model):
     # Actividad u ocupación del familiar/tutor
     occupation = db.Column(db.String(100), nullable=False)
 
-
     riders = db.relationship('Rider', secondary='rider_guardians', back_populates='guardians')
-    rider_guardians = db.relationship('RiderGuardian', back_populates='guardian')
+
+
+    def __init__(self, name: str, last_name: str, dni: int, address_id: int, locality_id: int, province_id: int, phone: str, email: str, education_level: str, occupation: str):
+        self.name = name
+        self.last_name = last_name
+        self.dni = dni
+        self.address_id = address_id
+        self.locality_id = locality_id
+        self.province_id = province_id
+        self.phone = phone
+        self.email = email
+        self.education_level = education_level
+        self.occupation = occupation

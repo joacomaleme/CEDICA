@@ -6,10 +6,12 @@ from src.model.database import db
 
 class RiderGuardian(db.Model):
     __tablename__ = 'rider_guardians'
+    id = db.Column(db.BigInteger, primary_key=True)  # Identificador único
+    rider_id = db.Column(db.Integer, db.ForeignKey('riders.id', ondelete="CASCADE"))
+    guardian_id = db.Column(db.BigInteger, db.ForeignKey('guardians.id', ondelete="CASCADE"))
 
-    rider_id = db.Column(db.BigInteger, db.ForeignKey('riders.id'), primary_key=True)
-    guardian_id = db.Column(db.BigInteger, db.ForeignKey('guardians.id'), primary_key=True)
+    relationship = db.Column(db.String(20), nullable=False)   # Relación con el jinete (Padre, Madre, Tutor/a)
 
-    # Relaciones
-    rider = db.relationship('Rider', back_populates='rider_guardians')
-    guardian = db.relationship('Guardian', back_populates='rider_guardians')
+    __table_args__ = (
+        db.UniqueConstraint('rider_id', 'guardian_id', name='_rider_guardian_uc'),  # Ensures unique combination of rider and guardian
+    )

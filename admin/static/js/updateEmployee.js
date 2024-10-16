@@ -13,28 +13,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const submitBtn = document.getElementById("button-submit");
 
+  const inputs = {
+    "name-field": [nameField, validateEmpty],
+    "surname-field": [surnameField, validateEmpty],
+    "dni-field": [dniField, validateDNI],
+    "street-field": [addressStreetField, validateEmpty],
+    "number-field": [addressNumberField, validateNumber],
+    "email-field": [emailField, validateEmail],
+    "phone-field": [phoneField, validatePhone],
+    "emergency-contact-name-field": [emergencyContactNameField, validateEmpty],
+    "emergency-contact-phone-field": [emergencyContactPhoneField, validatePhone],
+    "obra-social-field": [obraSocialField, validateEmpty],
+    "affiliate-number-field": [affiliateNumberField, validateAffiliateNumber]
+  };
+  
   const MAXVALIDOS = 11;
   let validos = 0;
 
-  // Se valida que ninguno de estos inputs esté vacío
-  const inputs = [nameField, surnameField, addressStreetField, emergencyContactNameField, obraSocialField, affiliateNumberField];
-  inputs.forEach((e) => {
-    e.addEventListener("input", validateEmpty);
-    e.addEventListener("focus", validateEmpty);
-  });
+  Object.keys(inputs).forEach(e => {
+    inputs[e][0].addEventListener("input", inputs[e][1]);
+    inputs[e][0].addEventListener("focus", inputs[e][1]);
+  })
 
-  emailField.addEventListener("input", validateEmail);
-  emailField.addEventListener("focus", validateEmail);
-  dniField.addEventListener("input", validateDNI);
-  dniField.addEventListener("focus", validateDNI);
-  addressNumberField.addEventListener("input", validateNumber);
-  addressNumberField.addEventListener("focus", validateNumber);
-  phoneField.addEventListener("input", validatePhone);
-  phoneField.addEventListener("focus", validatePhone);
-  emergencyContactPhoneField.addEventListener("input", validatePhone);
-  emergencyContactPhoneField.addEventListener("focus", validatePhone);
-  affiliateNumberField.addEventListener("input", validateAffiliateNumber);
-  affiliateNumberField.addEventListener("focus", validateAffiliateNumber);
+  callAll();
 
   // Valida que el campo no esté vacío
   function validateEmpty(event) {
@@ -122,6 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
     errorMessage.innerHTML = message;
     errorMessage.style.top = "80%";
     field.style.borderBottomColor = "red";
+    submitBtn.disabled = validos !== MAXVALIDOS;
   }
 
   // Desactiva el error del input dado
@@ -137,12 +139,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     errorMessage.innerHTML = "";
     field.style.borderBottomColor = "rgb(0, 170, 0)";
-    submitBtn.disabled = validos !== MAXVALIDOS
+    submitBtn.disabled = validos !== MAXVALIDOS;
   }
 
   // Elimina la parte de "-label" del id del input tag
   function trimID(id) {
     const split = id.split("-");
     return split.slice(0, split.length - 1).join("-");
+  }
+
+  // Activa el evento input para todos, checkeando sus valores
+  function callAll() {
+    const changeEvent = new Event('input');
+    Object.keys(inputs).forEach(e => inputs[e][0].dispatchEvent(changeEvent))
   }
 });
