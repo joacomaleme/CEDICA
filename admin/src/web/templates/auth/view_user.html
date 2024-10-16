@@ -3,7 +3,7 @@
 
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='register.css')}}"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='dropdown.css')}}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dropdown.css')}}"/>
 {% endblock %}
 {% block title %}{{user.alias}} - CEDICA{% endblock %}
 
@@ -27,19 +27,19 @@
         <br>
         <form action="{{ url_for('user.update', id=user.id)}}" method="POST">
             <div class="input-set">
-                <input {% if not is_self(session, user.email) %}disabled style="cursor: default;" {% endif %} placeholder="" value="{{user.email}}" spellcheck=false id="email-field" class="input-field" name="email" type="email" required><br>
+                <input maxlength="120" {% if not is_self(session, user.email) %}disabled style="cursor: default;" {% endif %} placeholder="" value="{{user.email}}" spellcheck=false id="email-field" class="input-field" name="email" type="email" required><br>
                 <label id="email-label" for="email-field" class="input-label">EMAIL</label>
                 <span id="email-error" class="input-error"></span>
             </div>
             <br>
             <div class="input-set">
-                <input {% if not is_self(session, user.email) %}disabled style="cursor: default;" {% endif %} placeholder="" value="{{user.alias}}" spellcheck=false id="alias-field" class="input-field" name="alias" type="text" required><br>
+                <input maxlength="50" {% if not is_self(session, user.email) %}disabled style="cursor: default;" {% endif %} placeholder="" value="{{user.alias}}" spellcheck=false id="alias-field" class="input-field" name="alias" type="text" required><br>
                 <label id="alias-label" class="input-label" for="alias-field">ALIAS</label>
                 <span id="alias-error" class="input-error"></span>
             </div>
             <br>
             <div {% if not is_self(session, user.email) %} style="display:none;" {% endif %} class="input-set">
-                <input placeholder="" id="password-field" class="input-field" name="password" type="password"><br>
+                <input maxlength="128" placeholder="" id="password-field" class="input-field" name="password" type="password"><br>
                 <label id="password-label" class="input-label" for="password-field">NUEVA CONTRASEÑA</label>
                 <span id="password-error" class="input-error"></span>
             </div>

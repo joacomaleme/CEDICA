@@ -52,6 +52,24 @@ def get_payment_type(id: int) -> Optional[PaymentType]:
         db.session.expunge(payment_type)
     return payment_type
 
+def get_payment_type_by_name(name: str) -> Optional[PaymentType]:
+    """
+    Recupera un tipo de pago (TipoPago) por su nombre.
+    Si no se encuentra el nombre, retorna None.
+
+    Parámetros:
+    name : str
+        El nombre del tipo de pago que se desea recuperar.
+
+    Retorna:
+    Optional[TipoPago]
+        El objeto TipoPago expurgado si se encuentra, de lo contrario None.
+    """
+    payment_type = PaymentType.query.filter(PaymentType.name == name).first()
+    if payment_type:
+        db.session.expunge(payment_type)
+    return payment_type
+
 def update_payment(to_update: PaymentType) -> PaymentType:
     """
     Actualiza un tipo de pago (TipoPago) existente con nuevos atributos

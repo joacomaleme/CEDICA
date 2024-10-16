@@ -81,6 +81,11 @@ def update(id):
         if (mail != "None" and mail != "") and ((not is_valid_email(mail)) or (not domain_exists(mail))):
             flash("La dirección de mail ingresada no es válida", "error")
             return redirect((url_for("user.view_user", alias=user.alias)))
+        
+        if len(mail) > 1024 or len(password) > 128 or len(alias) > 50:
+            flash('Parametro demasiado largo', "error")
+            return redirect((url_for("user.view_user", alias=user.alias)))
+
         if params["role"] == "Administrador de Sistema":
             enabled = True
         role = role_operations.search_name(role)
@@ -140,7 +145,7 @@ def index():
         flash("Uso inválido de parametros, no se pudo aplicar el filtro", "error")
         page = 0
     finally:
-        data = user_operations.get_paginated_list(users, page, 2)
+        data = user_operations.get_paginated_list(users, page)
 
         users = data[0]
         pages = data[1]

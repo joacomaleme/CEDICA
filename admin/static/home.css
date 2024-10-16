@@ -254,7 +254,7 @@ html{
     }
     
     th:first-child, td:first-child {
-        border-left: 3px solid #78b9bf;
+        border-left: 3px solid #78b9bf;;
     }
     
     th:last-child, td:last-child {

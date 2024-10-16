@@ -22,7 +22,8 @@ def list_employees():   # lista TODOS los employees (solo usar cuando sea estric
 
 def get_employee(id: int):      #devuelve un employee dado un id
     employee = Employee.query.get(id)
-    db.session.expunge(employee)
+    if employee:
+        db.session.expunge(employee)
     return employee # si no encuentra nada devuelve None
 
 def get_employee_by_dni(dni: str):

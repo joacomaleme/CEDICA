@@ -41,6 +41,8 @@
         <div class="nav-dropdown display-none">
             <ul>
                 <li><a href="{{ url_for('user.myprofile')}}">Perfil</a></li>
+                {% if is_permitted(session, 'payment_index') %}<li><a href="{{ url_for('payments.index')}}">Ver pagos</a></li>{% endif %}
+                {% if is_permitted(session, 'payment_create') %}<li><a href="{{ url_for('payments.register')}}">Registrar pago</a></li>{% endif %}
                 <li><a href="{{ url_for('auth.logout') }}">Cerrar sesión</a></li>
             </ul>
         </div>

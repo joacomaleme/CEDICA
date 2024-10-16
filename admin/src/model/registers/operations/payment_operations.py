@@ -147,7 +147,7 @@ def filter_payment_type(payments: Query, payment_types: List[PaymentType]) -> Qu
     Query
         Query filtrado con los pagos que coinciden con los tipos de pago especificados.
     """
-    return payments.filter(Payment.payment_type.id.in_(payment_type.id for payment_type in payment_types))
+    return payments.filter(Payment.payment_type_id.in_(payment_type.id for payment_type in payment_types))
 
 def sorted_by_date(payments: Query, ascending: bool = True) -> Query:
     """
@@ -197,8 +197,8 @@ def get_filtered_list(page: int, limit: int = 25, payment_types: List[PaymentTyp
 
     payment_list = sorted_by_date(
                 filter_payment_type(
-                filter_date(Payment.query, start_date, end_date), payment_types), ascending)\
-                .paginate(page=page, per_page=limit, error_out=False)
+                filter_date(Payment.query, start_date, end_date), payment_types), ascending)
+    paginated_list = payment_list.paginate(page=page, per_page=limit, error_out=False).items
 
-    [db.session.expunge(payment) for payment in payment_list.items]
-    return payment_list
+    [db.session.expunge(payment) for payment in paginated_list]
+    return [paginated_list, ((payment_list.count()-1)//limit)+1]

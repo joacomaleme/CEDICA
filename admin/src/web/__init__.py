@@ -5,6 +5,7 @@ from src.web.storage import storage
 from src.web.handlers import error
 from src.web.controllers.user_controller import bp as user_bp
 from src.web.controllers.auth import bp as auth_bp
+from src.web.controllers.payments_controller import bp as pay_bp
 from src.web.controllers.employee_controller import bp as employee_bp
 from src.web.handlers.auth import is_authenticated, is_permitted, is_self
 from src.model import database
@@ -35,8 +36,9 @@ def create_app(env="development", static_folder="../../static"):
     #---
     app.register_blueprint(user_bp)
     app.register_blueprint(auth_bp)
-    #---
+    app.register_blueprint(pay_bp)
     app.register_blueprint(employee_bp)
+    #---
 
     app.register_error_handler(404, error.error_not_found)
     app.register_error_handler(401, error.error_unauthorized)
