@@ -75,7 +75,7 @@ def run():
     # Creado de permisos para usuarios
     user_permissions = [
         'user_index', 'user_new', 'user_destroy', 'user_update', 'user_show',
-        'employee_index', 'employee_new', 'employee_destroy', 'employee_show', 'employee_update',
+        'employee_index', 'employee_new', 'employee_destroy', 'employee_create', 'employee_show', 'employee_update',
         'payment_index', 'payment_show', 'payment_update', 'payment_create', 'payment_destroy',
         'rider_index', 'rider_show', 'rider_update', 'rider_create', 'rider_destroy',
         'document_index', 'document_show', 'document_update', 'document_create', 'document_destroy'

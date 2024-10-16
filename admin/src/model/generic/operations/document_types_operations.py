@@ -13,6 +13,11 @@ def get_document_type(document_type_id):
     db.session.expunge(document_type)
     return document_type
 
+def list_document_type():
+    document_types = DocumentType.query.all()
+    [db.session.expunge(document_type) for document_type in document_types]
+    return document_types
+
 def delete_document_type(document_type_id):
     document_type = DocumentType.query.get(document_type_id)
     if document_type is None:
