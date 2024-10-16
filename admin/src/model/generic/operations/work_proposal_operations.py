@@ -1,5 +1,5 @@
 from src.model.database import db
-from src.model.riders.tables.work_proposal import WorkProposal
+from src.model.generic.tables.work_proposal import WorkProposal
 
 def create_work_proposal(name):
     work_proposal = WorkProposal(name=name)
