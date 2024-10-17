@@ -12,16 +12,16 @@ def create_payment(amount: float, date: datetime, description: str, payment_type
     Crea un nuevo pago (Pago), lo agrega a la base de datos y retorna el objeto expurgado.
 
     Parámetros:
-    beneficiario : EMPLEADO
-        El nombre del beneficiario del pago.
+    beneficiario : int
+        El id del beneficiario del pago.
     monto : float
         El monto del pago.
     fecha_pago : datetime
         La fecha en la que se realizó el pago.
     descripcion : str
         Descripción del pago.
-    tipo_pago : TipoPago
-        El tipo de pago asociado.
+    tipo_pago : int
+        El id del tipo de pago asociado.
 
     Retorna:
     Pago

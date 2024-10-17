@@ -4,18 +4,20 @@ const navLinksMenu = document.querySelector(".nav-links");
 const userLogo = document.querySelector(".user-logo");
 const navDropdown = document.querySelector(".nav-dropdown");
 
-navMenu.addEventListener("click", () => {
+navMenu.addEventListener("click", (e) => {
   navMenu.classList.toggle("open-menu");
   navLinksMenu.classList.toggle("open");
   e.stopPropagation(); // Previene el evento de click en window
 });
 
-// Cuando clickeo el botón userLogo se chequea el estado del dropdown
-userLogo.addEventListener("click", (e) => {
-  checkNavDropdown();
-  hideLinksMenu(); // Lo cierro manual porque los clicks en window no pasan
-  e.stopPropagation(); // Previene el evento de click en window
-});
+if (userLogo) { // Si el usuario no está logueado userLogo será null
+  // Cuando clickeo el botón userLogo se chequea el estado del dropdown
+  userLogo.addEventListener("click", (e) => {
+    checkNavDropdown();
+    hideLinksMenu(); // Lo cierro manual porque los clicks en window no pasan
+    e.stopPropagation(); // Previene el evento de click en window
+  });
+}
 
 // Cuando se cliquea afuera del botón userLogo, se cierra el dropdown
 window.addEventListener("click", (e) => {

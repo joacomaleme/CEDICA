@@ -10,6 +10,15 @@
     margin-block: 1rem;
 }
 
+.table-container a {
+    margin-left: 0.8rem;
+    background: none;
+    background-color: transparent;
+    color: black;
+    font-size: 20px;
+    text-decoration: none;
+}
+
 table {
     width: 100%;
     max-width: 100%;
@@ -51,6 +60,16 @@ th:first-child, td:first-child {
 
 th:last-child, td:last-child {
     border-right: 3px solid var(--blue-bg);
+}
+
+.delete-btn {
+    margin-left: 0.8rem;
+    cursor: pointer;
+}
+
+.fa-trash {
+    color: red;
+    font-size: 20px;
 }
 
 @media only screen and (max-width: 525px) {

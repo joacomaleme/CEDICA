@@ -8,19 +8,19 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/pagination.css')}}"/>
 {% endblock %}
 
-{% block title %}Empleados - CEDICA{% endblock %}
+{% block title %}Jinetes y Amazonas - CEDICA{% endblock %}
 
 {% block navbar %}
 {% endblock %}
 
 {% block content %}
     <div class="table-header">
-        {% if is_permitted(session, 'employee_new') %}
+        {% if is_permitted(session, 'rider_new') %}
             <button class="btn">
-                <a href="{{ url_for('employee.new') }}">Nuevo</a>
+                <a href="{{ url_for('rider.new') }}">Nuevo</a>
             </button>
         {% endif %}
-        <form id="search-options" class="search-options" action="{{ url_for('employee.index')}}" method="GET">
+        <form id="search-options" class="search-options" action="{{ url_for('rider.index')}}" method="GET">
 
             <div class="empty">
                 <label class="title-cont" for="controllers">Ordenar por:</label>
@@ -28,7 +28,6 @@
                     <div class="dropselect">
                         <div class="select_mate" data-mate-select="active" >
                             <select name="sort_attr" id="sortAttr">
-                                <option {% if start_sort_attr == 'inserted_at' %}selected{% endif %} value="inserted_at">Fecha creación</option>
                                 <option {% if start_sort_attr == 'name' %}selected{% endif %} value="name">Nombre</option>
                                 <option {% if start_sort_attr == 'surname' %}selected{% endif %} value="surname">Apellido</option>
                             </select>
@@ -60,10 +59,10 @@
                     <div class="dropselect">
                         <div class="select_mate" data-mate-select="active" >
                             <select name="search_attr">
-                                <option {% if start_search_attr == 'email' %}selected{% endif %} value="email">Email</option>
                                 <option {% if start_search_attr == 'dni' %}selected{% endif %} value="dni">DNI</option>
                                 <option {% if start_search_attr == 'name' %}selected{% endif %} value="name">Nombre</option>
                                 <option {% if start_search_attr == 'surname' %}selected{% endif %} value="surname">Apellido</option>
+                                <option {% if start_search_attr == 'professionals' %}selected{% endif %} value="professionals">Profesionales encargados</option>
                             </select>
                             
                             <p class="selecionado_opcion"  onclick="open_select(this)" ></p>
@@ -89,45 +88,19 @@
                 <button class="search-button" type="submit"><i class="fa fa-search"></i></button>
             </div>
         
-            <div class="dropselect">
-                <div class="select_mate" data-mate-select="active" >
-                    <select name="profession" id="mySelect">
-                        <option value="">Sin filtros de profesión</option>
-                        {% for profession in professions %}
-                            <option value="{{profession}}" {% if start_profession == profession %}selected{% endif %}>{{profession}}</option>
-                        {% endfor %}
-                    </select>
-                    
-                    <p class="selecionado_opcion"  onclick="open_select(this)" ></p>
-                    <span onclick="open_select(this)" class="icon_select_mate" >
-                        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
-                            <path d="M0-.75h24v24H0z" fill="none"/>
-                        </svg>
-                    </span>
-        
-                    <div class="cont_list_select_mate">
-                        <ul class="cont_select_int">  </ul> 
-                    </div>
-                </div>
-            </div>
         </form>
     </div>
-    {% if employees.total > 0 %}
+    {% if riders|length > 0 %}
     <div class="table-container">
         <table>
             <thead>
                 <tr>
                     <th>Nombre completo</th>
                     <th>DNI</th>
-                    <th>Email</th>
+                    <th>Fecha de nacimiento</th>
+                    <th>Lugar de nacimiento</th>
                     <th>Telefono</th>
-                    <th>Profesión</th>
-                    <th>Puesto laboral</th>
-                    <th>Obra Social</th>
-                    <th>Número de afiliado</th>
-                    <th>Condición</th>
-                    <th>Activo</th>
+                    <th>Profesionales que lo atienden</th>
                 </tr>
             </thead>
             <tbody>
@@ -135,26 +108,10 @@
                 <tr {% if is_permitted(session, 'employee_show') %} onclick="window.location='{{ url_for('employee.show', id=employee.id) }}'" style="cursor:pointer;"{% endif %}>
                     <td>{{ employee.name }} {{ employee.surname }}</td>
                     <td>{{ employee.dni }}</td>
-                    <td>{{ employee.email }}</td>
                     <td>{{ employee.phone }}</td>
-                    <td>{{ professions[employee.profession_id - 1] }}</td>
-                    <td>{{ job_positions[employee.job_position_id - 1] }}</td>
-                    <td>{{ employee.obra_social }}</td>
-                    <td>{{ employee.affiliate_number }}</td>
-                    <td>
-                        {% if employee.is_volunteer %}
-                            Voluntario
-                        {% else %}
-                            Personal Rentado
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if employee.enabled %}
-                            Sí
-                        {% else %}
-                            No
-                        {% endif %}
-                    </td>
+                    <td>{{ localities[rider.current_locality_id - 1] }} {{ provinces[rider.current_province_id - 1] }}</td>
+                    <td>{{ rider.phone }}</td>
+                    <td>{{ rider.attending_professionals }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -157,47 +157,31 @@ def toggle_active(id: int) -> Rider:
 def sorted_by_attribute(riders: Query, attribute: str = "name", ascending: bool = True) -> Query:
     return riders.order_by(getattr(Rider, attribute).asc() if ascending else getattr(Rider, attribute).desc())
 
-# Búsqueda por nombre
-def search_by_name(riders: Query, name: str = "") -> Query:
-    if name:
-        return riders.filter(Rider.name.ilike(f"%{name}%"))
-    return riders
-
-# Búsqueda por apellido
-def search_by_surname(riders: Query, surname: str = "") -> Query:
-    if surname:
-        return riders.filter(Rider.surname.ilike(f"%{surname}%"))
-    return riders
-
-# Búsqueda por DNI
-def search_by_dni(riders: Query, dni: int = None) -> Query:
-    if dni is not None:
-        return riders.filter(Rider.dni == dni)
-    return riders
-
-# Búsqueda por profesional
-def search_by_professional(riders: Query, professional: str = "") -> Query:
-    if professional:
-        return riders.filter(Rider.professional.ilike(f"%{professional}%"))
-    return riders
+def search_by_attribute(riders: Query, search_attr: str = "name", search_value: str = "") -> Query:
+    match search_attr:
+        case "name":
+            return riders.filter(Rider.name.ilike(f"%{search_value}%"))
+        case "surname":
+            return riders.filter(Rider.surname.ilike(f"%{search_value}%"))
+        case "dni":
+            return riders.filter(Rider.dni.ilike(f"%{search_value}%"))
+        case "professionals":
+            return riders.filter(Rider.attending_professionals.ilike(f"%{search_value}%"))
+        case _:
+            return riders.filter(Rider.name.ilike(f"%{search_value}%"))
 
 # Función final que combina los filtros y búsquedas
 def get_riders_filtered_list(page: int,
-                             limit: int = 25,
-                             sort_attr: str = "name",
-                             ascending: bool = True,
-                             search_name: str = "",
-                             search_surname: str = "",
-                             search_dni: int = None,
-                             search_professional: str = "") -> Query:           ## Tener en cuenta que profesional que lo atiende es TEXT
+                                limit: int = 25,
+                                sort_attr: str = "name",
+                                ascending: bool = True,
+                                search_attr: str = "name",
+                                search_value: str = "") -> Query:
     # Inicia la consulta con Rider
     riders = Rider.query
     
     # Aplica los filtros y búsquedas
-    riders = search_by_name(riders, search_name)
-    riders = search_by_surname(riders, search_surname)
-    riders = search_by_dni(riders, search_dni)
-    riders = search_by_professional(riders, search_professional)
+    riders = search_by_attribute(riders, search_attr, search_value)
     
     # Ordena los resultados
     riders = sorted_by_attribute(riders, sort_attr, ascending)

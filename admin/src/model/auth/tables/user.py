@@ -9,12 +9,12 @@ class User(db.Model):
     alias = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
     enabled = db.Column(db.Boolean, nullable=False, default=True)
-    role_id = db.Column(db.BigInteger, db.ForeignKey('roles.id'))       ## system_admin es un rol mas
+    role_id = db.Column(db.BigInteger, db.ForeignKey('roles.id'), nullable=True)       ## system_admin es un rol mas
     inserted_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
     # Relaciones con las tablas de roles y pagos
-    role = db.relationship('Role', back_populates='users')
+    role = db.relationship('Role', back_populates='users', lazy='joined')
 
     __table_args__ = (
         db.Index('idx_user_role', 'role_id'),

@@ -10,6 +10,11 @@ def create_province(name):
     db.session.expunge(province)
     return province
 
+def list_provinces():
+    provinces = Province.query.all()
+    [db.session.expunge(province) for province in provinces]
+    return provinces # puede devolver una lista vacia
+
 def get_province(id: int):
     province = Province.query.get(id)
     if province:

@@ -27,6 +27,11 @@ def list_documents():
     [db.session.expunge(document) for document in documents]
     return documents
 
+def list_documents_by__employee_id(id):
+    documents = Document.query.filter(Document.employee_id == id)
+    [db.session.expunge(document) for document in documents]
+    return documents
+
 def get_document(id: int) -> Document:
     document = Document.query.get(id)
     db.session.expunge(document)

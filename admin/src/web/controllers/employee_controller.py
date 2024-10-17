@@ -1,5 +1,6 @@
 from flask import abort, redirect, render_template, request, url_for
 from flask import Blueprint, flash, current_app
+from src.model.generic.operations import document_types_operations
 from src.web.handlers.check_permission import permission_required
 from src.model.employees.operations import employee_operations
 from src.model.employees.operations import job_position_operations
@@ -15,7 +16,7 @@ import re
 bp = Blueprint("employee", __name__, url_prefix="/empleados")
 
 @bp.route("/")
-# @permission_required('employee_index')
+@permission_required('employee_index')
 def index():
     professions = profession_operations.list_professions()
     professions = [profession.name for profession in professions]
@@ -56,7 +57,7 @@ def index():
                             start_profession=start_profession, start_ascending=(not start_ascending), start_page=page)
 
 @bp.get("/nuevo")
-#@permission_required('employee_new')
+@permission_required('employee_new')
 def new():
     employees = employee_operations.list_employees()
     professions = profession_operations.list_professions()
@@ -71,7 +72,7 @@ def new():
                            mails=mails, dnis=dnis, affiliate_numbers=affiliate_numbers)
 
 @bp.post("/create")
-# @permission_required('employee_create')
+@permission_required('employee_create')
 def create():
     params = request.form
 
@@ -110,7 +111,7 @@ def create():
     try:
         address = address_operations.create_address(employee_data["street"], employee_data["number"], employee_data["apartment"])
 
-        employee = employee_operations.create_employee(
+        employee_operations.create_employee(
             name = employee_data["name"],
             surname = employee_data["surname"],
             dni = employee_data["dni"],
@@ -128,37 +129,14 @@ def create():
             start_date = employee_data["start_date"],
             end_date = employee_data["end_date"],
         )
-
-        if "files" in request.files:
-            files = request.files.getlist("files")
-
-            # Tomo el cliente
-            client = current_app.storage.client
-
-            for file in files:
-                filename = remove_extension(file.filename)
-                path = f"{uuid4()}-{file.filename}" # Uso uuid4() para generar un número random y que no se repita el nombre
-                content_type = file.content_type
-
-                document_operations.create_document(title=filename, format="", is_external=False, allowed_operations="",
-                                                    file_address=path, employee_id=employee.id)
-
-                # Tomo el tamaño del archivo
-                file_content = file.read()
-                size = len(file_content)
-                file.seek(0)
-
-                # Subo a MINIO
-                client.put_object("grupo03", path, file.stream, size, content_type=content_type)
-    except Exception as e:
-        print(e)
+    except:
         flash("Uso inválido de parametros, no se pudo actualizar al usuario", "error")
         return redirect(url_for("home"))
 
     return redirect(url_for("employee.index"))
 
 @bp.get("/<int:id>")
-# @permission_required('employee_show')
+@permission_required('employee_show')
 def show(id):
     employee = employee_operations.get_employee(id)
     if employee:
@@ -166,7 +144,12 @@ def show(id):
         localitys = locality_operations.list_localitys()
         professions = profession_operations.list_professions()
         job_positions = job_position_operations.list_job_positions()
+        documents = document_operations.list_documents_by__employee_id(employee.id)
         
+        # document_types = document_types_operations.list_document_type()
+        # start_document_type = request.args.get('start-document-type') or ""
+        mode = request.args.get("mode", "general")
+
         # Traigo el address y locality por ser una copia
         address = address_operations.get_addres(employee.address_id)
         locality = locality_operations.get_locality(employee.locality_id)
@@ -183,12 +166,13 @@ def show(id):
         affiliate_numbers.remove(employee.affiliate_number)
         
         return render_template("employees/show.html", employee=employee, localitys=localitys, professions=professions, job_positions=job_positions,
-                                mails=mails, dnis=dnis, affiliate_numbers=affiliate_numbers)
+                                documents=documents, mails=mails, dnis=dnis, affiliate_numbers=affiliate_numbers,
+                                mode=mode)
     else:
         return abort(404)
 
 @bp.post("/<int:id>/update")
-# @permission_required('employee_update')
+@permission_required('employee_update')
 def update(id):
     real_id = int(id)
     params = request.form
@@ -270,7 +254,7 @@ def update(id):
 
 
 @bp.get("/<int:id>/delete")
-# @permission_required('employee_delete')
+@permission_required('employee_destroy')
 def delete(id):
     employee_operations.delete_employee(id)
     return redirect(url_for("employee.index"))
@@ -279,10 +263,6 @@ def delete(id):
 def is_valid_email(email :str) -> bool:
     pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     return re.match(pattern, email) is not None
-
-def remove_extension(path: str) -> str:
-    split = path.split(".")
-    return ".".join(split[:-1]) if len(split) > 1 else path
 
 def to_spanish(attr: str) -> str:
     match attr:

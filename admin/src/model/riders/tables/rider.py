@@ -1,4 +1,5 @@
 from datetime import date
+from datetime import datetime
 from src.model.database import db
 from src.model.riders.tables.family_allowance_type import FamilyAllowanceType
 from src.model.riders.tables.disability_diagnosis import DisabilityDiagnosis
@@ -97,6 +98,9 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
 
     track_assistant_id = db.Column(db.BigInteger, db.ForeignKey('employees.id'))  # Auxiliar de pista
     track_assistant = db.relationship('Employee', foreign_keys=[track_assistant_id])
+
+    inserted_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
     # Relacion con sus Documentos
     documents = db.relationship('Document', primaryjoin="Rider.id == Document.rider_id")

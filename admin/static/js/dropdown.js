@@ -171,6 +171,5 @@ function _select_option(indx, selc) {
     checkbox.disabled = false;
   }
   select_.selectedIndex = indx;
-  select_.onchange();
   salir_select(selc);
 }
