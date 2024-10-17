@@ -1,17 +1,20 @@
 from uuid import uuid4
 from flask import redirect, request, send_file, abort, url_for
-from minio import Minio  # Assuming you're using the MinIO client
+from minio import Minio
+from model.horses.operations import horse_document_operations
+from model.riders.operations import rider_document_operations
 from src.model.generic.operations import document_operations
+from src.model.employees.operations import employee_documents_operations
 from flask import Blueprint, current_app
 
 bp = Blueprint("document", __name__, url_prefix="/document")
 
 @bp.post('/create')
 def create():
-    employee_id = request.form.get('employee_id')
-    rider_id = request.form.get('rider_id')
+    relation = request.form.get('relation')
+    id = request.form.get('id')
 
-    if "files" in request.files:
+    if "files" in request.files and id is not None:
         files = request.files.getlist("files")
 
         # Tomo el cliente
@@ -22,8 +25,16 @@ def create():
             path = f"{uuid4()}-{file.filename}" # Uso uuid4() para generar un número random y que no se repita el nombre
             content_type = file.content_type
 
-            document_operations.create_document(title=filename, format=f"{content_type}", is_external=False, allowed_operations="",
-                                                file_address=path, employee_id=employee_id, rider_id=rider_id)
+            document = document_operations.create_document(title=filename, format=f"{content_type}", is_external=False, allowed_operations="", file_address=path)
+
+            if relation == "employee":
+                employee_documents_operations.create_employee_document(int(id), document.id)
+            elif relation == "horse":
+                horse_document_operations.create_horse_document(int(id), document.id)
+            elif relation == "rider":
+                rider_document_operations.create_horse_document(int(id), document.id)
+            else:
+                return abort(400, description="No files uploaded.")
 
             # Tomo el tamaño del archivo
             file_content = file.read()
@@ -35,7 +46,7 @@ def create():
     else:
         return abort(400, description="No files uploaded.")
 
-    return redirect(request.referrer)
+    return redirect(f"{request.referrer}?mode=documents")
 
 @bp.route('/download/<int:document_id>')
 def download(document_id: int):
@@ -84,12 +95,14 @@ def destroy(document_id: int):
             minio_client.remove_object(bucket_name, object_name)
 
         # Lo elimino de la db
+        employee_documents_operations.delete_employee_document(document_id)
         document_operations.delete_document(document_id)
 
         # Return success or redirect to the document list
         return redirect(request.referrer)
 
     except Exception as e:
+        print(e)
         return abort(500, description="Ocurrio un error intentando eliminar el documento.")
 
 def remove_extension(path: str) -> str:

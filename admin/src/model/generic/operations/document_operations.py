@@ -1,11 +1,12 @@
 from typing import Optional
 from src.model.database import db
 from src.model.generic.tables.document import Document
+from src.model.employees.tables.employee_document import EmployeeDocument
 from src.model.generic.tables.document_types import DocumentType
 from datetime import datetime
 from sqlalchemy.orm  import Query
 
-def create_document(title: str, format: str, is_external: bool, allowed_operations: str, file_path: str,
+def create_document(title: str, format: str, is_external: bool, allowed_operations: str, file_address: str,
                     type_id: Optional[int] = None, upload_date: datetime = datetime.now()) -> Document:
     document = Document(
         title=title,
@@ -14,7 +15,7 @@ def create_document(title: str, format: str, is_external: bool, allowed_operatio
         upload_date=upload_date,
         is_external=is_external,
         allowed_operations=allowed_operations,
-        file_path=file_path,
+        file_address=file_address,
     )
     db.session.add(document)
     db.session.commit()
@@ -26,9 +27,14 @@ def list_documents():
     [db.session.expunge(document) for document in documents]
     return documents
 
-def list_documents_by__employee_id(id):
-    documents = Document.query.filter(Document.employee_id == id)
+def list_documents_by_employee_id(employee_id):
+    employee_documents = EmployeeDocument.query.filter_by(employee_id=employee_id).all()
+    document_ids = [employee_document.document_id for employee_document in employee_documents]
+
+    documents = Document.query.filter(Document.id.in_(document_ids)).all()
+
     [db.session.expunge(document) for document in documents]
+
     return documents
 
 def get_document(id: int) -> Document:
@@ -46,7 +52,7 @@ def update_document(to_update: Document) -> Document:
     document.upload_date = to_update.upload_date or document.upload_date
     document.is_external = to_update.is_external if to_update.is_external is not None else document.is_external
     document.allowed_operations = to_update.allowed_operations or document.allowed_operations
-    document.file_path= to_update.file_path or document.file_path
+    document.file_address= to_update.file_address or document.file_address
     db.session.commit()
     db.session.expunge(document)
     return document
@@ -57,8 +63,6 @@ def delete_document(id: int):
         raise ValueError("No se encontró un documento con ese ID")
     db.session.delete(document)
     db.session.commit()
-
-
 
 # Instrucciones de listado específicas
 

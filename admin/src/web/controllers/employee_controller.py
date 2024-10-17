@@ -144,7 +144,7 @@ def show(id):
         localitys = locality_operations.list_localitys()
         professions = profession_operations.list_professions()
         job_positions = job_position_operations.list_job_positions()
-        documents = document_operations.list_documents_by__employee_id(employee.id)
+        documents = document_operations.list_documents_by_employee_id(employee.id)
         
         # document_types = document_types_operations.list_document_type()
         # start_document_type = request.args.get('start-document-type') or ""
@@ -166,8 +166,7 @@ def show(id):
         affiliate_numbers.remove(employee.affiliate_number)
         
         return render_template("employees/show.html", employee=employee, localitys=localitys, professions=professions, job_positions=job_positions,
-                                documents=documents, mails=mails, dnis=dnis, affiliate_numbers=affiliate_numbers,
-                                mode=mode)
+                                documents=documents, mails=mails, dnis=dnis, affiliate_numbers=affiliate_numbers, mode=mode)
     else:
         return abort(404)
 
