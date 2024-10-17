@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='riders_list.css')}}"/>
+{% endblock %}
+
+{% block title %}Listado jinetes y amazonas{% endblock %}
+
+{% block content %}
+
+<div class="main-container">
+    <div class="rider-list">
+        {% if riders %}
+            <div class="riders-container">
+                {% for rider in riders %}
+                    <a href="{{ url_for('rider.profile', rider_id=rider.id) }}" class="rider-card">
+                        <h3 class="rider-name"> {{ rider.name }} {{ rider.surname }} </h3>
+                        <p class="rider-info"><strong>Rol:</strong> {{ rider.dni }} </p>
+                        <p class="rider-info"><strong>Rol:</strong> {{ rider.age }} </p>
+                        <p class="rider-profesionales"><strong> Profesionales que lo atienden: </strong> {{rider.attending_professionals}} </p>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No hay resultados.</p>
+        {% endif %}
+    </div>
+
+    <div class="filter-container">
+        <div class="search-bar">
+            <input type="text" placeholder="Buscar jinetes..." id="searchInput">
+        </div>
+        
+        <div class="sorting-options">
+            <label for="sortSelect">Ordenar por:</label>
+            <select id="sortSelect" class="sort-select">
+                <option value="nameA">Nombre (ascendente)</option>
+                <option value="nameD">Nombre (descendente)</option>
+                <option value="surnameA">Apellido (ascendente)</option>
+                <option value="surnameD">Apellido (descendente)</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+    <div class="footer-container">
+        <p>Contactanos en nuestras redes sociales</p>
+        <div class="social-button">
+            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">
+                <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter" class="social-icon">
+            </a>
+        </div>
+    </div>
+{% endblock %}
