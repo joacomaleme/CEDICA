@@ -59,8 +59,6 @@ from src.model.registers.tables.payment_type import PaymentType
 
 from datetime import datetime, date, timedelta
 
-
-
 def run():
     ############
     # Usuarios #
@@ -72,7 +70,6 @@ def run():
     rol_ecuestre = roles.create_role(name='Ecuestre')
     rol_voluntariado = roles.create_role(name='Voluntariado')
     rol_administracion = roles.create_role(name='Administracion')
-
 
     # Creado de permisos para usuarios
     user_permissions = [
@@ -89,17 +86,12 @@ def run():
     for perm in user_permissions:
         created_permissions[perm] = permissions.create_permission(name=perm)
 
-
-
-
     # Asignacion de permisos a roles de usuario
     roles.assign_permission(system_admin, list(created_permissions.values()))
     roles.assign_permission(rol_tecnica, [created_permissions[p] for p in ['user_index', 'user_show', 'rider_index', 'rider_show', 'rider_update', 'rider_create', 'rider_destroy', 'collection_index', 'collection_show', 'horse_index', 'horse_show']])
     roles.assign_permission(rol_ecuestre, [created_permissions[p] for p in ['user_index', 'user_show', 'rider_index', 'rider_show', 'horse_index', 'horse_show', 'horse_update', 'horse_create', 'horse_destroy']])
     roles.assign_permission(rol_voluntariado, [created_permissions['user_index']])
     roles.assign_permission(rol_administracion, [created_permissions[p] for p in user_permissions if p not in ['user_destroy', 'horse_update', 'horse_create', 'horse_destroy']])
-
-
 
     # Creado de usuarios
     users_data = [
@@ -199,7 +191,6 @@ def run():
     for user_data in users_data:
         users.create_user(alias=user_data[0], password=user_data[1], email=user_data[2], enabled=user_data[3], role_id=user_data[4])
 
-
     ############
     # Generics #
     ############
@@ -235,8 +226,6 @@ def run():
     ]
     for prov in provinces:
         province.create_province(prov)
-
-
 
     #############
     # Empleados #
@@ -528,12 +517,10 @@ def run():
     horses.create_horse(name="Aurora", birth=datetime(2019, 8, 7), sex="Hembra", breed="Connemara", coat="Palomino", is_donated=True, sede_id=2, active=True, activity_id=4)
     horses.create_horse(name="Estrella", birth=datetime(2020, 12, 3), sex="Hembra", breed="Islandés", coat="Castaño", is_donated=False, sede_id=1, active=True, activity_id=5)
 
-
     # Create work days
     days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]
     for day in days:
         work_days.create_work_day(day)
-
 
     # Create family allowance types
     allowance_types = ["Universal", "Discapacidad", "Escolar"]
@@ -546,7 +533,6 @@ def run():
         pension_types.create_pension_type(pt)
 
     # Create schools
-
     schools.create_school(name="Greenwood High School", address="123 Oak Street, Springfield", phone="123-456-7890", observations="Focus on STEM programs.")
     schools.create_school(name="Sunnydale Elementary", address="456 Maple Avenue, Rivertown", phone="987-654-3210", observations="Strong emphasis on arts and music.")
     schools.create_school(name="Lakeside Academy", address="789 Pine Road, Lakeview", phone="555-123-4567", observations="Offers international exchange programs.")
@@ -576,8 +562,6 @@ def run():
     schools.create_school(name="Elmwood Technical School", address="123 Elmwood Street, Green Valley", phone="012-345-6789", observations="Known for trade programs in automotive and construction fields.")
     schools.create_school(name="Cedar Grove College", address="456 Cedar Grove Road, Cedarville", phone="234-567-8901", observations="Specializes in liberal arts and humanities.")
     schools.create_school(name="Hillside Prep", address="789 Hillside Boulevard, Hilltown", phone="345-678-9012", observations="Prep school with an emphasis on college preparatory and advanced placement courses.")
-
-
 
     from datetime import date
     # Create riders
@@ -693,7 +677,6 @@ def run():
         horse_conductor_id=9, horse_id=8, track_assistant_id=10
     )
 
-
     # Create 16 guardians
     guardian_data = [
         # Guardians for Rider 1
@@ -738,7 +721,6 @@ def run():
         relationship = "Father" if i % 2 == 0 else "Mother"
         guardians_riders.assign_guardian_to_rider(rider_id=rider_id, guardian_id=guardian.id, relationship=relationship)
 
-
     ##############################
     # REGISTRO DE PAGOS Y COBROS #
     ##############################
@@ -762,7 +744,6 @@ def run():
     for payment in payments_data:
         payments.create_payment(*payment)
 
-
     collection_mediums = ["Efectivo", "Tarjeta de crédito", "Tarjeta de débito", "Transferencia"]
     for cm in collection_mediums:
         collection_medium.create_collection_medium(cm)
@@ -783,3 +764,8 @@ def run():
     # Example of creating these payments and populating the database:
     for collection in collections_data:
         collections.create_collection(*collection)
+
+    document_types_data = ["Entrevista", "Evaluación", "Planificaciones", "Evolución", "Crónicas", "Documental"]
+
+    for dt in document_types_data:
+        document_types.create_document_type(dt)
