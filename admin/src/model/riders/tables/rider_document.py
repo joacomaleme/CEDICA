@@ -7,6 +7,6 @@ class RiderDocument(db.Model):
     rider = db.relationship("Rider", back_populates="rider_documents")
     document = db.relationship("Document", backref="rider_documents")
 
-    def __init__(self, rider, document):
-        self.rider = rider 
-        self.document = document
+    def __init__(self, rider_id: int, document_id: int):
+        self.rider_id = rider_id 
+        self.document_id = document_id 

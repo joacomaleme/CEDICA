@@ -1,9 +1,3 @@
-@font-face {
-    font-family: Panton;
-    src: url("Panton-Regular.ttf");
-  }
-
-
 .date-field{
     border-radius: 15px;
     outline: none;

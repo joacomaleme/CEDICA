@@ -485,31 +485,6 @@ def run():
             end_date=emp["end_date"],
         )
 
-    ##############################
-    # REGISTRO DE PAGOS Y COBROS #
-    ##############################
-
-    # Creado de tipos de pago
-    payment_types = ["Honorarios", "Proveedor", "Gastos Varios", "Donación", "Materiales", "Alquiler"]
-    for pt in payment_types:
-        payment_type.create_payment_type(pt)
-
-    # Creado de pagos
-    payments_data = [
-        (5000, datetime(2024, 9, 10), "Pago realizado", 1, 1),
-        (7200, datetime.now(), "El pago fue exitoso", 3, None),
-        (1300, datetime(2024, 9, 15), "Un muy buen pago", 1, 3),
-        (10200.50, datetime(1999, 2, 20), "Un pago de un proveedor", 2, None),
-        (3500, datetime(2024, 10, 1), "Donación mensual", 4, None),
-        (2800, datetime(2024, 10, 5), "Compra de materiales", 5, 2),
-        (15000, datetime(2024, 10, 12), "Alquiler de instalaciones", 6, None),
-        (4200, datetime(2024, 10, 18), "Honorarios profesionales", 1, 4),
-    ]
-    for payment in payments_data:
-        payments.create_payment(*payment)
-
-
-
 
     #############################
     # Riders and horses Section #
@@ -764,32 +739,47 @@ def run():
         guardians_riders.assign_guardian_to_rider(rider_id=rider_id, guardian_id=guardian.id, relationship=relationship)
 
 
+    ##############################
+    # REGISTRO DE PAGOS Y COBROS #
+    ##############################
+
+    # Creado de tipos de pago
+    payment_types = ["Honorarios", "Proveedor", "Gastos Varios", "Donación", "Materiales", "Alquiler"]
+    for pt in payment_types:
+        payment_type.create_payment_type(pt)
+
+    # Creado de pagos
+    payments_data = [
+        (5000, datetime(2024, 9, 10), "Pago realizado", 1, 1),
+        (7200, datetime.now(), "El pago fue exitoso", 3, None),
+        (1300, datetime(2024, 9, 15), "Un muy buen pago", 1, 3),
+        (10200.50, datetime(1999, 2, 20), "Un pago de un proveedor", 2, None),
+        (3500, datetime(2024, 10, 1), "Donación mensual", 4, None),
+        (2800, datetime(2024, 10, 5), "Compra de materiales", 5, 2),
+        (15000, datetime(2024, 10, 12), "Alquiler de instalaciones", 6, None),
+        (4200, datetime(2024, 10, 18), "Honorarios profesionales", 1, 4),
+    ]
+    for payment in payments_data:
+        payments.create_payment(*payment)
 
 
-    ##########
-    # COBROS #
-    ##########
+    collection_mediums = ["Efectivo", "Tarjeta de crédito", "Tarjeta de débito", "Transferencia"]
+    for cm in collection_mediums:
+        collection_medium.create_collection_medium(cm)
 
+    collections_data = [
+        (5000, datetime(2024, 9, 10), "Pago realizado en efectivo por servicio", 1, 1, 1),  # Efectivo
+        (12500, datetime(2024, 9, 12), "Pago por materiales", 2, 2, 2),  # Tarjeta de crédito
+        (7200, datetime(2024, 10, 2), "Pago mensual de la membresía", 3, 3, 2),  # Tarjeta de débito
+        (3200, datetime(2024, 10, 5), "Pago parcial por productos", 1, 2, 3),  # Efectivo
+        (10500, datetime(2024, 10, 6), "Pago total del contrato", 2, 1, 4),  # Tarjeta de crédito
+        (4600, datetime(2024, 10, 10), "Donación anual", 1, 4, 6),  # Efectivo
+        (2850, datetime(2024, 10, 12), "Pago por suscripción", 3, 2, 1),  # Tarjeta de débito
+        (9750, datetime(2024, 10, 15), "Pago por servicios contratados", 2, 3, 4),  # Tarjeta de crédito
+        (500, datetime(2024, 10, 18), "Pago parcial por artículo", 1, 1, 3),  # Efectivo
+        (6900, datetime(2024, 10, 20), "Pago por evento", 2, 4, 5),  # Tarjeta de crédito
+    ]
 
-    # Creacion de metodos de pago
-    mediums = ['Cash', 'Credit Card', 'Bank Transfer', 'PayPal', 'Bitcoin']
-    collection_mediums = []
-
-    for name in mediums:
-        medium = collection_medium.create_collection_medium(name)
-        collection_mediums.append(medium)
-
-
-    # Crecion de 20 cobros
-    for i in range(5):
-        for j in range(4):
-            amount = (i + 1) * 100.0  # Example amounts
-            date = datetime.now() - timedelta(days=j*i)  # Different dates
-            observations = f"Collection observation"
-            medium_id = collection_mediums[i % 5].id
-            received_by_id = i+1  # Assuming you have user with id 1
-            paid_by_id = i+1  # Assuming you have rider with id 2
-            
-            collections.create_collection(amount, date, observations, medium_id, received_by_id, paid_by_id)
-
-
+    # Example of creating these payments and populating the database:
+    for collection in collections_data:
+        collections.create_collection(*collection)
