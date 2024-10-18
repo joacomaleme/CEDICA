@@ -80,6 +80,7 @@ def download(document_id: int):
 @bp.post('/destroy/<int:document_id>')
 def destroy(document_id: int):
     document = document_operations.get_document(document_id)
+    relation = request.form.get('relation')
 
     if not document:
         return abort(404, description="Documento no encontrado.")
@@ -95,8 +96,14 @@ def destroy(document_id: int):
             minio_client.remove_object(bucket_name, object_name)
 
         # Lo elimino de la db
-        employee_documents_operations.delete_employee_document(document_id)
-        document_operations.delete_document(document_id)
+        if relation == "employee":
+            employee_documents_operations.delete_employee_document(document_id)
+        elif relation == "horse":
+            horse_document_operations.delete_employee_document(document.id)
+        elif relation == "rider":
+            rider_document_operations.delete_employee_document(document.id)
+        else:
+            return abort(400, description="No files uploaded.")
 
         # Return success or redirect to the document list
         return redirect(request.referrer)

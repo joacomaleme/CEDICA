@@ -8,8 +8,8 @@ def create_employee_document(employee_id: int, document_id: int) -> EmployeeDocu
     db.session.expunge(employee_document)
     return employee_document
 
-def delete_employee_document(id: int):
-    employee_document = EmployeeDocument.query.filter(EmployeeDocument.document_id == id).first()
+def delete_employee_document(document_id: int):
+    employee_document = EmployeeDocument.query.filter(EmployeeDocument.document_id == document_id).first()
     if employee_document is None:
         raise ValueError("No se encontró un documento con ese ID")
 

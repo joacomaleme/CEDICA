@@ -6,4 +6,4 @@ def create_horse_document(rider_id: int, document_id: int) -> RiderDocument:
     db.session.add(rider_document)
     db.session.commit()
     db.session.expunge(rider_document)
-    return rider_document
+    return rider_document 

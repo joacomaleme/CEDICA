@@ -9,4 +9,4 @@ class RiderDocument(db.Model):
 
     def __init__(self, rider_id: int, document_id: int):
         self.rider_id = rider_id 
-        self.document_id = document_id
+        self.document_id = document_id 

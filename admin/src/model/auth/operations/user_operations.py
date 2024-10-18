@@ -98,7 +98,10 @@ def has_permission(user_email: str, permission_name:str) -> bool:
     user = get_user_by_email(user_email)
     if user:
         role = Role.query.get(user.role_id)
-        return any(permission.name == permission_name for permission in role.permissions)
+        if role:
+            return any(permission.name == permission_name for permission in role.permissions)
+        else:
+            return False
     else:
         return False
 

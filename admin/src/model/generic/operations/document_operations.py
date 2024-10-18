@@ -36,7 +36,7 @@ def list_documents_by_employee_id(employee_id):
     [db.session.expunge(document) for document in documents]
 
     return documents
-
+ 
 def get_document(id: int) -> Document:
     document = Document.query.get(id)
     db.session.expunge(document)

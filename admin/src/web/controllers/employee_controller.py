@@ -1,6 +1,5 @@
 from flask import abort, redirect, render_template, request, url_for
-from flask import Blueprint, flash, current_app
-from model.generic.operations import document_types_operations
+from flask import Blueprint, flash
 from src.web.handlers.check_permission import permission_required
 from src.model.employees.operations import employee_operations
 from src.model.employees.operations import job_position_operations
@@ -10,7 +9,6 @@ from src.model.generic.operations import locality_operations
 from src.model.generic.operations import address_operations
 from src.model.generic.tables.address import Address
 from src.model.employees.tables.employee import Employee
-from uuid import uuid4
 import re
 
 bp = Blueprint("employee", __name__, url_prefix="/empleados")
@@ -197,7 +195,7 @@ def update(id):
         "start_date": params.get("start-date"),
         "end_date": params.get("end-date"),
     }
-
+ 
     try:
         employee = employee_operations.get_employee(real_id)
 

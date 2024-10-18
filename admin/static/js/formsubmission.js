@@ -1,14 +1,9 @@
-form = document.getElementById('search-options');
-checkbox = document.getElementById("cb5");
-date = document.getElementById("from");
-date2 = document.getElementById("until");
+const form = document.getElementById('search-options');
+const checkbox = document.getElementById("cb5");
+const from = document.getElementById("from");
+const until = document.getElementById("until");
 
-date.addEventListener("blur", function(){
-    if (date.value.length === 10) {
-        form.submit();
-}})
-date2.addEventListener("blur", function(){
-    if (date2.value.length === 10) {
-        form.submit();
-}});
+from.addEventListener("change", () => form.submit())
+until.addEventListener("change", () => form.submit())
+
 checkbox.addEventListener('change', function(){setTimeout(() => {form.submit();}, 300)});
