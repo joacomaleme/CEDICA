@@ -8,6 +8,6 @@ class EmployeeDocument(db.Model):
     employee = db.relationship("Employee", back_populates="employee_documents")
     document = db.relationship("Document", backref="employee_documents")
 
-    def __init__(self, employee, document):
-        self.employee = employee
-        self.document = document
+    def __init__(self, employee_id: int, document_id: int):
+        self.employee_id = employee_id
+        self.document_id = document_id
