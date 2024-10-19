@@ -71,7 +71,7 @@ window.onload = function () {
   
   var cont_slc = 0;
   function open_select(idx) {
-    if (false){
+    if (is_permitted){
     var idx1 = idx.getAttribute("data-n-select");
     var ul_cont_li = document.querySelectorAll(
       "[data-indx-select='" + idx1 + "'] .cont_select_int > li"
@@ -123,6 +123,16 @@ window.onload = function () {
           "[data-indx-select='" + idx1 + "'] > .cont_list_select_mate > ul"
         )[0].style.height = "0px";
     }
+    var emps = document.getElementById('emps');
+
+    if(select_.getAttribute('id') === "sel-type"){
+      if (select_.value === 'Honorarios'){
+        emps.style.display = "block";
+      }
+      else{
+          emps.style.display = "none";
+      }
+    }
         }
       }
     }
@@ -168,6 +178,45 @@ window.onload = function () {
       li_s[indx].className = "active";
     }
     select_optiones[indx].selected = true;
+    var emps = document.getElementById('emps');
+    var otherSelect = document.getElementById('sel-emp');
+
+    if(select_.getAttribute('id') === "sel-type"){
+      if (select_.value === 'Honorarios'){
+        emps.style.display = "block";
+        if(otherSelect.value != st_bf){
+          bf_mod = true;
+          button.disabled = !(montoValido && fechaValida); 
+        }
+        else{
+          bf_mod = false;
+          button.disabled = !(montoValido && fechaValida && onePlusModified());
+        }
+      }
+      else{
+          emps.style.display = "none";
+          bf_mod = false;
+          button.disabled = !(montoValido && fechaValida && onePlusModified());
+      }
+      if(select_.value != st_ty){
+        ty_mod = true;
+        button.disabled = !(montoValido && fechaValida);
+      }
+      else{
+        ty_mod = false;
+        button.disabled = !(montoValido && fechaValida && onePlusModified());
+      }
+    }
+    else{
+      if(select_.value != st_bf){
+        bf_mod = true;
+        button.disabled = !(montoValido && fechaValida);
+      }
+      else{
+        bf_mod = false;
+        button.disabled = !(montoValido && fechaValida && onePlusModified());
+      }
+    }
     select_.selectedIndex = indx;
     salir_select(selc);
   }
