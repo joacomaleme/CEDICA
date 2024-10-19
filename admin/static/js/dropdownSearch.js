@@ -164,7 +164,7 @@ function _select_option(indx, selc) {
   
   //Agregar código relacionado al value si es necesario.
   var form = document.getElementById("search-options");
-  form.submit();
+  setTimeout(() => {form.submit();}, 400);
   select_.selectedIndex = indx;
   salir_select(selc);
 }

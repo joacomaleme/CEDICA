@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dropdown.css')}}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/payment_register.css')}}"/>
+{% endblock head %}
+{% block title %}Pago {{payment.id}} - CEDICA{% endblock title %}
+
+{% block content %}
+<section class="registerbox">
+    <div class="formRegister">
+        <h1>Pago {{payment.id}}</h1>
+        <div class='form'>
+            <div class="input-set">
+                <input value="{{payment.amount}}" disabled placeholder="" id="amount-field" class="input-field" name="amount" type="number" required><br>
+                <label for="amount-field" class="input-label">MONTO</label>
+            </div>
+            <div class="input-set">
+                <label class='label' for="date-field">FECHA DE PAGO</label>
+                <input value="{{payment.date.strftime('%Y-%m-%d')}}" disabled id="date-field" class="date-field" name="date" type="date" required><br>
+            </div>
+
+            <div class="types">
+                <div class="input-set">
+                    <div class="select_mate" data-mate-select="active" >
+                    <select  disabled name="type" id="sel-type">
+                            <option selected value="{{type.name}}">{{type.name}}</option>
+                    </select>
+                    
+                    <p style="cursor: default;" class="selecionado_opcion"  onclick="open_select(this)" ></p>
+                    <span onclick="open_select(this)" class="icon_select_mate" >
+                        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                            <path d="M0-.75h24v24H0z" fill="none"/>
+                        </svg>
+                    </span>
+            
+                    <div class="cont_list_select_mate">
+                    <ul class="cont_select_int">  </ul> 
+                    </div>
+                </div>
+            </div>
+            {% if type.name == 'Honorarios' %}
+            <div id="emps" class="emps">
+                <div class="input-set">
+                    <div style="cursor: default;" class="select_mate" data-mate-select="active" >
+                        <select style="cursor: default;" name="emp" id="sel-emp">
+                            <option value="{{emp.id}}">{{emp.name}} {{emp.surname}} ({{emp.dni}})</option>
+                        </select>
+                        
+                        <p style="cursor: default;" class="selecionado_opcion"  onclick="open_select(this)" ></p>
+                        <span onclick="open_select(this)" class="icon_select_mate" >
+                            <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                                <path d="M0-.75h24v24H0z" fill="none"/>
+                            </svg>
+                        </span>
+    
+                        <div class="cont_list_select_mate">
+                            <ul class="cont_select_int">  </ul> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class='text'>
+                <label class='input-label ltxt' for="desc-field">DESCRIPCIÓN</label>
+                <br>
+                <br>
+                <p class="simple-text" id="desc-field">{{payment.description}}</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+<script src="{{ url_for('static', filename='js/dropdownReadOnly.js')}}"/></script>
+{% endblock content %}

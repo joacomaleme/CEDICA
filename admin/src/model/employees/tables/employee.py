@@ -1,8 +1,9 @@
 from datetime import datetime
 from src.model.database import db
-from src.model.generic.tables.document import Document  # Ensure this is imported
+from src.model.horses.tables.horse_employee import HorseEmployee
 from src.model.employees.tables.job_position import JobPosition  # Ensure this is imported
 from src.model.employees.tables.profession import Profession  # Ensure this is imported
+from src.model.employees.tables.employee_document import EmployeeDocument
 from typing import Optional
 
 class Employee(db.Model):
@@ -44,13 +45,16 @@ class Employee(db.Model):
     user = db.relationship('User', backref='employee', lazy=True, foreign_keys=[user_id])
 
     # Relación con la documentación complementaria
-
-    documents = db.relationship('Document', primaryjoin="Employee.id == Document.employee_id")
+    employee_documents = db.relationship("EmployeeDocument", back_populates="employee")
+    documents = db.relationship("Document", secondary="employee_documents", viewonly=True)
 
     payments = db.relationship('Payment', back_populates='beneficiary')
 
     inserted_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
+
+    # Relacion con los caballos que le fueron asignados
+    horses = db.relationship('Horse', secondary='horses_employees', back_populates='employees')
 
     def __init__(self, name: str, surname: str, dni: str, address_id: int, email: str, locality_id: int, phone: str, profession_id: int,
                 job_position_id: int, emergency_contact_name: str, emergency_contact_phone: str, obra_social: str, affiliate_number: str,

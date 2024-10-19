@@ -1,7 +1,7 @@
 from src.model.database import db
 from src.model.riders.tables.rider import Rider
 from sqlalchemy.orm  import Query
-from typing import List, Optional
+from typing import Optional
 from datetime import date
 
 """
@@ -22,7 +22,8 @@ def create_rider(name: str, last_name: str, dni: str, age: int, birth_date: date
                  school_id: Optional[int] = None, current_grade: Optional[str] = None,
                  attending_professionals: Optional[str] = None, work_proposal: Optional[str] = None,
                  teacher_id: Optional[int] = None, horse_conductor_id: Optional[int] = None,
-                 horse_id: Optional[int] = None, track_assistant_id: Optional[int] = None) -> Rider:
+                 horse_id: Optional[int] = None, track_assistant_id: Optional[int] = None,
+                 is_indebt: bool = False, debt: float = 0.0) -> Rider:
     
     rider = Rider(
         name=name, last_name=last_name, dni=dni, age=age, birth_date=birth_date,
@@ -38,7 +39,7 @@ def create_rider(name: str, last_name: str, dni: str, age: int, birth_date: date
         school_id=school_id, current_grade=current_grade,
         attending_professionals=attending_professionals, work_proposal=work_proposal,
         teacher_id=teacher_id, horse_conductor_id=horse_conductor_id,
-        horse_id=horse_id, track_assistant_id=track_assistant_id
+        horse_id=horse_id, track_assistant_id=track_assistant_id, is_indebt=is_indebt, debt=debt
     )
     db.session.add(rider)
     db.session.commit()
@@ -117,6 +118,8 @@ def __update_rider__(to_update: Rider) -> Rider:
     rider.horse_conductor_id = to_update.horse_conductor_id or rider.horse_conductor_id
     rider.horse_id = to_update.horse_id or rider.horse_id
     rider.track_assistant_id = to_update.track_assistant_id or rider.track_assistant_id
+    rider.is_indebt = to_update.is_indebt or rider.is_indebt
+    rider.debt = to_update.debt or rider.debt
 
     db.session.commit()
     db.session.expunge(rider)
@@ -161,8 +164,8 @@ def search_by_attribute(riders: Query, search_attr: str = "name", search_value: 
     match search_attr:
         case "name":
             return riders.filter(Rider.name.ilike(f"%{search_value}%"))
-        case "surname":
-            return riders.filter(Rider.surname.ilike(f"%{search_value}%"))
+        case "last_name":
+            return riders.filter(Rider.last_name.ilike(f"%{search_value}%"))
         case "dni":
             return riders.filter(Rider.dni.ilike(f"%{search_value}%"))
         case "professionals":
@@ -191,7 +194,7 @@ def get_riders_filtered_list(page: int,
     
     # Expulsa los objetos de la sesión
     [db.session.expunge(rider) for rider in rider_list.items]
-    
-    return rider_list
+
+    return (rider_list, ((riders.count()-1)//limit)+1)
 
 

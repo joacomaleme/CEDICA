@@ -2,8 +2,8 @@ from datetime import datetime
 from src.model.database import db
 from src.model.employees.tables.employee import Employee
 from src.model.employees.operations.profession_operations import search_name
-from sqlalchemy.orm  import Query
-from typing import List, Optional, Tuple
+from sqlalchemy.orm import Query
+from typing import Optional, Tuple
 
 def create_employee(name: str, surname: str, dni: str, address_id: int, email: str, locality_id: int, phone: str, profession_id: int, job_position_id: int, 
                     emergency_contact_name: str, emergency_contact_phone: str, obra_social: str, affiliate_number: str, is_volunteer: bool,
@@ -22,7 +22,8 @@ def list_employees():   # lista TODOS los employees (solo usar cuando sea estric
 
 def get_employee(id: int):      #devuelve un employee dado un id
     employee = Employee.query.get(id)
-    db.session.expunge(employee)
+    if employee:
+        db.session.expunge(employee)
     return employee # si no encuentra nada devuelve None
 
 def get_employee_by_dni(dni: str):
@@ -145,5 +146,5 @@ def get_employees_filtered_list(page: int,
     
     # Expulsa los objetos de la sesión
     [db.session.expunge(employee) for employee in employee_list.items]
-    
+
     return (employee_list, ((employees.count()-1)//limit)+1)

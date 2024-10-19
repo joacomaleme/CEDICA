@@ -81,6 +81,11 @@ def update(id):
         if (mail != "None" and mail != "") and ((not is_valid_email(mail)) or (not domain_exists(mail))):
             flash("La dirección de mail ingresada no es válida", "error")
             return redirect((url_for("user.view_user", alias=user.alias)))
+        
+        if len(mail) > 1024 or len(password) > 128 or len(alias) > 50:
+            flash('Parametro demasiado largo', "error")
+            return redirect((url_for("user.view_user", alias=user.alias)))
+
         if params["role"] == "Administrador de Sistema":
             enabled = True
         role = role_operations.search_name(role)
@@ -108,5 +113,40 @@ def update(id):
 @bp.get("/")
 @permission_required('user_index')
 def index():
-    user = user_operations.list_users()
-    return render_template("user/index.html", users = user)
+    roles = role_operations.list_roles()
+    roles = [role.name for role in roles]
+
+    mail = request.args.get('mail')
+    page = request.args.get('page')
+    role = request.args.get('role')
+    ascending = request.args.get('ascending') is None
+    users = user_operations.start_query()
+    retMail=""
+    retRole=""
+    orderMail = request.args.get('order_email') is not None
+    try:
+        if not page:
+            page = 1
+        else:
+            page = int(page)
+        if mail:
+            users = user_operations.search_by_mail(users, str(mail))
+            retMail=mail
+        if role:
+            users = user_operations.filter_role(users, str(role))
+            retRole=role
+        if not orderMail:
+            users = user_operations.sorted_by_attribute(users=users, attribute="email", ascending=ascending)
+        else:
+            users = user_operations.sorted_by_attribute(users, "inserted_at", ascending)
+        if request.args.get('status'):
+            users = user_operations.filter_active(users, bool(int(request.args.get('value'))))
+    except:
+        flash("Uso inválido de parametros, no se pudo aplicar el filtro", "error")
+        page = 0
+    finally:
+        data = user_operations.get_paginated_list(users, page)
+
+        users = data[0]
+        pages = data[1]
+        return render_template("user_search.html", pages=pages, users=users, roles=roles, status=request.args.get('status'), startMail=retMail, startRole=retRole, startAscending=(not ascending), enabled=request.args.get('value'), orderMail=orderMail, startPage=page)

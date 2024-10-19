@@ -1,5 +1,5 @@
 from src.model.database import db
-from src.model.riders.tables.sede import Sede
+from src.model.generic.tables.sede import Sede
 
 def create_sede(name):
     sede = Sede(name=name)

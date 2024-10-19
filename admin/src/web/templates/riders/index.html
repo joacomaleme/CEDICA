@@ -29,7 +29,7 @@
                         <div class="select_mate" data-mate-select="active" >
                             <select name="sort_attr" id="sortAttr">
                                 <option {% if start_sort_attr == 'name' %}selected{% endif %} value="name">Nombre</option>
-                                <option {% if start_sort_attr == 'surname' %}selected{% endif %} value="surname">Apellido</option>
+                                <option {% if start_sort_attr == 'last_name' %}selected{% endif %} value="last_name">Apellido</option>
                             </select>
                             
                             <p class="selecionado_opcion"  onclick="open_select(this)" ></p>
@@ -61,7 +61,7 @@
                             <select name="search_attr">
                                 <option {% if start_search_attr == 'dni' %}selected{% endif %} value="dni">DNI</option>
                                 <option {% if start_search_attr == 'name' %}selected{% endif %} value="name">Nombre</option>
-                                <option {% if start_search_attr == 'surname' %}selected{% endif %} value="surname">Apellido</option>
+                                <option {% if start_search_attr == 'last_name' %}selected{% endif %} value="last_name">Apellido</option>
                                 <option {% if start_search_attr == 'professionals' %}selected{% endif %} value="professionals">Profesionales encargados</option>
                             </select>
                             
@@ -90,7 +90,7 @@
         
         </form>
     </div>
-    {% if riders|length > 0 %}
+    {% if riders.total > 0 %}
     <div class="table-container">
         <table>
             <thead>
@@ -104,11 +104,11 @@
                 </tr>
             </thead>
             <tbody>
-                {% for employee in employees %}
-                <tr {% if is_permitted(session, 'employee_show') %} onclick="window.location='{{ url_for('employee.show', id=employee.id) }}'" style="cursor:pointer;"{% endif %}>
-                    <td>{{ employee.name }} {{ employee.surname }}</td>
-                    <td>{{ employee.dni }}</td>
-                    <td>{{ employee.phone }}</td>
+                {% for rider in riders %}
+                <tr {% if is_permitted(session, 'rider_show') %} onclick="window.location='{{ url_for('rider.show', id=rider.id) }}'" style="cursor:pointer;"{% endif %}>
+                    <td>{{ rider.name }} {{ rider.last_name }}</td>
+                    <td>{{ rider.dni }}</td>
+                    <td>{{ rider.phone }}</td>
                     <td>{{ localities[rider.current_locality_id - 1] }} {{ provinces[rider.current_province_id - 1] }}</td>
                     <td>{{ rider.phone }}</td>
                     <td>{{ rider.attending_professionals }}</td>
@@ -118,7 +118,7 @@
         </table>
     </div>
     {% else %}
-        <h1 style="width:fit-content;margin:auto;margin-top:2rem;margin-bottom:4rem;background-color:var(--nav-bg);padding:1.5rem;border-radius:5px,">No se encontró ningún empleado</h1>
+        <h1 style="width:fit-content;margin:auto;margin-top:2rem;margin-bottom:4rem;background-color:var(--nav-bg);padding:1.5rem;border-radius:5px,">No se encontró ningún jinete</h1>
     {% endif %}
     
     <div class="page-section">

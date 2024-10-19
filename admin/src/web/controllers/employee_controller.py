@@ -1,5 +1,6 @@
 from flask import abort, redirect, render_template, request, url_for
 from flask import Blueprint, flash, current_app
+from model.generic.operations import document_types_operations
 from src.model.generic.operations import document_types_operations
 from src.web.handlers.check_permission import permission_required
 from src.model.employees.operations import employee_operations
@@ -16,6 +17,7 @@ import re
 bp = Blueprint("employee", __name__, url_prefix="/empleados")
 
 @bp.route("/")
+@permission_required('employee_index')
 @permission_required('employee_index')
 def index():
     professions = profession_operations.list_professions()
@@ -49,6 +51,7 @@ def index():
         employees = data[0]
         pages = data[1]
     except Exception as e:
+        print(e)
         flash("Uso inválido de parametros, no se pudo aplicar el filtro", "error")
         page = 0
 
@@ -57,6 +60,7 @@ def index():
                             start_profession=start_profession, start_ascending=(not start_ascending), start_page=page)
 
 @bp.get("/nuevo")
+@permission_required('employee_new')
 @permission_required('employee_new')
 def new():
     employees = employee_operations.list_employees()
@@ -72,6 +76,7 @@ def new():
                            mails=mails, dnis=dnis, affiliate_numbers=affiliate_numbers)
 
 @bp.post("/create")
+@permission_required('employee_create')
 @permission_required('employee_create')
 def create():
     params = request.form
@@ -112,6 +117,7 @@ def create():
         address = address_operations.create_address(employee_data["street"], employee_data["number"], employee_data["apartment"])
 
         employee_operations.create_employee(
+        employee_operations.create_employee(
             name = employee_data["name"],
             surname = employee_data["surname"],
             dni = employee_data["dni"],
@@ -129,6 +135,7 @@ def create():
             start_date = employee_data["start_date"],
             end_date = employee_data["end_date"],
         )
+        )
     except:
         flash("Uso inválido de parametros, no se pudo actualizar al usuario", "error")
         return redirect(url_for("home"))
@@ -137,6 +144,7 @@ def create():
 
 @bp.get("/<int:id>")
 @permission_required('employee_show')
+@permission_required('employee_show')
 def show(id):
     employee = employee_operations.get_employee(id)
     if employee:
@@ -144,6 +152,12 @@ def show(id):
         localitys = locality_operations.list_localitys()
         professions = profession_operations.list_professions()
         job_positions = job_position_operations.list_job_positions()
+        documents = document_operations.list_documents_by__employee_id(employee.id)
+        
+        # document_types = document_types_operations.list_document_type()
+        # start_document_type = request.args.get('start-document-type') or ""
+        mode = request.args.get("mode", "general")
+
         documents = document_operations.list_documents_by__employee_id(employee.id)
         
         # document_types = document_types_operations.list_document_type()
@@ -172,6 +186,7 @@ def show(id):
         return abort(404)
 
 @bp.post("/<int:id>/update")
+@permission_required('employee_update')
 @permission_required('employee_update')
 def update(id):
     real_id = int(id)
@@ -254,6 +269,7 @@ def update(id):
 
 
 @bp.get("/<int:id>/delete")
+@permission_required('employee_destroy')
 @permission_required('employee_destroy')
 def delete(id):
     employee_operations.delete_employee(id)

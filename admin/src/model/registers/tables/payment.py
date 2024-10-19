@@ -8,7 +8,7 @@ class Payment(db.Model):
     id = db.Column(db.BigInteger, primary_key=True)
     amount = db.Column(db.Float)
     date = db.Column(db.DateTime)
-    description = db.Column(db.String(255))
+    description = db.Column(db.String(1024))
 
     # Relacion con tipo de pago
     payment_type_id = db.Column(db.BigInteger, db.ForeignKey('payment_types.id'))

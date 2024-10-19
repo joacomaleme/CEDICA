@@ -93,6 +93,9 @@ def upload():
     if params["role"] == "Administrador de Sistema":
         enabled = True
 
+    if len(mail) > 1024 or len(password) > 128 or len(str(params.get("alias"))) > 50:
+        flash('Parametro demasiado largo', "error")
+        return redirect((url_for("auth.register")))
 
     role = role_operations.search_name(params["role"])
     user_operations.create_user(mail, params.get("alias"), password, role, enabled)

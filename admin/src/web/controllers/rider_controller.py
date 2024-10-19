@@ -7,15 +7,13 @@ from src.model.riders.operations import disability_type_operations
 from src.model.riders.operations import family_allowance_type_operations
 from src.model.riders.operations import guardian_operations
 from src.model.riders.operations import guardian_rider_operations
-from src.model.riders.operations import horse_operations
 from src.model.riders.operations import pension_type_operations
 from src.model.riders.operations import rider_operations
 from src.model.riders.operations import school_operations
-from src.model.riders.operations import sede_operations
 from src.model.riders.operations import work_day_operations
-from src.model.riders.operations import work_proposal_operations
 from src.model.generic.operations import locality_operations
 from src.model.generic.operations import province_operations
+from src.model.generic.operations import address_operations
 from uuid import uuid4
 
 bp = Blueprint("rider", __name__, url_prefix="/JyA")
@@ -47,7 +45,7 @@ def index():
         else:
             page = int(page)
 
-        data = rider_operations.get_riders_filtered_list(page=page, sort_attr=sort_attr, ascending=start_ascending, search_attr=search_attr,
+        data = rider_operations.get_riders_filtered_list(page=page, limit=2, sort_attr=sort_attr, ascending=start_ascending, search_attr=search_attr,
                                                                 search_value=search_value)
 
         riders = data[0]
@@ -57,20 +55,56 @@ def index():
         flash("Uso inválido de parametros, no se pudo aplicar el filtro", "error")
         page = 0
 
-    return render_template("riders/index.html", pages=pages, riders=riders, localities=localities, provices=provinces, start_sort_attr=start_sort_attr,
+    return render_template("riders/index.html", pages=pages, riders=riders, localities=localities, provinces=provinces, start_sort_attr=start_sort_attr,
                             start_search_attr=start_search_attr, search_attr_esp=search_attr_esp, start_search_val=start_search_val,
                             start_ascending=(not start_ascending), start_page=page)
 
-@bp.route("/profile/<int:rider_id>")
-def profile(rider_id):
-    wanted_rider = rider_operations.get_rider(rider_id)
-    return render_template("riders/view_rider.html", rider=wanted_rider)
+@bp.get("/<int:id>")
+@permission_required('rider_show')
+def show(id):
+    rider = rider_operations.get_rider(id)
+    if rider:
+        riders = rider_operations.list_riders()
+        localitys = locality_operations.list_localitys()
+        provinces = province_operations.list_provinces()
+        documents = document_operations.list_documents_by__rider_id(rider.id)
+        
+        # document_types = document_types_operations.list_document_type()
+        # start_document_type = request.args.get('start-document-type') or ""
+        mode = request.args.get("mode", "general")
+
+        documents = document_operations.list_documents_by__rider_id(rider.id)
+        
+        # document_types = document_types_operations.list_document_type()
+        # start_document_type = request.args.get('start-document-type') or ""
+        mode = request.args.get("mode", "general")
+
+        # Traigo el address y locality por ser una copia
+        address = address_operations.get_addres(rider.address_id)
+        locality = locality_operations.get_locality(rider.locality_id)
+
+        rider.address = address
+        rider.locality = locality
+
+        mails = [rider.email for rider in riders]
+        dnis = [rider.dni for rider in riders]
+        affiliate_numbers = [rider.affiliate_number for rider in riders]
+       
+        mails.remove(rider.email)
+        dnis.remove(rider.dni)
+        affiliate_numbers.remove(rider.affiliate_number)
+        
+        return render_template("riders/show.html", rider=rider, localitys=localitys, professions=professions, job_positions=job_positions,
+                                documents=documents, mails=mails, dnis=dnis, affiliate_numbers=affiliate_numbers,
+                                mode=mode)
+    else:
+        return abort(404)
 
 def to_spanish(attr: str) -> str:
     match attr:
         case "name":
             return "nombre"
-        case "surname":
+        case "last_name":
             return "apellido"
         case _:
             return attr
