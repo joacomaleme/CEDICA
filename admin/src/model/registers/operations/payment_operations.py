@@ -85,11 +85,11 @@ def update_payment(to_update: Payment) -> Payment:
     if payment is None:
         raise ValueError("No se encontró un pago con ese ID")
     
-    payment.beneficiary = to_update.beneficiary
+    payment.beneficiary_id = to_update.beneficiary_id
     payment.amount = to_update.amount or payment.amount
     payment.date = to_update.date or payment.date
     payment.description = to_update.description or payment.description
-    payment.payment_type = to_update.payment_type
+    payment.payment_type_id = to_update.payment_type_id
 
     db.session.commit()
     db.session.expunge(payment)
@@ -189,8 +189,8 @@ def get_filtered_list(page: int, limit: int = 25, payment_types: List[PaymentTyp
         Fecha de fin para el filtro de rango de fechas.
 
     Retorna:
-    List[Pago]
-        Lista paginada de pagos filtrados y ordenados.
+        Una lista que contiene una Lista paginada de pagos filtrados y ordenados, y también un integer de la cantidad de páginas que entraban en el Query
+        pre-paginación.
     """
     if payment_types == []:
         payment_types = PaymentType.query.all()
