@@ -3,10 +3,12 @@ from flask import abort
 # para la administracion de permisos y para hacer el decorator
 from functools import wraps # un decorator que hace que se mantengan los metadatos de la funcion cuando esta siendo decorada, util para debuggear.
 
-#Creacion de un decorator que consulte los permisos para agregarlos a las funciones del CRUD.
-#se anota como @permission_required('user_index') (como ejemplo. Puede recibir cualquier permiso como param)
+
 def login_required():
-    #Decorator para verificar si el usuario tiene el permiso necesario.
+    '''
+    Decorator para hacer el login un prerequsito, retorna un abort(401) si no hay una sesión iniciada para este usuario, sino deja proseguir
+    a la función decorada
+    '''
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):

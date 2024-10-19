@@ -26,12 +26,30 @@ def get_collection_medium(id: int) -> Optional[CollectionMedium]:
         db.session.expunge(collection_medium)
     return collection_medium
 
+def get_collection_medium_by_name(name: str) -> Optional[CollectionMedium]:
+    """
+    Recupera un tipo de pago (TipoPago) por su nombre.
+    Si no se encuentra el nombre, retorna None.
+
+    Parámetros:
+    name : str
+        El nombre del tipo de pago que se desea recuperar.
+
+    Retorna:
+    Optional[TipoPago]
+        El objeto TipoPago expurgado si se encuentra, de lo contrario None.
+    """
+    collection_medium = CollectionMedium.query.filter(CollectionMedium.name == name).first()
+    if collection_medium:
+        db.session.expunge(collection_medium)
+    return collection_medium
 
 def update_collection_medium(to_update: CollectionMedium) -> CollectionMedium:
     """ Actualiza un medio de pago (MedioPago) existente con nuevos atributos y guarda los cambios en la base de datos. """
     collection_medium = CollectionMedium.query.get(to_update.id)
     if collection_medium is None:
         raise ValueError("No collection medium found with that ID")
+    
     collection_medium.name = to_update.name
     db.session.commit()
     db.session.expunge(collection_medium)

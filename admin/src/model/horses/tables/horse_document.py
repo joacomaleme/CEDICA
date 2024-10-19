@@ -7,6 +7,6 @@ class HorseDocument(db.Model):
     horse = db.relationship("Horse", back_populates="horse_documents")
     document = db.relationship("Document", backref="horse_documents")
 
-    def __init__(self, horse, document):
-        self.horse = horse
-        self.document = document
+    def __init__(self, horse_id: int, document_id: int):
+        self.horse_id = horse_id
+        self.document_id = document_id

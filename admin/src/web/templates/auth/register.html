@@ -36,21 +36,21 @@
             <div class="order">
                 <div class="input-set">
                     <div class="select_mate" data-mate-select="active" >
-                    <select name="role" id="mySelect">
-                        <option value="">-</option>
-                        {%for role in roles%}
-                            <option value="{{role}}">{{role}}</option>
-                        {% endfor %}
-                    </select>
-                    
-                    <p class="selecionado_opcion"  onclick="open_select(this)" ></p>
-                    <span onclick="open_select(this)" class="icon_select_mate" >
-                        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
-                            <path d="M0-.75h24v24H0z" fill="none"/>
-                        </svg>
-                    </span>
-
+                        <select name="role" id="mySelect">
+                            <option value="">-</option>
+                            {%for role in roles%}
+                                <option value="{{role}}">{{role}}</option>
+                            {% endfor %}
+                        </select>
+                        
+                        <p class="selecionado_opcion"  onclick="open_select(this)" ></p>
+                        <span onclick="open_select(this)" class="icon_select_mate" >
+                            <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                                <path d="M0-.75h24v24H0z" fill="none"/>
+                            </svg>
+                        </span>
+                    </div>
                     <div class="cont_list_select_mate">
                     <ul class="cont_select_int">  </ul> 
                     </div>

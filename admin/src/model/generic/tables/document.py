@@ -17,17 +17,17 @@ class Document(db.Model):
     upload_date = db.Column(db.DateTime, nullable = False)
     is_external = db.Column(db.Boolean, nullable=False) # Si el archivo se guarda en un link externo a la pagina o no. (si es interno se almacena con MinIO)
     allowed_operations = db.Column(db.String(20), nullable=False) # Esto podria ser otra tabla aparte
-    file_path = db.Column(db.String(255), nullable=False)  # Ruta al archivo almacenado
+    file_address = db.Column(db.String(255), nullable=False)  # Ruta al archivo almacenado
 
 
-    def __init__(self, title: str, format: str, is_external: bool, allowed_operations: str, file_path: str, type_id: Optional[int]=None, upload_date: datetime = datetime.now()):
+    def __init__(self, title: str, format: str, is_external: bool, allowed_operations: str, file_address: str, type_id: Optional[int]=None, upload_date: datetime = datetime.now()):
         self.title = title
         self.type_id = type_id
         self.format = format
         self.upload_date = upload_date
         self.is_external = is_external
         self.allowed_operations = allowed_operations
-        self.file_path = file_path
+        self.file_address = file_address
 
 
     def __repr__(self):

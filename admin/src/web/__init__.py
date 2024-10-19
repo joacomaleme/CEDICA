@@ -1,18 +1,23 @@
 from flask import Flask, render_template
 from flask_session import Session
+
 from src.model.encrypt import bcrypt
 from src.web.storage import storage
 from src.web.handlers import error
+
+from src.web.controllers.employee_controller import bp as employee_bp
 from src.web.controllers.document_controller import bp as document_bp
+from src.web.controllers.collection_controller import bp as collection_bp
+from src.web.controllers.payments_controller import bp as pay_bp
 from src.web.controllers.user_controller import bp as user_bp
 from src.web.controllers.rider_controller import bp as rider_bp
 from src.web.controllers.auth import bp as auth_bp
-from src.web.controllers.payments_controller import bp as pay_bp
-from src.web.controllers.employee_controller import bp as employee_bp
+
 from src.web.handlers.auth import is_authenticated, is_permitted, is_self
 from src.web.controllers.rider_controller import bp as rider_bp
 from src.model import database
 from src.model.config import config
+from src.model import database
 from src.model import seeds
 
 session = Session()
@@ -41,6 +46,7 @@ def create_app(env="development", static_folder="../../static"):
     app.register_blueprint(auth_bp)
 
     app.register_blueprint(pay_bp)
+    app.register_blueprint(employee_bp)
     app.register_blueprint(document_bp)
     #---
 

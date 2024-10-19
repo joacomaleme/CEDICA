@@ -111,8 +111,6 @@ def search_by_attribute(employees: Query, search_attr: str = "email", search_val
             return employees.filter(Employee.surname.ilike(f"%{search_value}%"))
         case "dni":
             return employees.filter(Employee.dni.ilike(f"%{search_value}%"))
-        case "profession":
-            return employees.filter(Employee.profession.name.ilike(f"%{search_value}%"))
         case _:
             return employees.filter(Employee.email.ilike(f"%{search_value}%"))
 

@@ -10,7 +10,10 @@ from functools import wraps # un decorator que hace que se mantengan los metadat
 #se anota como @permission_required('user_index') (como ejemplo. Puede recibir cualquier permiso como param)
 
 def permission_required(permission: str):
-    #Decorator para verificar si el usuario tiene el permiso necesario.
+    '''
+    Decorator para hacer la posesión de un permiso un prerequisito, retorna un abort(403) si el permiso determinado por la string "permission" no
+    está presente en los permisos de los roles de este usuario, sino deja proseguir a la función decorada
+    '''
     def decorator(func):
         @wraps(func)
         @login_required()
