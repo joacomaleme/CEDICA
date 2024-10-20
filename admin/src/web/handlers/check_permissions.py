@@ -1,3 +1,4 @@
+from typing import List
 from src.model.auth.operations.user_operations import has_permission
 from flask import session
 from flask import abort
@@ -21,6 +22,22 @@ def permission_required(permission: str):
             user_email = session.get("user")
             if not has_permission(user_email, permission):
                 return abort(403)  # Retorna un error 403 si no tiene el permiso, lo dejo como opcion para el futuro.
+            return func(*args, **kwargs)
+        return wrapper
+    return decorator
+
+def permissions_required(permissions: List[str]):
+    #Decorator para verificar si el usuario tiene el permiso necesario.
+    def decorator(func):
+        @wraps(func)
+        @login_required()
+        def wrapper(*args, **kwargs):
+            user_email = session.get("user")
+            for permission in permissions:
+                if not has_permission(user_email, permission):
+                    return abort(403)  # Retorna un error 403 si no tiene el permiso, lo dejo como opcion para el futuro.
+                else:
+                    break
             return func(*args, **kwargs)
         return wrapper
     return decorator

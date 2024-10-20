@@ -1,0 +1,164 @@
+{% extends "layout.html" %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dropdown.css') }}"/>
+  {% endblock %}
+
+{% block title %}Nuevo empleado - CEDICA{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block content %}
+  <section class="form-container">
+    <h1 class="title">Registrar un Caballo</h1>
+    <form class="form" action="{{ url_for('horse.create')}}" method="POST" enctype="multipart/form-data">
+      <div class="input-set">
+        <input spellcheck=false id="name-field" class="input-field" name="name" type="text" placeholder="" required><br>
+        <label id="name-label" class="input-label" for="name-field">NOMBRE</label>
+        <span id="name-error" class="input-error"></span>
+      </div>
+
+      <div class="input-set">
+        <input spellcheck=false id="birth-field" class="input-field" name="birth" type="date" placeholder="" required><br>
+        <label id="birth-label" class="input-label" for="birth-field">FECHA DE NACIMIENTO</label>
+        <span id="birth-error" class="input-error"></span>
+      </div>
+
+      <div class="order">
+        <div class="input-set">
+          <label id="sex-label" class="select-label" for="sex-field">SEXO</label>
+          <div class="select_mate" data-mate-select="active" >
+            <select name="sex" id="sex-field" required>
+                <option value="True"> MACHO </option>
+                <option value="False"> HEMBRA </option>
+            </select>
+            
+            <p class="selecionado_opcion" onclick="open_select(this)" ></p>
+            <span onclick="open_select(this)" class="icon_select_mate" >
+              <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                <path d="M0-.75h24v24H0z" fill="none"/>
+              </svg>
+            </span>
+
+            <div class="cont_list_select_mate">
+              <ul class="cont_select_int"></ul> 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-set">
+        <input id="breed-field" class="input-field" name="breed" placeholder="" type="text" required><br>
+        <label id="breed-label" class="input-label" for="breed-field">RAZA</label>
+        <span id="breed-error" class="input-error"></span>
+      </div>
+
+      <div class="input-set">
+        <input id="coat-field" class="input-field" name="coat" placeholder="" type="text" required><br>
+        <label id="coat-label" class="input-label" for="coat-field">PELAJE</label>
+        <span id="coat-error" class="input-error"></span>
+      </div>
+      
+      <div class="order">
+        <div class="input-set">
+          <label id="is-donated-label" class="select-label" for="is-donated-field">DONADO</label>
+          <div class="select_mate" data-mate-select="active" >
+            <select name="is-donated" id="is-donated-field" required>
+                <option value="True"> SI </option>
+                <option value="False"> NO </option>
+            </select>
+            
+            <p class="selecionado_opcion" onclick="open_select(this)" ></p>
+            <span onclick="open_select(this)" class="icon_select_mate" >
+              <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                <path d="M0-.75h24v24H0z" fill="none"/>
+              </svg>
+            </span>
+
+            <div class="cont_list_select_mate">
+              <ul class="cont_select_int"></ul> 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="order">
+        <div class="input-set">
+          <label id="sede-label" class="select-label" for="sede-field">SEDE</label>
+          <div class="select_mate" data-mate-select="active" >
+            <select name="sede" id="sede-field" required>
+              {% for sede in sedes %}
+                <option value="{{ sede.id }}">{{ sede.name | upper }}</option>
+              {% endfor %}
+            </select>
+            
+            <p class="selecionado_opcion" onclick="open_select(this)" ></p>
+            <span onclick="open_select(this)" class="icon_select_mate" >
+              <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                <path d="M0-.75h24v24H0z" fill="none"/>
+              </svg>
+            </span>
+
+            <div class="cont_list_select_mate">
+              <ul class="cont_select_int"></ul> 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="order">
+        <div class="input-set">
+          <label id="activity-label" class="select-label" for="activity-field">ACTIVIDAD</label>
+          <div class="select_mate" data-mate-select="active" >
+            <select name="activity" id="activity-field" required>
+              {% for activity in activities%}
+                <option value="{{ activity.id }}">{{ activity.name | upper }}</option>
+              {% endfor %}
+            </select>
+            
+            <p class="selecionado_opcion" onclick="open_select(this)" ></p>
+            <span onclick="open_select(this)" class="icon_select_mate" >
+              <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                <path d="M0-.75h24v24H0z" fill="none"/>
+              </svg>
+            </span>
+
+            <div class="cont_list_select_mate">
+              <ul class="cont_select_int"></ul> 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <label for="employees" class="select-label" >ENTRENADORES Y CONDUCTORES</label>
+        <button type="button" class="dropdown-btn">EMPLEADOS</button>
+        <div class="dropdown-content" id="checkboxDropdown">
+            {% for employee in employees %}
+                <div class="checkbox-item">
+                    <input type="checkbox" id="employee_{{ employee.id }}" name="employees" value="{{ employee.id }}">
+                    <label for="employee_{{ employee.id }}">{{ employee.name }} {{ employee.surname }}</label>
+                </div>
+            {% endfor %}
+        </div>
+      </div>
+
+      <div class="submit-btn">
+        <button id="button-submit" class="submit" type="submit" disabled>Registrar</button>
+      </div>
+    </form>
+  </section>
+
+  <script src="{{ url_for('static', filename='js/createHorse.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/dropdownmultiple.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/dropdown.js') }}"></script>
+  {% endblock %}
+
+{% block footer %}
+{% endblock %}

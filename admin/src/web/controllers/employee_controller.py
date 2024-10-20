@@ -55,7 +55,7 @@ def index():
                             start_profession=start_profession, start_ascending=(not start_ascending), start_page=page)
 
 @bp.get("/nuevo")
-@permission_required('employee_new')
+@permission_required('employee_create')
 def new():
     employees = employee_operations.list_employees()
     professions = profession_operations.list_professions()
