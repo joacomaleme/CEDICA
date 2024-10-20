@@ -25,7 +25,7 @@ subtitleGeneral.addEventListener("click", (e) => {
     formDocuments.classList.add("display-none");
     documentTable.classList.add("display-none");
     filesContainer.classList.add("display-none");
-    pageSection.classList.add("display-none");
+    if (pageSection) pageSection.classList.add("display-none");
     formGeneral.classList.remove("display-none");
   }
 });
@@ -40,7 +40,7 @@ subtitleDocuments.addEventListener("click", (e) => {
     formDocuments.classList.remove("display-none");
     documentTable.classList.remove("display-none");
     filesContainer.classList.remove("display-none");
-    pageSection.classList.remove("display-none");
+    if (pageSection) pageSection.classList.remove("display-none");
     formGeneral.classList.add("display-none");
     applyEventListeners();
   }
@@ -80,14 +80,16 @@ function applyEventListeners() {
   const linkModal = document.getElementById("link-modal");
   const linkCancelBtn = document.getElementById("link-cancel-btn");
 
-  linkBtn.addEventListener("click", (event) => {
-    event.preventDefault();
-    linkModal.showModal();
-  });
-
-  linkCancelBtn.addEventListener("click", () => {
-    linkModal.close();
-  })
+  if (linkBtn) {
+    linkBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      linkModal.showModal();
+    });
+  
+    linkCancelBtn.addEventListener("click", () => {
+      linkModal.close();
+    })
+  }
 
   const ascending = document.getElementById("ascending");
   const sortAttr = document.getElementById("sortAttr");

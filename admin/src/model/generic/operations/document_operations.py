@@ -33,6 +33,9 @@ def list_documents():
 def list_documents_by_employee_id(employee_id):
     employee_documents = EmployeeDocument.query.filter_by(employee_id=employee_id).all()
     document_ids = [employee_document.document_id for employee_document in employee_documents]
+    documents = Document.query.filter(Document.id.in_(document_ids))
+
+    return documents
 
 def list_documents_by_horse_id(horse_id):
     horse_documents = HorseDocument.query.filter_by(horse_id=horse_id).all()
@@ -88,15 +91,13 @@ def search_by_type(documents: Query, type_name: str = "") -> Query:
     return documents
 
 # Función final que combina los filtros y búsquedas
-def get_documents_filtered_list(horse_id: int,
+def get_documents_filtered_list(documents: Query,
                                 page: int,
                                 limit: int = 25,
                                 sort_attr: str = "upload_date",
                                 ascending: bool = True,
                                 search_title: str = "",
                                 search_type: str = "") -> Tuple[List[Document], int]:
-    # Inicia la consulta con Document
-    documents = list_documents_by_horse_id(horse_id)
     
     # Aplica los filtros y búsquedas
     documents = search_by_title(documents, search_title)

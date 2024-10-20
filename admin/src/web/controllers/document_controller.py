@@ -50,7 +50,7 @@ def create():
     else:
         return abort(400, description="No files uploaded.")
 
-    return redirect(f"{request.referrer}?mode=documents")
+    return redirect(request.referrer)
 
 @bp.post('/linkcreate')
 def link_create():

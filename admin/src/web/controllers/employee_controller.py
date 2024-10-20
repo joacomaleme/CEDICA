@@ -1,5 +1,6 @@
 from flask import abort, redirect, render_template, request, url_for
 from flask import Blueprint, flash
+from model.generic.operations import document_types_operations
 from src.web.handlers.check_permission import permission_required
 from src.model.employees.operations import employee_operations
 from src.model.employees.operations import job_position_operations
@@ -52,7 +53,7 @@ def index():
 
     return render_template("employees/index.html", pages=pages, employees=employees, professions=professions, job_positions=job_positions, start_sort_attr=start_sort_attr,
                             start_search_attr=start_search_attr, search_attr_esp=search_attr_esp, start_search_val=start_search_val,
-                            start_profession=start_profession, start_ascending=(not start_ascending), start_page=page)
+                            start_profession=start_profession, start_ascending=(not start_ascending), startPage=page)
 
 @bp.get("/nuevo")
 @permission_required('employee_create')
@@ -142,11 +143,18 @@ def show(id):
         localitys = locality_operations.list_localitys()
         professions = profession_operations.list_professions()
         job_positions = job_position_operations.list_job_positions()
-        documents = document_operations.list_documents_by_employee_id(employee.id)
-        
-        # document_types = document_types_operations.list_document_type()
-        # start_document_type = request.args.get('start-document-type') or ""
+        documents = document_operations.list_documents_by_employee_id(id)
+        types = document_types_operations.list_document_type()
+
+        page = request.args.get('page')
+        start_ascending = request.args.get('ascending') is None
+        sort_attr = request.args.get('sort_attr') or "upload_date"
+        search_title = request.args.get('search_title') or ""
+        start_type = request.args.get('type') or ""
         mode = request.args.get("mode", "general")
+        pages = 1
+
+        page = 1 if not page else int(page)
 
         # Traigo el address y locality por ser una copia
         address = address_operations.get_addres(employee.address_id)
@@ -162,9 +170,16 @@ def show(id):
         mails.remove(employee.email)
         dnis.remove(employee.dni)
         affiliate_numbers.remove(employee.affiliate_number)
-        
+
+        data = document_operations.get_documents_filtered_list(documents=documents, page=page, sort_attr=sort_attr, ascending=start_ascending, search_title=search_title,
+                                                                search_type=start_type)
+
+        documents = data[0]
+        pages = data[1]
+
         return render_template("employees/show.html", employee=employee, localitys=localitys, professions=professions, job_positions=job_positions,
-                                documents=documents, mails=mails, dnis=dnis, affiliate_numbers=affiliate_numbers, mode=mode)
+                                documents=documents, mails=mails, dnis=dnis, affiliate_numbers=affiliate_numbers, mode=mode, pages=pages, startPage=page,
+                                start_ascending=(not start_ascending), sort_attr=sort_attr, search_title=search_title, start_type=start_type, types=types)
     else:
         return abort(404)
 

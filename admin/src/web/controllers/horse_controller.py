@@ -118,6 +118,7 @@ def show(id):
         activities = work_proposal_operations.list_work_proposals()
         employees = employee_operations.list_employees_for_horses()
         types = document_types_operations.list_document_type()
+        documents = document_operations.list_documents_by_horse_id(id)
 
         existing_employees = horse_employee_operations.list_horse_employee_by_horse_id(id)
         existing_employees = [existing_employee.employee_id for existing_employee in existing_employees]
@@ -135,7 +136,7 @@ def show(id):
         # Traigo la sede por ser una copia
         sede = sede_operations.get_sede(horse.sede_id)
 
-        data = document_operations.get_documents_filtered_list(horse_id=id, page=page, sort_attr=sort_attr, ascending=start_ascending, search_title=search_title,
+        data = document_operations.get_documents_filtered_list(documents=documents, page=page, sort_attr=sort_attr, ascending=start_ascending, search_title=search_title,
                                                                     search_type=start_type)
         horse.sede = sede
         documents = data[0]

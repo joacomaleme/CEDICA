@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
   var prev = document.getElementById('prev');
   var next = document.getElementById('next');
 
+  if (!pageNum || !page || !form || !prev || !next) return;
+
   pageNum.forEach(function(item) {
       item.addEventListener('click', function() {
           if (!item.parentElement.classList.contains('active')) {

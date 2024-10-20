@@ -16,25 +16,25 @@ document.addEventListener("DOMContentLoaded", function () {
   const MAXVALIDOS = 11;
   let validos = 0;
 
-  // Se valida que ninguno de estos inputs esté vacío
-  const inputs = [nameField, surnameField, addressStreetField, emergencyContactNameField, obraSocialField, affiliateNumberField];
-  inputs.forEach((e) => {
-    e.addEventListener("input", validateEmpty);
-    e.addEventListener("focus", validateEmpty);
-  });
+  // Se les asigna el evento adecuado a cada atributo
+  const inputs = {
+    "name-field": [nameField, (e) => validateLength(e, 100)],
+    "surname-field": [surnameField, (e) => validateLength(e, 100)],
+    "dni-field": [dniField, validateDNI],
+    "street-field": [addressStreetField, (e) => validateLength(e, 255)],
+    "number-field": [addressNumberField, (e) => validateLength(e, 10)],
+    "email-field": [emailField, validateEmail],
+    "phone-field": [phoneField, validatePhone],
+    "emergency-contact-name-field": [emergencyContactNameField, (e) => validateLength(e, 100)],
+    "emergency-contact-phone-field": [emergencyContactPhoneField, validatePhone],
+    "obra-social-field": [obraSocialField, (e) => validateLength(e, 100)],
+    "affiliate-number-field": [affiliateNumberField, validateAffiliateNumber],
+  };
 
-  emailField.addEventListener("input", validateEmail);
-  emailField.addEventListener("focus", validateEmail);
-  dniField.addEventListener("input", validateDNI);
-  dniField.addEventListener("focus", validateDNI);
-  addressNumberField.addEventListener("input", validateNumber);
-  addressNumberField.addEventListener("focus", validateNumber);
-  phoneField.addEventListener("input", validatePhone);
-  phoneField.addEventListener("focus", validatePhone);
-  emergencyContactPhoneField.addEventListener("input", validatePhone);
-  emergencyContactPhoneField.addEventListener("focus", validatePhone);
-  affiliateNumberField.addEventListener("input", validateAffiliateNumber);
-  affiliateNumberField.addEventListener("focus", validateAffiliateNumber);
+  Object.keys(inputs).forEach(e => {
+    inputs[e][0].addEventListener("input", inputs[e][1]);
+    inputs[e][0].addEventListener("focus", inputs[e][1]);
+  });
 
   // Valida que el campo no esté vacío
   function validateEmpty(event) {
@@ -47,10 +47,24 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  // Validates field length and emptiness
+  function validateLength(event, maxLength) {
+    const field = event.target;
+    if (field.value.trim() === "") {
+      activateError(field, "Este campo es obligatorio");
+    } else if (field.value.length > maxLength) {
+      activateError(field, `Este campo debe tener menos de ${maxLength} caracteres`);
+    } else {
+      deactivateError(field);
+    }
+  }
+
   function validateNumber(event) {
     const field = event.target;
 
-    if (!field.value.match(/^\d+$/)) {
+    if (field.value.trim() === "") {
+      activateError(field, "Este campo es obligatorio");
+    } else if (!field.value.match(/^\d+$/)) {
       activateError(field, "Formato inválido");
     } else {
       deactivateError(field);
@@ -60,7 +74,9 @@ document.addEventListener("DOMContentLoaded", function () {
   function validatePhone(event) {
     const field = event.target;
 
-    if (!field.value.match(/^[\d\-]+$/)) {
+    if (field.value.trim() === "") {
+      activateError(field, "Este campo es obligatorio");
+    } else if (!field.value.match(/^[\d\-]+$/)) {
       activateError(field, "Formato inválido");
     } else {
       deactivateError(field);
@@ -71,7 +87,9 @@ document.addEventListener("DOMContentLoaded", function () {
   function validateDNI(event) {
     const field = event.target;
 
-    if (!field.value.match(/^\d+$/)) {
+    if (field.value.trim() === "") {
+      activateError(field, "Este campo es obligatorio");
+    } else if (!field.value.match(/^\d+$/)) {
       activateError(field, "Formato de DNI inválido");
     } else {
         if (dnis.includes(field.value)) {
@@ -84,7 +102,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Valida que el mail tenga el formato adecuado y que no esté repetido
   function validateEmail() {
-    if (!emailField.value.match(/^[A-Za-z\._\-0-9]+[@][A-Za-z]+[\.][a-z]{2,4}$/)) {
+    if (field.value.trim() === "") {
+      activateError(field, "Este campo es obligatorio");
+    } else if (!emailField.value.match(/^[A-Za-z\._\-0-9]+[@][A-Za-z]+[\.][a-z]{2,4}$/)) {
       activateError(emailField, "Formato de email inválido");
     } else {
       if (mails.includes(emailField.value)) {

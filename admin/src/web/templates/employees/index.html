@@ -163,30 +163,34 @@
         <h1 class="alternative-title">No se encontró ningún empleado</h1>
     {% endif %}
     
-    <div class="page-section">
-        <nav>
-        <ul class="pagination">
-            <li class="pagination-item">
-                <a id="prev" class="ext" href="#">Previo</a>
-            </li>
-            {% for i in range(pages) %}
-                <li class="pagination-item {% if startPage == i+1 %}active{% endif %}">
-                    <a class="pageNum">{{i+1}}</a>
+      <div class="page-section">
+        <nav class="theNav">
+            <ul class="pagination">
+                <li class="pagination-item">
+                    <a id="prev" class="ext" href="#">Previo</a>
                 </li>
-            {% endfor %}
-            <li class="pagination-item">
-                <a id="next" class="ext" href="#">Siguiente</a>
-            </li>
-        </ul>
+                {% for i in range(pages) %}
+                    {% if (i > startPage-6) and (i < startPage+4) or ((5 >= startPage) and (i < 10)) %}
+                        <li class="pagination-item {% if startPage == i+1 %}active{% endif %}">
+                            <a class="pageNum">{{i+1}}</a>
+                        </li> 
+                    {% endif %}
+                {% endfor %}
+                <li class="pagination-item">
+                    <a id="next" class="ext" href="#">Siguiente</a>
+                </li>
+            </ul>
         </nav>
+        <hr>
     </div>
 
     <script>
-        const startPage = {{ start_page }};
+        const startPage = {{ startPage }};
         const pages = {{ pages }};
     </script>
     <script src="{{ url_for('static', filename='js/dropdownSearch.js') }}"></script>
     <script src="{{ url_for('static', filename='js/indexEmployee.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pagination.js') }}"></script>
 {% endblock %}
 
 {% block footer %}
