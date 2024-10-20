@@ -1,5 +1,6 @@
 from src.model.database import db
 from src.model.riders.tables.guardian import Guardian
+from src.model.riders.tables.rider_guardian import RiderGuardian
 
 def create_guardian(name: str, last_name: str, dni: int, address_id: int, locality_id: int, province_id: int, phone: str, email: str, education_level: str, occupation: str):
     guardian = Guardian(name=name, last_name=last_name, dni=dni, address_id=address_id, locality_id=locality_id, province_id=province_id, phone=phone, email=email, education_level=education_level, occupation=occupation)
@@ -7,6 +8,21 @@ def create_guardian(name: str, last_name: str, dni: int, address_id: int, locali
     db.session.commit()
     db.session.expunge(guardian)
     return guardian
+
+def list_guardians():
+    guardians = Guardian.query.all()
+    [db.session.expunge(guardian) for guardian in guardians]
+    return guardians
+
+def get_guardians_by_rider_id(rider_id: int):
+    guardians = (
+        db.session.query(Guardian)
+        .join(RiderGuardian)
+        .filter(RiderGuardian.rider_id == rider_id)
+        .all()
+    )
+    [db.session.expunge(guardian) for guardian in guardians]
+    return guardians
 
 def get_guardian(guardian_id):
     guardian = Guardian.query.get(guardian_id)

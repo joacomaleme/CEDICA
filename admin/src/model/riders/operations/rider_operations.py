@@ -13,14 +13,14 @@ def create_rider(name: str, last_name: str, dni: str, age: int, birth_date: date
                  birth_locality_id: int, birth_province_id: int, address_id: int,
                  current_locality_id: int, current_province_id: int, phone: str,
                  emergency_contact_name: str, emergency_contact_phone: str,
-                 active: bool, sede: str, has_scholarship: bool = False, scholarship_percentage: Optional[float] = None,
+                 active: bool, sede_id: str, has_scholarship: bool = False, scholarship_percentage: Optional[float] = None,
                  has_disability_certificate: bool = False, disability_diagnosis_id: Optional[int] = None,
                  disability_type_id: Optional[int] = None, receives_family_allowance: bool = False,
                  family_allowance_type_id: Optional[int] = None, receives_pension: bool = False,
                  pension_type_id: Optional[int] = None, health_insurance: Optional[str] = None,
                  affiliate_number: Optional[str] = None, has_guardianship: bool = False,
                  school_id: Optional[int] = None, current_grade: Optional[str] = None,
-                 attending_professionals: Optional[str] = None, work_proposal: Optional[str] = None,
+                 attending_professionals: Optional[str] = None, work_proposal_id: Optional[str] = None,
                  teacher_id: Optional[int] = None, horse_conductor_id: Optional[int] = None,
                  horse_id: Optional[int] = None, track_assistant_id: Optional[int] = None,
                  is_indebt: bool = False, debt: float = 0.0) -> Rider:
@@ -30,14 +30,14 @@ def create_rider(name: str, last_name: str, dni: str, age: int, birth_date: date
         birth_locality_id=birth_locality_id, birth_province_id=birth_province_id, address_id=address_id,
         current_locality_id=current_locality_id, current_province_id=current_province_id, phone=phone,
         emergency_contact_name=emergency_contact_name, emergency_contact_phone=emergency_contact_phone,
-        active=active, sede=sede, has_scholarship=has_scholarship, scholarship_percentage=scholarship_percentage,
+        active=active, sede_id=sede_id, has_scholarship=has_scholarship, scholarship_percentage=scholarship_percentage,
         has_disability_certificate=has_disability_certificate, disability_diagnosis_id=disability_diagnosis_id,
         disability_type_id=disability_type_id, receives_family_allowance=receives_family_allowance,
         family_allowance_type_id=family_allowance_type_id, receives_pension=receives_pension,
         pension_type_id=pension_type_id, health_insurance=health_insurance,
         affiliate_number=affiliate_number, has_guardianship=has_guardianship,
         school_id=school_id, current_grade=current_grade,
-        attending_professionals=attending_professionals, work_proposal=work_proposal,
+        attending_professionals=attending_professionals, work_proposal_id=work_proposal_id,
         teacher_id=teacher_id, horse_conductor_id=horse_conductor_id,
         horse_id=horse_id, track_assistant_id=track_assistant_id, is_indebt=is_indebt, debt=debt
     )
@@ -97,7 +97,7 @@ def __update_rider__(to_update: Rider) -> Rider:
     rider.emergency_contact_name = to_update.emergency_contact_name or rider.emergency_contact_name
     rider.emergency_contact_phone = to_update.emergency_contact_phone or rider.emergency_contact_phone
     rider.active = to_update.active if to_update.active is not None else rider.active
-    rider.sede = to_update.sede or rider.sede
+    rider.sede_id = to_update.sede_id or rider.sede_id
     rider.has_scholarship = to_update.has_scholarship if to_update.has_scholarship is not None else rider.has_scholarship
     rider.scholarship_percentage = to_update.scholarship_percentage if to_update.scholarship_percentage is not None else rider.scholarship_percentage
     rider.has_disability_certificate = to_update.has_disability_certificate if to_update.has_disability_certificate is not None else rider.has_disability_certificate
@@ -113,7 +113,7 @@ def __update_rider__(to_update: Rider) -> Rider:
     rider.school_id = to_update.school_id or rider.school_id
     rider.current_grade = to_update.current_grade or rider.current_grade
     rider.attending_professionals = to_update.attending_professionals or rider.attending_professionals
-    rider.work_proposal = to_update.work_proposal or rider.work_proposal
+    rider.work_proposal_id = to_update.work_proposal_id or rider.work_proposal_id
     rider.teacher_id = to_update.teacher_id or rider.teacher_id
     rider.horse_conductor_id = to_update.horse_conductor_id or rider.horse_conductor_id
     rider.horse_id = to_update.horse_id or rider.horse_id

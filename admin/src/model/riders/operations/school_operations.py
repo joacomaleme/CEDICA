@@ -9,6 +9,11 @@ def create_school(name: str, address: str, phone: str, observations: Optional[st
     db.session.expunge(school)
     return school
 
+def list_schools():
+    schools = School.query.all()
+    [db.session.expunge(school) for school in schools]
+    return schools
+
 def get_school(school_id):
     school = School.query.get(school_id)
     db.session.expunge(school)

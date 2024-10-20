@@ -14,7 +14,6 @@ from src.web.controllers.rider_controller import bp as rider_bp
 from src.web.controllers.auth import bp as auth_bp
 
 from src.web.handlers.auth import is_authenticated, is_permitted, is_self
-from src.web.controllers.rider_controller import bp as rider_bp
 from src.model import database
 from src.model.config import config
 from src.model import database
@@ -44,15 +43,11 @@ def create_app(env="development", static_folder="../../static"):
     #---
     app.register_blueprint(user_bp)
     app.register_blueprint(auth_bp)
-
     app.register_blueprint(pay_bp)
     app.register_blueprint(employee_bp)
     app.register_blueprint(document_bp)
-    #---
-
     app.register_blueprint(rider_bp)
-
-    app.register_blueprint(employee_bp)
+    app.register_blueprint(collection_bp)
     #---
 
     app.register_error_handler(404, error.error_not_found)

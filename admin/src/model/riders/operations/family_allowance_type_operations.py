@@ -8,6 +8,11 @@ def create_family_allowance_type(name):
     db.session.expunge(family_allowance_type)
     return family_allowance_type
 
+def list_family_allowance_types():
+    family_allowance_types = FamilyAllowanceType.query.all()
+    [db.session.expunge(family_allowance_type) for family_allowance_type in family_allowance_types]
+    return family_allowance_types
+
 def get_family_allowance_type(family_allowance_type_id):
     family_allowance_type = FamilyAllowanceType.query.get(family_allowance_type_id)
     db.session.expunge(family_allowance_type)

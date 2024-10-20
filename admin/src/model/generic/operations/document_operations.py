@@ -2,6 +2,7 @@ from typing import Optional
 from src.model.database import db
 from src.model.generic.tables.document import Document
 from src.model.employees.tables.employee_document import EmployeeDocument
+from src.model.riders.tables.rider_document import RiderDocument
 from src.model.generic.tables.document_types import DocumentType
 from datetime import datetime
 from sqlalchemy.orm  import Query
@@ -30,6 +31,16 @@ def list_documents():
 def list_documents_by_employee_id(employee_id):
     employee_documents = EmployeeDocument.query.filter_by(employee_id=employee_id).all()
     document_ids = [employee_document.document_id for employee_document in employee_documents]
+
+    documents = Document.query.filter(Document.id.in_(document_ids)).all()
+
+    [db.session.expunge(document) for document in documents]
+
+    return documents
+
+def list_documents_by_rider_id(rider_id):
+    rider_documents = RiderDocument.query.filter_by(rider_id=rider_id).all()
+    document_ids = [rider_document.document_id for rider_document in rider_documents]
 
     documents = Document.query.filter(Document.id.in_(document_ids)).all()
 

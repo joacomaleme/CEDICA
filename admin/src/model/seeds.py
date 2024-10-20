@@ -570,12 +570,12 @@ def run():
         name="John", last_name="Doe", dni="12345678", age=25, birth_date=date(1999, 5, 14),
         birth_locality_id=1, birth_province_id=1, address_id=1, current_locality_id=2,
         current_province_id=2, phone="555-1234", emergency_contact_name="Jane Doe",
-        emergency_contact_phone="555-5678", active=True, sede="North", has_scholarship=True,
+        emergency_contact_phone="555-5678", active=True, sede_id=1, has_scholarship=True,
         scholarship_percentage=50.0, has_disability_certificate=False, disability_diagnosis_id=None,
         disability_type_id=None, receives_family_allowance=False, family_allowance_type_id=None,
         receives_pension=False, pension_type_id=None, health_insurance="HealthPlus",
         affiliate_number="H123456", has_guardianship=True, school_id=3, current_grade="Grade 10",
-        attending_professionals="Dr. Smith", work_proposal="Therapeutic riding", teacher_id=1,
+        attending_professionals="Dr. Smith", work_proposal_id=1, teacher_id=1,
         horse_conductor_id=2, horse_id=1, track_assistant_id=3
     )
 
@@ -584,12 +584,12 @@ def run():
         name="Emily", last_name="Smith", dni="87654321", age=30, birth_date=date(1994, 8, 10),
         birth_locality_id=2, birth_province_id=3, address_id=2, current_locality_id=4,
         current_province_id=3, phone="555-7890", emergency_contact_name="Peter Smith",
-        emergency_contact_phone="555-8765", active=True, sede="East", has_scholarship=False,
+        emergency_contact_phone="555-8765", active=True, sede_id=2, has_scholarship=False,
         scholarship_percentage=None, has_disability_certificate=True, disability_diagnosis_id=1,
         disability_type_id=2, receives_family_allowance=True, family_allowance_type_id=1,
         receives_pension=False, pension_type_id=None, health_insurance="MediCare",
         affiliate_number="MC56789", has_guardianship=True, school_id=5, current_grade="Grade 8",
-        attending_professionals="Dr. Brown", work_proposal="Social interaction", teacher_id=2,
+        attending_professionals="Dr. Brown", work_proposal_id=2, teacher_id=2,
         horse_conductor_id=3, horse_id=2, track_assistant_id=4
     )
 
@@ -598,12 +598,12 @@ def run():
         name="Lucas", last_name="Johnson", dni="65432198", age=20, birth_date=date(2004, 1, 21),
         birth_locality_id=3, birth_province_id=2, address_id=3, current_locality_id=5,
         current_province_id=4, phone="555-4321", emergency_contact_name="Sarah Johnson",
-        emergency_contact_phone="555-3210", active=False, sede="South", has_scholarship=False,
+        emergency_contact_phone="555-3210", active=False, sede_id=3, has_scholarship=False,
         scholarship_percentage=None, has_disability_certificate=False, disability_diagnosis_id=None,
         disability_type_id=None, receives_family_allowance=True, family_allowance_type_id=2,
         receives_pension=True, pension_type_id=1, health_insurance="HealthCare",
         affiliate_number="HC12345", has_guardianship=True, school_id=6, current_grade="Grade 12",
-        attending_professionals="Dr. White", work_proposal="Cognitive development", teacher_id=3,
+        attending_professionals="Dr. White", work_proposal_id=3, teacher_id=3,
         horse_conductor_id=1, horse_id=3, track_assistant_id=5
     )
 
@@ -612,12 +612,12 @@ def run():
         name="Sophia", last_name="Brown", dni="87651234", age=28, birth_date=date(1996, 11, 15),
         birth_locality_id=4, birth_province_id=1, address_id=4, current_locality_id=1,
         current_province_id=5, phone="555-6543", emergency_contact_name="James Brown",
-        emergency_contact_phone="555-9876", active=True, sede="Central", has_scholarship=True,
+        emergency_contact_phone="555-9876", active=True, sede_id=4, has_scholarship=True,
         scholarship_percentage=75.0, has_disability_certificate=True, disability_diagnosis_id=2,
         disability_type_id=1, receives_family_allowance=False, family_allowance_type_id=None,
         receives_pension=True, pension_type_id=2, health_insurance="PrimeHealth",
         affiliate_number="PH87654", has_guardianship=True, school_id=7, current_grade="Grade 11",
-        attending_professionals="Dr. Green", work_proposal="Motor skills", teacher_id=4,
+        attending_professionals="Dr. Green", work_proposal_id=4, teacher_id=4,
         horse_conductor_id=5, horse_id=4, track_assistant_id=6
     )
 
@@ -626,12 +626,12 @@ def run():
         name="James", last_name="Wilson", dni="99887766", age=22, birth_date=date(2002, 3, 5),
         birth_locality_id=5, birth_province_id=4, address_id=5, current_locality_id=6,
         current_province_id=6, phone="555-1111", emergency_contact_name="Anna Wilson",
-        emergency_contact_phone="555-2222", active=False, sede="West", has_scholarship=False,
+        emergency_contact_phone="555-2222", active=False, sede_id=5, has_scholarship=False,
         scholarship_percentage=None, has_disability_certificate=False, disability_diagnosis_id=None,
         disability_type_id=None, receives_family_allowance=True, family_allowance_type_id=3,
         receives_pension=False, pension_type_id=None, health_insurance="OptiCare",
         affiliate_number="OC54321", has_guardianship=True, school_id=8, current_grade="Grade 9",
-        attending_professionals="Dr. Blue", work_proposal="Communication skills", teacher_id=5,
+        attending_professionals="Dr. Blue", work_proposal_id=5, teacher_id=5,
         horse_conductor_id=6, horse_id=5, track_assistant_id=7
     )
 
@@ -640,12 +640,12 @@ def run():
         name="Olivia", last_name="Garcia", dni="44556677", age=19, birth_date=date(2005, 7, 19),
         birth_locality_id=6, birth_province_id=7, address_id=6, current_locality_id=7,
         current_province_id=3, phone="555-3333", emergency_contact_name="Carlos Garcia",
-        emergency_contact_phone="555-4444", active=True, sede="North", has_scholarship=True,
+        emergency_contact_phone="555-4444", active=True, sede_id=1, has_scholarship=True,
         scholarship_percentage=100.0, has_disability_certificate=True, disability_diagnosis_id=3,
         disability_type_id=3, receives_family_allowance=False, family_allowance_type_id=None,
         receives_pension=True, pension_type_id=1, health_insurance="GlobalCare",
         affiliate_number="GC12321", has_guardianship=True, school_id=9, current_grade="Grade 7",
-        attending_professionals="Dr. Red", work_proposal="Behavioral therapy", teacher_id=6,
+        attending_professionals="Dr. Red", work_proposal_id=1, teacher_id=6,
         horse_conductor_id=7, horse_id=6, track_assistant_id=8
     )
 
@@ -654,12 +654,12 @@ def run():
         name="Michael", last_name="Martinez", dni="11223344", age=24, birth_date=date(2000, 12, 10),
         birth_locality_id=7, birth_province_id=8, address_id=7, current_locality_id=8,
         current_province_id=9, phone="555-5555", emergency_contact_name="Laura Martinez",
-        emergency_contact_phone="555-6666", active=False, sede="South", has_scholarship=False,
+        emergency_contact_phone="555-6666", active=False, sede_id=3, has_scholarship=False,
         scholarship_percentage=None, has_disability_certificate=False, disability_diagnosis_id=None,
         disability_type_id=None, receives_family_allowance=True, family_allowance_type_id=2,
         receives_pension=False, pension_type_id=None, health_insurance="SecureHealth",
         affiliate_number="SH23456", has_guardianship=True, school_id=10, current_grade="Grade 6",
-        attending_professionals="Dr. Yellow", work_proposal="Physical therapy", teacher_id=7,
+        attending_professionals="Dr. Yellow", work_proposal_id=3, teacher_id=7,
         horse_conductor_id=8, horse_id=7, track_assistant_id=9
     )
 
@@ -668,12 +668,12 @@ def run():
         name="Emma", last_name="Lopez", dni="22334455", age=26, birth_date=date(1998, 4, 18),
         birth_locality_id=8, birth_province_id=9, address_id=8, current_locality_id=9,
         current_province_id=10, phone="555-7777", emergency_contact_name="David Lopez",
-        emergency_contact_phone="555-8888", active=True, sede="Central", has_scholarship=False,
+        emergency_contact_phone="555-8888", active=True, sede_id=4, has_scholarship=False,
         scholarship_percentage=None, has_disability_certificate=True, disability_diagnosis_id=4,
         disability_type_id=2, receives_family_allowance=True, family_allowance_type_id=3,
         receives_pension=True, pension_type_id=2, health_insurance="BlueCare",
         affiliate_number="BC98765", has_guardianship=True, school_id=11, current_grade="Grade 5",
-        attending_professionals="Dr. Purple", work_proposal="Language development", teacher_id=8,
+        attending_professionals="Dr. Purple", work_proposal_id=4, teacher_id=8,
         horse_conductor_id=9, horse_id=8, track_assistant_id=10
     )
 

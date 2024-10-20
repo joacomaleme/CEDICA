@@ -8,6 +8,11 @@ def create_work_proposal(name):
     db.session.expunge(work_proposal)
     return work_proposal
 
+def list_work_proposals():
+    work_proposals = WorkProposal.query.all()
+    [db.session.expunge(work_proposal) for work_proposal in work_proposals]
+    return work_proposals
+
 def get_work_proposal(work_proposal_id):
     work_proposal = WorkProposal.query.get(work_proposal_id)
     db.session.expunge(work_proposal)

@@ -8,6 +8,11 @@ def create_work_day(day):
     db.session.expunge(work_day)
     return work_day
 
+def list_work_days():
+    work_days = WorkDay.query.all()
+    [db.session.expunge(work_day) for work_day in work_days]
+    return work_days
+
 def get_work_day(work_day_id):
     work_day = WorkDay.query.get(work_day_id)
     db.session.expunge(work_day)
