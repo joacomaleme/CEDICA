@@ -2,6 +2,7 @@ from datetime import datetime
 from src.model.database import db
 from src.model.employees.tables.employee import Employee
 from src.model.employees.operations.profession_operations import search_name
+from src.model.employees.operations.job_position_operations import search_name as job_search
 from sqlalchemy.orm import Query
 from typing import Optional, Tuple
 
@@ -17,6 +18,14 @@ def create_employee(name: str, surname: str, dni: str, address_id: int, email: s
 
 def list_employees():   # lista TODOS los employees (solo usar cuando sea estrictamente necesario)
     employees = Employee.query.all()
+    [db.session.expunge(employee) for employee in employees]
+    return employees # puede devolver una lista vacia
+
+def list_employees_for_horses():   # lista TODOS los employees (solo usar cuando sea estrictamente necesario)
+    domador = job_search("Domador")
+    cuidador = job_search("Cuidador de Caballos")
+    employees = Employee.query.filter(db.or_(Employee.job_position_id == domador.id, Employee.job_position_id == cuidador.id))
+
     [db.session.expunge(employee) for employee in employees]
     return employees # puede devolver una lista vacia
 

@@ -85,8 +85,21 @@ function open_select(idx) {
       // All
       var evt = window.document.createEvent("MouseEvents");
       evt.initMouseEvent(
-        "mousedown", false, true,
-        window, 0, 0, 0, 0, 0, false, false, false, false, 0, null
+        "mousedown",
+        false,
+        true,
+        window,
+        0,
+        0,
+        0,
+        0,
+        0,
+        false,
+        false,
+        false,
+        false,
+        0,
+        null
       );
       slect_element_open.dispatchEvent(evt);
     } else if (slect_element_open.fireEvent) {
@@ -164,12 +177,30 @@ function _select_option(indx, selc) {
     li_s[indx].className = "active";
   }
   select_optiones[indx].selected = true;
-  if (select_.value === "Administrador de Sistema") {
-    checkbox.checked = false;
-    checkbox.disabled = true;
-  } else {
-    checkbox.disabled = false;
-  }
+  // if (select_.value === "Administrador de Sistema") {
+  //   checkbox.checked = false;
+  //   checkbox.disabled = true;
+  // } else {
+  //   checkbox.disabled = false;
+  // }
   select_.selectedIndex = indx;
   salir_select(selc);
 }
+
+// Dropdown multiple
+document.addEventListener("DOMContentLoaded", function () {
+  const dropdownBtn = document.querySelector(".dropdown-btn");
+  const dropdown = document.querySelector(".dropdown");
+
+  dropdownBtn.addEventListener("click", function () {
+    // Toggle the visibility of the dropdown content
+    dropdown.classList.toggle("show");
+  });
+
+  // Close the dropdown if clicked outside
+  window.addEventListener("click", function (e) {
+    if (!dropdown.contains(e.target) && !dropdownBtn.contains(e.target)) {
+      dropdown.classList.remove("show");
+    }
+  });
+});

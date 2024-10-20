@@ -1,8 +1,11 @@
-from typing import Optional
+from typing import List, Optional, Tuple
+
+from model.generic.operations import document_types_operations
 from src.model.database import db
 from src.model.generic.tables.document import Document
 from src.model.employees.tables.employee_document import EmployeeDocument
 from src.model.generic.tables.document_types import DocumentType
+from src.model.horses.tables.horse_document import HorseDocument
 from datetime import datetime
 from sqlalchemy.orm  import Query
 
@@ -31,12 +34,13 @@ def list_documents_by_employee_id(employee_id):
     employee_documents = EmployeeDocument.query.filter_by(employee_id=employee_id).all()
     document_ids = [employee_document.document_id for employee_document in employee_documents]
 
-    documents = Document.query.filter(Document.id.in_(document_ids)).all()
-
-    [db.session.expunge(document) for document in documents]
+def list_documents_by_horse_id(horse_id):
+    horse_documents = HorseDocument.query.filter_by(horse_id=horse_id).all()
+    document_ids = [horse_document.document_id for horse_document in horse_documents]
+    documents = Document.query.filter(Document.id.in_(document_ids))
 
     return documents
- 
+
 def get_document(id: int) -> Document:
     document = Document.query.get(id)
     db.session.expunge(document)
@@ -79,18 +83,20 @@ def search_by_title(documents: Query, title: str = "") -> Query:
 # Búsqueda por tipo de documento
 def search_by_type(documents: Query, type_name: str = "") -> Query:
     if type_name:
-        return documents.join(DocumentType).filter(DocumentType.name.ilike(f"%{type_name}%"))
+        type = document_types_operations.get_document_type_by_name(type_name)
+        return documents.filter(Document.type_id == type.id)
     return documents
 
 # Función final que combina los filtros y búsquedas
-def get_documents_filtered_list(page: int,
+def get_documents_filtered_list(horse_id: int,
+                                page: int,
                                 limit: int = 25,
-                                sort_attr: str = "title",
+                                sort_attr: str = "upload_date",
                                 ascending: bool = True,
                                 search_title: str = "",
-                                search_type: str = "") -> Query:
+                                search_type: str = "") -> Tuple[List[Document], int]:
     # Inicia la consulta con Document
-    documents = Document.query
+    documents = list_documents_by_horse_id(horse_id)
     
     # Aplica los filtros y búsquedas
     documents = search_by_title(documents, search_title)
@@ -101,8 +107,7 @@ def get_documents_filtered_list(page: int,
     
     # Pagina los resultados
     document_list = documents.paginate(page=page, per_page=limit, error_out=False)
-    
     # Expulsa los objetos de la sesión
     [db.session.expunge(document) for document in document_list.items]
     
-    return document_list
+    return (document_list, ((documents.count()-1)//limit)+1)
