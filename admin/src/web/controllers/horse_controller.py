@@ -35,10 +35,19 @@ def index():
     horses = []
 
     try:
-        if not page:
-            page = 1
-        else:
+        try:
             page = int(page)
+        except:
+            page = 1
+
+        try:
+            if sort_attr not in ["inserted_at", "name", "birth"]:
+                raise TypeError("Search attribute incorrecto")
+            if start_sort_attr not in ["inserted_at", "name", "birth"]:
+                raise TypeError("Search attribute incorrecto")
+        except TypeError:
+            sort_attr = start_sort_attr = "inserted_at"
+
 
         data = horse_operations.get_horses_filtered_list(page=page, sort_attr=sort_attr, ascending=start_ascending, search_attr=search_attr,
                                                          search_value=search_value, activity=start_activity)
@@ -85,7 +94,9 @@ def create():
     employees = [int(employee) for employee in employees]
 
     try:
-        if check_data(horse_data) is False or check_employees(employees) is False:
+        if not check_data(horse_data):
+            raise Exception
+        if not check_employees(employees):
             raise Exception
 
         new_horse = horse_operations.create_horse(
@@ -165,7 +176,7 @@ def update(id):
     horse_data = {
         "name": params.get("name"),
         "birth": params.get("birth"),
-        "sex": params.get("sex") == 'on',
+        "sex": params.get("sex") == 'True',
         "breed": params.get("breed"),
         "coat": params.get("coat"),
         "is_donated": params.get("is_donated") != None,
@@ -242,29 +253,26 @@ def check_data(horse_data):
         return False
     # Verifica que la fecha de nacimiento sea válida
     if not is_valid_date(horse_data["birth"]):
-        return False
-    # Verifica que el campo 'sex' sea un booleano
-    if not isinstance(horse_data["sex"], bool):
-        return False
+       return False
     # Verifica que la raza no exceda los 100 caracteres
     if len(horse_data["breed"]) > 100:
         return False
     # Verifica que el pelaje no exceda los 64 caracteres
     if len(horse_data["coat"]) > 64:
         return False
-    # Verifica que el campo 'is_donated' sea un booleano
-    if not isinstance(horse_data["is_donated"], bool):
+    try:
+        # Verifica que el 'sede_id' exista en la base de datos
+        sede_ids = [sede.id for sede in sede_operations.list_sedes()]
+        if int(horse_data["sede_id"]) not in sede_ids:
+            return False
+    except:
         return False
-    # Verifica que el 'sede_id' exista en la base de datos
-    sede_ids = [sede.id for sede in sede_operations.list_sedes()]
-    if not horse_data["sede_id"] in sede_ids:
-        return False
-    # Verifica que el campo 'active' sea un booleano
-    if not isinstance(horse_data["active"], bool):
-        return False
-    # Verifica que el 'activity_id' exista en la base de datos
-    activity_ids = [activity.id for activity in work_proposal_operations.list_work_proposals()]
-    if not horse_data["activity_id"] in activity_ids:
+    try:
+        # Verifica que el 'activity_id' exista en la base de datos
+        activity_ids = [activity.id for activity in work_proposal_operations.list_work_proposals()]
+        if int(horse_data["activity_id"]) not in activity_ids:
+            return False
+    except:
         return False
 
     # Si todas las verificaciones son correctas, retorna True
