@@ -77,6 +77,9 @@ def update(id):
     try:
         real_id = int(id)
         user = user_operations.get_user(real_id)
+        if not user:
+            flash("No se puede identificar al usuario a modificar", "error")
+            return redirect((url_for("user.index")))
         if ((mail != "None" and mail != "") or (alias != "None" and alias != "") or (password != "None" and password != "")) and user.email != session.get("user"):
             flash("No se puede modificar información privada de los usuarios", "error")
             return redirect((url_for("user.view_user", alias=user.alias)))
@@ -96,6 +99,8 @@ def update(id):
 
         if params["role"] == "Administrador de Sistema":
             enabled = True
+
+        actual_mail = user.email
         role = role_operations.search_name(role)
         role_id = None
         if role:
@@ -109,13 +114,9 @@ def update(id):
         user = User(mail, alias, password, enabled=enabled, role_id=role_id)
         user.id = real_id
         user_operations.update_user(user)
-        print(mail)
-        if mail != "None" and mail != "":
-            print(0)
+        if mail != "None" and mail != "" and mail != actual_mail:
             del session["user"]
-            print(1)
             session.clear()
-
             session["user"] = user.email
         return redirect(url_for("user.view_user", alias=user.alias))
     except:
