@@ -166,8 +166,19 @@
   transform: scale(1.2); /* Enlarge checkboxes */
 }
 
-.dates{
+.dates {
   display: flex;
   justify-content: space-between;
   font-size: 0.8rem;
+}
+
+.search-btn {
+  border: none;
+  position: absolute;
+  right: -2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0.5rem;
+  background-color: white;
+  cursor: pointer;
 }

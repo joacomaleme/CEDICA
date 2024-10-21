@@ -233,7 +233,7 @@
           <button class="search-button" type="submit"><i class="fa fa-search"></i></button>
         </div>
 
-        <div class="dropselect">
+        <div class="dropselect" style="position: relative;">
           <div class="select_mate" data-mate-select="active" >
               <select name="type" id="mySelect">
                   <option value="">Sin filtros de tipo</option>
@@ -254,6 +254,7 @@
                   <ul class="cont_select_int">  </ul> 
               </div>
           </div>
+          <button class="search-btn" type="submit"><i class="fa fa-search"></i></button>
         </div>
       </div>
     </form>
@@ -440,7 +441,7 @@
   </script>
   <script src="{{ url_for('static', filename='js/updateHorse.js') }}"></script>
   <script src="{{ url_for('static', filename='js/pagination.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/dropdownSearch.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/dropdown.js') }}"></script>
   <script src="{{ url_for('static', filename='js/documents.js') }}"></script>
 {% endblock %}
 
