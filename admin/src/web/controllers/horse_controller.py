@@ -23,7 +23,7 @@ def index():
     page = request.args.get('page')
     start_ascending = request.args.get('ascending') is None
     sort_attr = request.args.get('sort_attr') or "inserted_at"
-    search_attr = request.args.get('search_attr') or "name"
+    search_attr = "name"
     search_value = request.args.get('search_value') or ""
 
     start_activity = request.args.get('activity') or ""
@@ -78,15 +78,24 @@ def new():
 def create():
     params = request.form
 
+    print("  ")
+    print("  ")
+    print("  ")
+    print("  ")
+    print(params.get("is-donated"))
+    print("  ")
+    print("  ")
+    print("  ")
+    print("  ")
+
     horse_data = {
         "name": params.get("name"),
         "birth": params.get("birth"),
         "sex": params.get("sex") == "True",
         "breed": params.get("breed"),
         "coat": params.get("coat"),
-        "is_donated": params.get("is_donated") == "True",
+        "is_donated": params.get("is-donated") == "True",
         "sede_id": params.get("sede"),
-        "active": params.get("active") == "True",
         "activity_id": params.get("activity"),
     }
 
@@ -107,7 +116,7 @@ def create():
             coat = horse_data["coat"],
             is_donated = horse_data["is_donated"],
             sede_id = horse_data["sede_id"],
-            active = horse_data["active"],
+            active = True,
             activity_id = horse_data["activity_id"],
         )
         for employee_id in employees:
@@ -179,9 +188,9 @@ def update(id):
         "sex": params.get("sex") == 'True',
         "breed": params.get("breed"),
         "coat": params.get("coat"),
-        "is_donated": params.get("is_donated") != None,
+        "is_donated": params.get("is_donated") == "True",
         "sede_id": params.get("sede"),
-        "active": params.get("active") != None,
+        "active": params.get("active") == "on",
         "activity_id": params.get("activity"),
     }
     check_data(horse_data)
@@ -263,14 +272,11 @@ def check_data(horse_data):
     try:
         # Verifica que el 'sede_id' exista en la base de datos
         sede_ids = [sede.id for sede in sede_operations.list_sedes()]
-        if int(horse_data["sede_id"]) not in sede_ids:
+        if not int(horse_data["sede_id"]) in sede_ids:
             return False
-    except:
-        return False
-    try:
         # Verifica que el 'activity_id' exista en la base de datos
         activity_ids = [activity.id for activity in work_proposal_operations.list_work_proposals()]
-        if int(horse_data["activity_id"]) not in activity_ids:
+        if not int(horse_data["activity_id"]) in activity_ids:
             return False
     except:
         return False

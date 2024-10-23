@@ -40,8 +40,8 @@
           <label id="sex-label" class="select-label" for="sex-field">SEXO</label>
           <div class="select_mate" data-mate-select="active">
             <select {% if not is_permitted(session, 'horse_update') %}disabled style="cursor: default;" {% endif %} name="sex" id="sex-field" required>
-                <option value="True"> MACHO </option>
-                <option value="False"> HEMBRA </option>
+              <option value="True" {% if horse.sex == True %} selected {% endif %}> MACHO </option>
+                <option value="False" {% if horse.sex == False %} selected {% endif %}> HEMBRA </option>
             </select>
             
             <p class="selecionado_opcion" onclick="open_select(this)"></p>
@@ -76,8 +76,8 @@
           <label id="is-donated-label" class="select-label" for="is-donated-field">DONADO</label>
           <div class="select_mate" data-mate-select="active">
             <select {% if not is_permitted(session, 'horse_update') %}disabled style="cursor: default;" {% endif %} name="is-donated" id="is-donated-field" required>
-                <option value="True"> SI</option>
-                <option value="False"> NO</option>
+                <option value="True" {% if horse.is_donated == True %} selected {% endif %}> SI</option>
+                <option value="False" {% if horse.is_donated == False %} selected {% endif %}> NO</option>
             </select>
             
             <p class="selecionado_opcion" onclick="open_select(this)"></p>
@@ -124,7 +124,7 @@
         <label class="order-checkbox" for="active-checkbox">ACTIVO</label>
         <div class="checkbox-wrapper-30">
           <span class="checkbox">
-          <input {% if not is_permitted(session, 'horse_update') %}disabled style="cursor: default;" {% endif %} type="checkbox" id="active-checkbox" name="active" {% if horse.active %}checked{% endif %}/>
+          <input {% if not is_permitted(session, 'horse_update') %}disabled style="cursor: default;" {% endif %} type="checkbox" id="active-checkbox" name="active" {% if horse.active %} checked {% endif %}/>
           <svg>
             <use xlink:href="#checkbox-30" class="checkbox"></use>
           </svg>
