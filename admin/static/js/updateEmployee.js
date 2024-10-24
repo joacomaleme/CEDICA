@@ -13,18 +13,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const submitBtn = document.getElementById("button-submit");
 
+  // Se les asigna el evento adecuado a cada atributo
   const inputs = {
-    "name-field": [nameField, validateEmpty],
-    "surname-field": [surnameField, validateEmpty],
+    "name-field": [nameField, (e) => validateLength(e, 100)],
+    "surname-field": [surnameField, (e) => validateLength(e, 100)],
     "dni-field": [dniField, validateDNI],
-    "street-field": [addressStreetField, validateEmpty],
+    "street-field": [addressStreetField, (e) => validateLength(e, 255)],
     "number-field": [addressNumberField, validateNumber],
     "email-field": [emailField, validateEmail],
     "phone-field": [phoneField, validatePhone],
-    "emergency-contact-name-field": [emergencyContactNameField, validateEmpty],
+    "emergency-contact-name-field": [emergencyContactNameField, (e) => validateLength(e, 100)],
     "emergency-contact-phone-field": [emergencyContactPhoneField, validatePhone],
-    "obra-social-field": [obraSocialField, validateEmpty],
-    "affiliate-number-field": [affiliateNumberField, validateAffiliateNumber]
+    "obra-social-field": [obraSocialField, (e) => validateLength(e, 100)],
+    "affiliate-number-field": [affiliateNumberField, validateAffiliateNumber],
   };
   
   const MAXVALIDOS = 11;
@@ -43,6 +44,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (field.value.trim() === "") {
       activateError(field, "Este campo es obligatorio");
+    } else {
+      deactivateError(field);
+    }
+  }
+
+  // Validates field length and emptiness
+  function validateLength(event, maxLength) {
+    const field = event.target;
+    if (field.value.trim() === "") {
+      activateError(field, "Este campo es obligatorio");
+    } else if (field.value.length > maxLength) {
+      activateError(field, `Este campo debe tener menos de ${maxLength} caracteres`);
     } else {
       deactivateError(field);
     }

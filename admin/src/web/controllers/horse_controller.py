@@ -256,7 +256,7 @@ def to_spanish(attr: str) -> str:
             return attr
 
 
-def check_data(horse_data): 
+def check_data(horse_data) -> bool:
     # Verifica que el nombre no exceda los 100 caracteres
     if len(horse_data["name"]) > 100:
         return False
@@ -285,7 +285,7 @@ def check_data(horse_data):
     return True
 
 
-def check_employees(employees):
+def check_employees(employees) -> bool:
     # Obtiene la lista de empleados válidos de la base de datos
     bd_employees = employee_operations.list_employees()
     valid_employee_ids = [employee.id for employee in bd_employees]
@@ -298,7 +298,7 @@ def check_employees(employees):
     return True
 
 
-def is_valid_date(date_str):
+def is_valid_date(date_str: str) -> bool:
     try:
         # Intenta convertir la cadena de fecha en un objeto datetime con el formato 'YYYY-MM-DD'
         datetime.strptime(date_str, "%Y-%m-%d")

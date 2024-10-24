@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
     "surname-field": [surnameField, (e) => validateLength(e, 100)],
     "dni-field": [dniField, validateDNI],
     "street-field": [addressStreetField, (e) => validateLength(e, 255)],
-    "number-field": [addressNumberField, (e) => validateLength(e, 10)],
+    "number-field": [addressNumberField, validateNumber],
     "email-field": [emailField, validateEmail],
     "phone-field": [phoneField, validatePhone],
     "emergency-contact-name-field": [emergencyContactNameField, (e) => validateLength(e, 100)],
@@ -101,7 +101,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Valida que el mail tenga el formato adecuado y que no esté repetido
-  function validateEmail() {
+  function validateEmail(event) {
+    const field = event.target;
+
     if (field.value.trim() === "") {
       activateError(field, "Este campo es obligatorio");
     } else if (!emailField.value.match(/^[A-Za-z\._\-0-9]+[@][A-Za-z]+[\.][a-z]{2,4}$/)) {
