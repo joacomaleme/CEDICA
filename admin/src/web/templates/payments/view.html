@@ -23,7 +23,7 @@
         <h1>Pago {{payment.id}}</h1>
         <div class='form'>
             <div class="input-set">
-                <input id="amount-field" value="{{payment.amount}}" {% if not is_permitted(session, 'payment_update') %} disabled {% endif %} placeholder="" id="amount-field" class="input-field" name="amount" type="number" required><br>
+                <input step="0.01" id="amount-field" value="{{payment.amount}}" {% if not is_permitted(session, 'payment_update') %} disabled {% endif %} placeholder="" id="amount-field" class="input-field" name="amount" type="number" required><br>
                 <label for="amount-field" class="input-label">MONTO</label>
                 <span id="amount-error" class="input-error"></span>
             </div>
