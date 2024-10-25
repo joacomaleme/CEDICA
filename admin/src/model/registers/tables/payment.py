@@ -15,8 +15,8 @@ class Payment(db.Model):
     payment_type = db.relationship('PaymentType', back_populates='payments')
 
     # Relacion con beneficiario
-    beneficiary_id = db.Column(db.BigInteger, db.ForeignKey('employees.id'))
-    beneficiary = db.relationship('Employee', back_populates='payments')
+    beneficiary_id = db.Column(db.BigInteger, db.ForeignKey('employees.id', ondelete='CASCADE'))
+    beneficiary = db.relationship('Employee', back_populates='payments', passive_deletes=True)
 
     def __init__(self, amount: float, date: datetime, description: str, payment_type_id: int, beneficiary_id: Optional[int] = None):
         self.amount = amount 
