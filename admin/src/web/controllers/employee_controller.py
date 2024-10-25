@@ -345,6 +345,12 @@ def check_index_data(
         return (False, "Atributo de busqueda incorrecto.")
     if start_profession and not start_profession in professions:
         return (False, "Profesión de busqueda incorrecta.")
+
+    if page:
+        try:
+            int(page)
+        except:
+            return (False, "Tipo de pagina inválido.")
     
     return (True, "")
 
@@ -360,6 +366,12 @@ def check_show_data(
     if start_type and not start_type in types:
         return (False, "Tipo de documento de busqueda incorrecto.")
     
+    if page:
+        try:
+            int(page)
+        except:
+            return (False, "Tipo de pagina inválido.")
+
     return (True, "")
 
 def check_employee_data(employee_data) -> Tuple[bool, str]:
