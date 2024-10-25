@@ -12,10 +12,18 @@ class Collection(db.Model):
     # Relacion con el medio de pago, y los actores involucrados en la transaccion
     medium_id = db.Column(db.BigInteger, db.ForeignKey('collection_mediums.id'))
     medium = db.relationship('CollectionMedium', back_populates='collections', foreign_keys=[medium_id])
-    received_by_id = db.Column(db.BigInteger, db.ForeignKey('employees.id'))
-    received_by = db.relationship('Employee', foreign_keys=[received_by_id])
-    paid_by_id = db.Column(db.BigInteger, db.ForeignKey('riders.id'))
-    paid_by = db.relationship('Rider', foreign_keys=[paid_by_id])
+
+    paid_by_id = db.Column(db.BigInteger, db.ForeignKey('riders.id', ondelete='CASCADE'))
+    paid_by = db.relationship('Rider', 
+                            foreign_keys=[paid_by_id],
+                            back_populates='paid_collections',
+                            passive_deletes=True)
+
+    received_by_id = db.Column(db.BigInteger, db.ForeignKey('employees.id', ondelete='CASCADE'))
+    received_by = db.relationship('Employee', 
+                               foreign_keys=[received_by_id],
+                               back_populates='received_collections',
+                               passive_deletes=True)
 
     def __init__(self, amount: float, date: datetime, observations: str, medium_id: int, received_by_id: int, paid_by_id: int):
         self.amount = amount

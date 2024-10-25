@@ -4,6 +4,7 @@ from model.generic.operations import document_types_operations
 from src.model.database import db
 from src.model.generic.tables.document import Document
 from src.model.employees.tables.employee_document import EmployeeDocument
+from src.model.riders.tables.rider_document import RiderDocument
 from src.model.generic.tables.document_types import DocumentType
 from src.model.horses.tables.horse_document import HorseDocument
 from datetime import datetime
@@ -40,6 +41,13 @@ def list_documents_by_employee_id(employee_id):
 def list_documents_by_horse_id(horse_id):
     horse_documents = HorseDocument.query.filter_by(horse_id=horse_id).all()
     document_ids = [horse_document.document_id for horse_document in horse_documents]
+    documents = Document.query.filter(Document.id.in_(document_ids))
+
+    return documents
+
+def list_documents_by_rider_id(rider_id):
+    rider_documents = RiderDocument.query.filter_by(rider_id=rider_id).all()
+    document_ids = [rider_document.document_id for rider_document in rider_documents]
     documents = Document.query.filter(Document.id.in_(document_ids))
 
     return documents

@@ -8,6 +8,11 @@ def create_disability_type(type):
     db.session.expunge(disability_type)
     return disability_type
 
+def list_disability_type():
+    disabilities_type = DisabilityType.query.all()
+    [db.session.expunge(disability_type) for disability_type in disabilities_type]
+    return disabilities_type
+
 def get_disability_type(disability_type_id):
     disability_type = DisabilityType.query.get(disability_type_id)
     db.session.expunge(disability_type)

@@ -48,7 +48,12 @@ class Employee(db.Model):
     employee_documents = db.relationship("EmployeeDocument", back_populates="employee")
     documents = db.relationship("Document", secondary="employee_documents", viewonly=True)
 
-    payments = db.relationship('Payment', back_populates='beneficiary')
+    received_collections = db.relationship('Collection',
+                                        back_populates='received_by',
+                                        cascade='all, delete-orphan')
+    payments = db.relationship('Payment',
+                             back_populates='beneficiary',
+                             cascade='all, delete-orphan')
 
     inserted_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)

@@ -20,6 +20,7 @@ def create():
         # Tomo el cliente
         client = current_app.storage.client
 
+
         for file in files:
             filename = remove_extension(file.filename)
             path = f"{uuid4()}-{file.filename}" # Uso uuid4() para generar un número random y que no se repita el nombre
@@ -29,6 +30,17 @@ def create():
                 flash("Nombre del archivo demasiado largo.", "error")
                 return redirect(request.referrer)
 
+            # Tomo el tamaño del archivo
+            file_content = file.read()
+            size = len(file_content)
+            file.seek(0)
+            # Subo a MINIO
+            try:
+                client.put_object("grupo03", path, file.stream, size, content_type=content_type)
+            except:
+                flash("El servidor esta teniendo problemas para realizar esta accion en este momento, intente mas tarde.", "error")
+                return redirect(request.referrer)
+            # Creo el documento en la bd
             document = document_operations.create_document(title=filename, format=f"{content_type}", is_external=False, allowed_operations="", file_address=path)
 
             if relation == "employee":
@@ -40,13 +52,7 @@ def create():
             else:
                 return abort(400, description="No files uploaded.")
 
-            # Tomo el tamaño del archivo
-            file_content = file.read()
-            size = len(file_content)
-            file.seek(0)
 
-            # Subo a MINIO
-            client.put_object("grupo03", path, file.stream, size, content_type=content_type)
     else:
         return abort(400, description="No files uploaded.")
 
@@ -103,9 +109,12 @@ def download(document_id: int):
             object_name = document.file_address
 
             # Descargo el archivo de minio
-            minio_client = current_app.storage.client
-
-            response = minio_client.get_object(bucket_name, object_name)
+            try:
+                minio_client = current_app.storage.client
+                response = minio_client.get_object(bucket_name, object_name)
+            except:
+                flash("El servidor esta teniendo problemas para realizar esta accion en este momento, intente mas tarde.", "error")
+                return redirect(request.referrer)
 
             # Retorno el archivo como descarga
             return send_file(
@@ -136,9 +145,12 @@ def destroy(document_id: int):
             bucket_name = "grupo03"
             object_name = document.file_address
 
-            minio_client = current_app.storage.client
-
-            minio_client.remove_object(bucket_name, object_name)
+            try:
+                minio_client = current_app.storage.client
+                minio_client.remove_object(bucket_name, object_name)
+            except:
+                flash("El servidor esta teniendo problemas para realizar esta accion en este momento, intente mas tarde.", "error")
+                return redirect(request.referrer)
 
         # Lo elimino de la db
         if relation == "employee":

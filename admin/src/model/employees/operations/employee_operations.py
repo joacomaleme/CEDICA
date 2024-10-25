@@ -155,5 +155,5 @@ def get_employees_filtered_list(page: int,
     
     # Expulsa los objetos de la sesión
     [db.session.expunge(employee) for employee in employee_list.items]
-    
+
     return (employee_list, ((employees.count()-1)//limit)+1)

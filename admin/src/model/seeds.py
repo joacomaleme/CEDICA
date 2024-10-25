@@ -16,8 +16,6 @@ from src.model.generic.operations import document_types_operations as document_t
 from src.model.generic.operations import sede_operations as sedes
 from src.model.generic.operations import work_proposal_operations as work_proposals
 from src.model.riders.operations import rider_operations as riders
-from src.model.riders.operations import guardian_operations as guardians
-from src.model.riders.operations import guardian_rider_operations as guardians_riders
 from src.model.riders.operations import work_day_operations as work_days
 from src.model.riders.operations import disability_type_operations as disability_types
 from src.model.riders.operations import disability_diagnosis_operations as disability_diagnoses
@@ -42,7 +40,6 @@ from src.model.riders.tables.pension_type import PensionType
 from src.model.riders.tables.disability_type import DisabilityType
 from src.model.horses.tables.horse import Horse
 from src.model.riders.tables.school import School
-from src.model.riders.tables.guardian import Guardian
 from src.model.riders.tables.work_day import WorkDay
 from src.model.riders.tables.rider_work_day import RiderWorkDay
 from src.model.generic.tables.sede import Sede
@@ -204,7 +201,7 @@ def run():
         ("Calle 44", "3010", "15F"),
         ("Avenida Libertador", "5678", "8B"),
         ("Pasaje del Sol", "123", None),
-        ("Ruta 2", "Km 65", None),
+        ("Ruta 2", "561", None),
         ("Calle San Martín", "789", "3D"),
         ("Avenida Mayo", "1122", "12A"),
     ]
@@ -565,161 +562,205 @@ def run():
 
     from datetime import date
     # Create riders
-    # Example 1
-    riders.create_rider(
-        name="John", last_name="Doe", dni="12345678", age=25, birth_date=date(1999, 5, 14),
-        birth_locality_id=1, birth_province_id=1, address_id=1, current_locality_id=2,
-        current_province_id=2, phone="555-1234", emergency_contact_name="Jane Doe",
-        emergency_contact_phone="555-5678", active=True, sede="North", has_scholarship=True,
-        scholarship_percentage=50.0, has_disability_certificate=False, disability_diagnosis_id=None,
-        disability_type_id=None, receives_family_allowance=False, family_allowance_type_id=None,
-        receives_pension=False, pension_type_id=None, health_insurance="HealthPlus",
-        affiliate_number="H123456", has_guardianship=True, school_id=3, current_grade="Grade 10",
-        attending_professionals="Dr. Smith", work_proposal="Therapeutic riding", teacher_id=1,
-        horse_conductor_id=2, horse_id=1, track_assistant_id=3
-    )
-
-    # Example 2
-    riders.create_rider(
-        name="Emily", last_name="Smith", dni="87654321", age=30, birth_date=date(1994, 8, 10),
-        birth_locality_id=2, birth_province_id=3, address_id=2, current_locality_id=4,
-        current_province_id=3, phone="555-7890", emergency_contact_name="Peter Smith",
-        emergency_contact_phone="555-8765", active=True, sede="East", has_scholarship=False,
-        scholarship_percentage=None, has_disability_certificate=True, disability_diagnosis_id=1,
-        disability_type_id=2, receives_family_allowance=True, family_allowance_type_id=1,
-        receives_pension=False, pension_type_id=None, health_insurance="MediCare",
-        affiliate_number="MC56789", has_guardianship=True, school_id=5, current_grade="Grade 8",
-        attending_professionals="Dr. Brown", work_proposal="Social interaction", teacher_id=2,
-        horse_conductor_id=3, horse_id=2, track_assistant_id=4
-    )
-
-    # Example 3
-    riders.create_rider(
-        name="Lucas", last_name="Johnson", dni="65432198", age=20, birth_date=date(2004, 1, 21),
-        birth_locality_id=3, birth_province_id=2, address_id=3, current_locality_id=5,
-        current_province_id=4, phone="555-4321", emergency_contact_name="Sarah Johnson",
-        emergency_contact_phone="555-3210", active=False, sede="South", has_scholarship=False,
-        scholarship_percentage=None, has_disability_certificate=False, disability_diagnosis_id=None,
-        disability_type_id=None, receives_family_allowance=True, family_allowance_type_id=2,
-        receives_pension=True, pension_type_id=1, health_insurance="HealthCare",
-        affiliate_number="HC12345", has_guardianship=True, school_id=6, current_grade="Grade 12",
-        attending_professionals="Dr. White", work_proposal="Cognitive development", teacher_id=3,
-        horse_conductor_id=1, horse_id=3, track_assistant_id=5
-    )
-
-    # Example 4
-    riders.create_rider(
-        name="Sophia", last_name="Brown", dni="87651234", age=28, birth_date=date(1996, 11, 15),
-        birth_locality_id=4, birth_province_id=1, address_id=4, current_locality_id=1,
-        current_province_id=5, phone="555-6543", emergency_contact_name="James Brown",
-        emergency_contact_phone="555-9876", active=True, sede="Central", has_scholarship=True,
-        scholarship_percentage=75.0, has_disability_certificate=True, disability_diagnosis_id=2,
-        disability_type_id=1, receives_family_allowance=False, family_allowance_type_id=None,
-        receives_pension=True, pension_type_id=2, health_insurance="PrimeHealth",
-        affiliate_number="PH87654", has_guardianship=True, school_id=7, current_grade="Grade 11",
-        attending_professionals="Dr. Green", work_proposal="Motor skills", teacher_id=4,
-        horse_conductor_id=5, horse_id=4, track_assistant_id=6
-    )
-
-    # Example 5
-    riders.create_rider(
-        name="James", last_name="Wilson", dni="99887766", age=22, birth_date=date(2002, 3, 5),
-        birth_locality_id=5, birth_province_id=4, address_id=5, current_locality_id=6,
-        current_province_id=6, phone="555-1111", emergency_contact_name="Anna Wilson",
-        emergency_contact_phone="555-2222", active=False, sede="West", has_scholarship=False,
-        scholarship_percentage=None, has_disability_certificate=False, disability_diagnosis_id=None,
-        disability_type_id=None, receives_family_allowance=True, family_allowance_type_id=3,
-        receives_pension=False, pension_type_id=None, health_insurance="OptiCare",
-        affiliate_number="OC54321", has_guardianship=True, school_id=8, current_grade="Grade 9",
-        attending_professionals="Dr. Blue", work_proposal="Communication skills", teacher_id=5,
-        horse_conductor_id=6, horse_id=5, track_assistant_id=7
-    )
-
-    # Example 6
-    riders.create_rider(
-        name="Olivia", last_name="Garcia", dni="44556677", age=19, birth_date=date(2005, 7, 19),
-        birth_locality_id=6, birth_province_id=7, address_id=6, current_locality_id=7,
-        current_province_id=3, phone="555-3333", emergency_contact_name="Carlos Garcia",
-        emergency_contact_phone="555-4444", active=True, sede="North", has_scholarship=True,
-        scholarship_percentage=100.0, has_disability_certificate=True, disability_diagnosis_id=3,
-        disability_type_id=3, receives_family_allowance=False, family_allowance_type_id=None,
-        receives_pension=True, pension_type_id=1, health_insurance="GlobalCare",
-        affiliate_number="GC12321", has_guardianship=True, school_id=9, current_grade="Grade 7",
-        attending_professionals="Dr. Red", work_proposal="Behavioral therapy", teacher_id=6,
-        horse_conductor_id=7, horse_id=6, track_assistant_id=8
-    )
-
-    # Example 7
-    riders.create_rider(
-        name="Michael", last_name="Martinez", dni="11223344", age=24, birth_date=date(2000, 12, 10),
-        birth_locality_id=7, birth_province_id=8, address_id=7, current_locality_id=8,
-        current_province_id=9, phone="555-5555", emergency_contact_name="Laura Martinez",
-        emergency_contact_phone="555-6666", active=False, sede="South", has_scholarship=False,
-        scholarship_percentage=None, has_disability_certificate=False, disability_diagnosis_id=None,
-        disability_type_id=None, receives_family_allowance=True, family_allowance_type_id=2,
-        receives_pension=False, pension_type_id=None, health_insurance="SecureHealth",
-        affiliate_number="SH23456", has_guardianship=True, school_id=10, current_grade="Grade 6",
-        attending_professionals="Dr. Yellow", work_proposal="Physical therapy", teacher_id=7,
-        horse_conductor_id=8, horse_id=7, track_assistant_id=9
-    )
-
-    # Example 8
     riders.create_rider(
         name="Emma", last_name="Lopez", dni="22334455", age=26, birth_date=date(1998, 4, 18),
         birth_locality_id=8, birth_province_id=9, address_id=8, current_locality_id=9,
         current_province_id=10, phone="555-7777", emergency_contact_name="David Lopez",
-        emergency_contact_phone="555-8888", active=True, sede="Central", has_scholarship=False,
+        emergency_contact_phone="555-8888", active=True, sede_id=4, has_scholarship=False,
         scholarship_percentage=None, has_disability_certificate=True, disability_diagnosis_id=4,
         disability_type_id=2, receives_family_allowance=True, family_allowance_type_id=3,
         receives_pension=True, pension_type_id=2, health_insurance="BlueCare",
-        affiliate_number="BC98765", has_guardianship=True, school_id=11, current_grade="Grade 5",
-        attending_professionals="Dr. Purple", work_proposal="Language development", teacher_id=8,
-        horse_conductor_id=9, horse_id=8, track_assistant_id=10
+        affiliate_number="BC98765", has_guardianship=True, school_id=3, current_grade="Grade 5",
+        attending_professionals="Dr. Purple", work_proposal_id=4, teacher_id=8,
+        horse_conductor_id=9, horse_id=8, track_assistant_id=5,
+        guardian1_name="John", guardian1_last_name="Doe", guardian1_dni="12345678",
+        guardian1_address_id=10, guardian1_locality_id=5, guardian1_province_id=6,
+        guardian1_phone="555-9999", guardian1_email="john.doe@example.com",
+        guardian1_education_level="College", guardian1_occupation="Engineer",
+        guardian1_relationship="Father", guardian2_name="Jane", guardian2_last_name="Doe",
+        guardian2_dni="87654321", guardian2_address_id=4, guardian2_locality_id=2,
+        guardian2_province_id=5, guardian2_phone="555-8888", guardian2_email="jane.doe@example.com",
+        guardian2_education_level="High School", guardian2_occupation="Teacher",
+        guardian2_relationship="Mother"
     )
 
-    # Create 16 guardians
-    guardian_data = [
-        # Guardians for Rider 1
-        ("Juan", "Gomez", 12345678, 1, 1, 1, "cel1", "juan.gomez@mail.com", "Primario", "Carpenter"),
-        ("Maria", "Perez", 23456789, 1, 1, 1, "cel12", "maria.perez@mail.com", "Secundario", "Teacher"),
+    riders.create_rider(
+        name="Liam", last_name="Smith", dni="33445566", age=27, birth_date=date(1997, 5, 19),
+        birth_locality_id=9, birth_province_id=5, address_id=9, current_locality_id=10,
+        current_province_id=2, phone="555-7778", emergency_contact_name="Michael Smith",
+        emergency_contact_phone="555-8889", active=True, sede_id=5, has_scholarship=True,
+        scholarship_percentage=50, has_disability_certificate=False, disability_diagnosis_id=None,
+        disability_type_id=3, receives_family_allowance=False, family_allowance_type_id=None,
+        receives_pension=False, pension_type_id=None, health_insurance="RedCare",
+        affiliate_number="RC87654", has_guardianship=True, school_id=5, current_grade="Grade 6",
+        attending_professionals="Dr. Green", work_proposal_id=5, teacher_id=9,
+        horse_conductor_id=10, horse_id=9, track_assistant_id=3,
+        guardian1_name="Kevin", guardian1_last_name="Smith", guardian1_dni="23456789",
+        guardian1_address_id=2, guardian1_locality_id=4, guardian1_province_id=7,
+        guardian1_phone="555-1111", guardian1_email="kevin.smith@example.com",
+        guardian1_education_level="Bachelor", guardian1_occupation="Doctor",
+        guardian1_relationship="Father", guardian2_name="Laura", guardian2_last_name="Smith",
+        guardian2_dni="98765432", guardian2_address_id=5, guardian2_locality_id=2,
+        guardian2_province_id=6, guardian2_phone="555-2222", guardian2_email="laura.smith@example.com",
+        guardian2_education_level="Diploma", guardian2_occupation="Nurse",
+        guardian2_relationship="Mother"
+    )
+
+    riders.create_rider(
+        name="Sofia", last_name="Perez", dni="11223344", age=25, birth_date=date(1999, 1, 22),
+        birth_locality_id=2, birth_province_id=3, address_id=4, current_locality_id=5,
+        current_province_id=6, phone="555-1111", emergency_contact_name="Maria Perez",
+        emergency_contact_phone="555-2222", active=True, sede_id=1, has_scholarship=True,
+        scholarship_percentage=75, has_disability_certificate=False, disability_diagnosis_id=None,
+        disability_type_id=2, receives_family_allowance=True, family_allowance_type_id=1,
+        receives_pension=False, pension_type_id=None, health_insurance="GreenCare",
+        affiliate_number="GC12345", has_guardianship=True, school_id=1, current_grade="Grade 3",
+        attending_professionals="Dr. Blue", work_proposal_id=2, teacher_id=1,
+        horse_conductor_id=2, horse_id=1, track_assistant_id=2,
+        guardian1_name="Carlos", guardian1_last_name="Perez", guardian1_dni="45678912",
+        guardian1_address_id=2, guardian1_locality_id=3, guardian1_province_id=4,
+        guardian1_phone="555-3333", guardian1_email="carlos.perez@example.com",
+        guardian1_education_level="Masters", guardian1_occupation="Architect",
+        guardian1_relationship="Father", guardian2_name="Ana", guardian2_last_name="Perez",
+        guardian2_dni="65432198", guardian2_address_id=5, guardian2_locality_id=6,
+        guardian2_province_id=7, guardian2_phone="555-4444", guardian2_email="ana.perez@example.com",
+        guardian2_education_level="Bachelors", guardian2_occupation="Lawyer",
+        guardian2_relationship="Mother"
+    )
+
+    riders.create_rider(
+        name="Mateo", last_name="Garcia", dni="22335577", age=24, birth_date=date(2000, 3, 15),
+        birth_locality_id=7, birth_province_id=8, address_id=6, current_locality_id=7,
+        current_province_id=8, phone="555-5555", emergency_contact_name="Laura Garcia",
+        emergency_contact_phone="555-6666", active=True, sede_id=3, has_scholarship=False,
+        scholarship_percentage=None, has_disability_certificate=True, disability_diagnosis_id=3,
+        disability_type_id=1, receives_family_allowance=True, family_allowance_type_id=2,
+        receives_pension=True, pension_type_id=1, health_insurance="YellowCare",
+        affiliate_number="YC65432", has_guardianship=True, school_id=4, current_grade="Grade 4",
+        attending_professionals="Dr. Orange", work_proposal_id=3, teacher_id=4,
+        horse_conductor_id=3, horse_id=4, track_assistant_id=3,
+        guardian1_name="Jose", guardian1_last_name="Garcia", guardian1_dni="98765432",
+        guardian1_address_id=7, guardian1_locality_id=8, guardian1_province_id=9,
+        guardian1_phone="555-7777", guardian1_email="jose.garcia@example.com",
+        guardian1_education_level="Doctorate", guardian1_occupation="Professor",
+        guardian1_relationship="Father", guardian2_name="Maria", guardian2_last_name="Garcia",
+        guardian2_dni="87654321", guardian2_address_id=8, guardian2_locality_id=9,
+        guardian2_province_id=1, guardian2_phone="555-8888", guardian2_email="maria.garcia@example.com",
+        guardian2_education_level="Masters", guardian2_occupation="Researcher",
+        guardian2_relationship="Mother"
+    )
+
+    riders.create_rider(
+        name="Valentina", last_name="Martinez", dni="33447788", age=23, birth_date=date(2001, 2, 10),
+        birth_locality_id=4, birth_province_id=5, address_id=3, current_locality_id=4,
+        current_province_id=5, phone="555-9999", emergency_contact_name="Pedro Martinez",
+        emergency_contact_phone="555-0000", active=True, sede_id=2, has_scholarship=True,
+        scholarship_percentage=100, has_disability_certificate=True, disability_diagnosis_id=5,
+        disability_type_id=3, receives_family_allowance=False, family_allowance_type_id=None,
+        receives_pension=True, pension_type_id=2, health_insurance="OrangeCare",
+        affiliate_number="OC87654", has_guardianship=True, school_id=3, current_grade="Grade 2",
+        attending_professionals="Dr. Red", work_proposal_id=1, teacher_id=2,
+        horse_conductor_id=1, horse_id=2, track_assistant_id=1,
+        guardian1_name="Ricardo", guardian1_last_name="Martinez", guardian1_dni="56789012",
+        guardian1_address_id=4, guardian1_locality_id=5, guardian1_province_id=6,
+        guardian1_phone="555-1111", guardian1_email="ricardo.martinez@example.com",
+        guardian1_education_level="College", guardian1_occupation="Engineer",
+        guardian1_relationship="Father", guardian2_name="Luisa", guardian2_last_name="Martinez",
+        guardian2_dni="78901234", guardian2_address_id=6, guardian2_locality_id=7,
+        guardian2_province_id=8, guardian2_phone="555-2222", guardian2_email="luisa.martinez@example.com",
+        guardian2_education_level="High School", guardian2_occupation="Teacher",
+        guardian2_relationship="Mother"
+    )
+
+    riders.create_rider(
+        name="Lucas", last_name="Rodriguez", dni="44556677", age=28, birth_date=date(1996, 9, 25),
+        birth_locality_id=6, birth_province_id=7, address_id=5, current_locality_id=6,
+        current_province_id=7, phone="555-3333", emergency_contact_name="Marcela Rodriguez",
+        emergency_contact_phone="555-4444", active=True, sede_id=2, has_scholarship=False,
+        scholarship_percentage=None, has_disability_certificate=True, disability_diagnosis_id=6,
+        disability_type_id=2, receives_family_allowance=True, family_allowance_type_id=2,
+        receives_pension=False, pension_type_id=None, health_insurance="PinkCare",
+        affiliate_number="PC12345", has_guardianship=True, school_id=5, current_grade="Grade 1",
+        attending_professionals="Dr. Yellow", work_proposal_id=3, teacher_id=5,
+        horse_conductor_id=6, horse_id=5, track_assistant_id=6,
+        guardian1_name="Hector", guardian1_last_name="Rodriguez", guardian1_dni="34567890",
+        guardian1_address_id=9, guardian1_locality_id=10, guardian1_province_id=5,
+        guardian1_phone="555-5555", guardian1_email="hector.rodriguez@example.com",
+        guardian1_education_level="Masters", guardian1_occupation="Architect",
+        guardian1_relationship="Father", guardian2_name="Silvia", guardian2_last_name="Rodriguez",
+        guardian2_dni="12345678", guardian2_address_id=7, guardian2_locality_id=8,
+        guardian2_province_id=9, guardian2_phone="555-6666", guardian2_email="silvia.rodriguez@example.com",
+        guardian2_education_level="Bachelors", guardian2_occupation="Lawyer",
+        guardian2_relationship="Mother"
+    )
+
+    riders.create_rider(
+        name="Martina", last_name="Fernandez", dni="55667788", age=30, birth_date=date(1994, 7, 18),
+        birth_locality_id=3, birth_province_id=4, address_id=1, current_locality_id=3,
+        current_province_id=4, phone="555-7777", emergency_contact_name="Daniel Fernandez",
+        emergency_contact_phone="555-8888", active=True, sede_id=2, has_scholarship=True,
+        scholarship_percentage=90, has_disability_certificate=False, disability_diagnosis_id=None,
+        disability_type_id=3, receives_family_allowance=True, family_allowance_type_id=1,
+        receives_pension=True, pension_type_id=2, health_insurance="GrayCare",
+        affiliate_number="GC54321", has_guardianship=True, school_id=2, current_grade="Grade 5",
+        attending_professionals="Dr. White", work_proposal_id=2, teacher_id=6,
+        horse_conductor_id=7, horse_id=6, track_assistant_id=7,
+        guardian1_name="Jorge", guardian1_last_name="Fernandez", guardian1_dni="23456789",
+        guardian1_address_id=2, guardian1_locality_id=3, guardian1_province_id=4,
+        guardian1_phone="555-9999", guardian1_email="jorge.fernandez@example.com",
+        guardian1_education_level="College", guardian1_occupation="Engineer",
+        guardian1_relationship="Father", guardian2_name="Silvia", guardian2_last_name="Fernandez",
+        guardian2_dni="34567890", guardian2_address_id=3, guardian2_locality_id=4,
+        guardian2_province_id=5, guardian2_phone="555-1111", guardian2_email="silvia.fernandez@example.com",
+        guardian2_education_level="High School", guardian2_occupation="Teacher",
+        guardian2_relationship="Mother"
+    )
+
+    riders.create_rider(
+        name="Lucas", last_name="Alvarez", dni="66778899", age=22, birth_date=date(2002, 6, 30),
+        birth_locality_id=2, birth_province_id=3, address_id=3, current_locality_id=4,
+        current_province_id=5, phone="555-2222", emergency_contact_name="Paula Alvarez",
+        emergency_contact_phone="555-3333", active=True, sede_id=4, has_scholarship=False,
+        scholarship_percentage=None, has_disability_certificate=True, disability_diagnosis_id=2,
+        disability_type_id=1, receives_family_allowance=True, family_allowance_type_id=2,
+        receives_pension=False, pension_type_id=None, health_insurance="BlueShield",
+        affiliate_number="BS12345", has_guardianship=True, school_id=3, current_grade="Grade 6",
+        attending_professionals="Dr. Green", work_proposal_id=5, teacher_id=8,
+        horse_conductor_id=9, horse_id=7, track_assistant_id=8,
+        guardian1_name="Miguel", guardian1_last_name="Alvarez", guardian1_dni="98765432",
+        guardian1_address_id=9, guardian1_locality_id=10, guardian1_province_id=2,
+        guardian1_phone="555-4444", guardian1_email="miguel.alvarez@example.com",
+        guardian1_education_level="Masters", guardian1_occupation="Doctor",
+        guardian1_relationship="Father", guardian2_name="Claudia", guardian2_last_name="Alvarez",
+        guardian2_dni="87654321", guardian2_address_id=10, guardian2_locality_id=1,
+        guardian2_province_id=4, guardian2_phone="555-5555", guardian2_email="claudia.alvarez@example.com",
+        guardian2_education_level="Bachelors", guardian2_occupation="Nurse",
+        guardian2_relationship="Mother"
+    )
+
+    riders.create_rider(
+        name="Camila", last_name="Lopez", dni="77889900", age=21, birth_date=date(2003, 10, 10),
+        birth_locality_id=8, birth_province_id=9, address_id=2, current_locality_id=5,
+        current_province_id=2, phone="555-6666", emergency_contact_name="Sofia Lopez",
+        emergency_contact_phone="555-7777", active=True, sede_id=2, has_scholarship=False,
+        scholarship_percentage=None, has_disability_certificate=False, disability_diagnosis_id=None,
+        disability_type_id=2, receives_family_allowance=False, family_allowance_type_id=None,
+        receives_pension=True, pension_type_id=1, health_insurance="HealthCare",
+        affiliate_number="HC87654", has_guardianship=True, school_id=1, current_grade="Grade 1",
+        attending_professionals="Dr. Pink", work_proposal_id=3, teacher_id=2,
+        horse_conductor_id=1, horse_id=3, track_assistant_id=1,
+        guardian1_name="Juan", guardian1_last_name="Lopez", guardian1_dni="22334455",
+        guardian1_address_id=2, guardian1_locality_id=3, guardian1_province_id=4,
+        guardian1_phone="555-8888", guardian1_email="juan.lopez@example.com",
+        guardian1_education_level="College", guardian1_occupation="Engineer",
+        guardian1_relationship="Father", guardian2_name="Lucia", guardian2_last_name="Lopez",
+        guardian2_dni="99887766", guardian2_address_id=3, guardian2_locality_id=4,
+        guardian2_province_id=5, guardian2_phone="555-9999", guardian2_email="lucia.lopez@example.com",
+        guardian2_education_level="High School", guardian2_occupation="Teacher",
+        guardian2_relationship="Mother"
+    )
+
     
-        # Guardians for Rider 2
-        ("Carlos", "Lopez", 34567890, 2, 2, 2, "cel3", "carlos.lopez@mail.com", "Universitario", "Engineer"),
-        ("Ana", "Martinez", 45678901, 2, 2, 2, "cel4", "ana.martinez@mail.com", "Primario", "Nurse"),
-    
-        # Guardians for Rider 3
-        ("Roberto", "Fernandez", 56789012, 3, 3, 3, "cel5", "roberto.fernandez@mail.com", "Terciario", "Plumber"),
-        ("Lucia", "Gonzalez", 67890123, 3, 3, 3, "cel6", "lucia.gonzalez@mail.com", "Secundario", "Accountant"),
-    
-        # Guardians for Rider 4
-        ("Jose", "Rodriguez", 78901234, 4, 4, 4, "cel7", "jose.rodriguez@mail.com", "Universitario", "Architect"),
-        ("Laura", "Torres", 89012345, 4, 4, 4, "cel8", "laura.torres@mail.com", "Primario", "Baker"),
-    
-        # Guardians for Rider 5
-        ("Luis", "Castro", 90123456, 5, 5, 5, "cel9", "luis.castro@mail.com", "Secundario", "Mechanic"),
-        ("Elena", "Diaz", 11234567, 5, 5, 5, "cel10", "elena.diaz@mail.com", "Terciario", "Doctor"),
-    
-        # Guardians for Rider 6
-        ("Mario", "Sanchez", 22345678, 6, 6, 6, "cel11", "mario.sanchez@mail.com", "Universitario", "Lawyer"),
-        ("Patricia", "Vega", 33456789, 6, 6, 6, "cel12", "patricia.vega@mail.com", "Primario", "Secretary"),
-    
-        # Guardians for Rider 7
-        ("Pedro", "Molina", 44567890, 7, 7, 7, "cel13", "pedro.molina@mail.com", "Secundario", "Driver"),
-        ("Sofia", "Ramos", 55678901, 7, 7, 7, "cel14", "sofia.ramos@mail.com", "Universitario", "Teacher"),
-    
-        # Guardians for Rider 8
-        ("Ricardo", "Ruiz", 66789012, 8, 8, 8, "cel15", "ricardo.ruiz@mail.com", "Terciario", "Electrician"),
-        ("Angela", "Morales", 77890123, 8, 8, 8, "cel16", "angela.morales@mail.com", "Secundario", "Psychologist")
-    ]
-    # Create guardians and assign them to riders
-    for i, data in enumerate(guardian_data):
-        name, last_name, dni, address_id, locality_id, province_id, phone, email, education_level, occupation = data
-        guardian = guardians.create_guardian(name, last_name, dni, address_id, locality_id, province_id, phone, email, education_level, occupation)
-    
-        # Assign guardians to riders (each rider gets 2 guardians)
-        rider_id = (i // 2) + 1  # Riders 1..8
-        relationship = "Father" if i % 2 == 0 else "Mother"
-        guardians_riders.assign_guardian_to_rider(rider_id=rider_id, guardian_id=guardian.id, relationship=relationship)
 
     ##############################
     # REGISTRO DE PAGOS Y COBROS #

@@ -107,6 +107,12 @@
   transform: translateX(-50%);
 }
 
+.order-checkbox-ivy {
+  display: block;
+  position: absolute;
+  bottom: 100%;
+}
+
 .input-field {
   display: block;
   width: 100%;
@@ -136,6 +142,50 @@
   top: -0.7rem;
   font-size: 0.7em;
   color: #555;
+}
+
+.subtitulos {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+}
+
+.documentos-columnas {
+  display:flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: left;
+  align-items: left;
+  gap: 1rem;
+  max-width: 40rem;
+}
+
+.documentos-filas {
+  display:flex;
+  flex-direction:row;
+  gap:1rem;
+}
+
+.text{
+  position: relative;
+}
+
+.desc{
+  border: 1px solid darkgray;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  line-height: 1rem;
+
+
+  width: 40rem;
+  height: auto;
+  resize: none;
+  overflow: hidden;
+  padding: 8px;
+  box-sizing: border-box;
+  font-family: Panton, Arial, Helvetica;
 }
 
 .select-label {
