@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const guardian1DniField = document.getElementById("guardian1-dni-field");
     const guardian1StreetField = document.getElementById("guardian1-street-field");
     const guardian1NumberField = document.getElementById("guardian1-number-field");
-    const guardian1AparmentField = document.getElementById("guardian1-apartment-field");
     const guardian1PhoneField = document.getElementById("guardian1-phone-field");
     const guardian1EmailField = document.getElementById("guardian1-email-field");
     const guardian1OccupationField = document.getElementById("guardian1-occupation-field");
@@ -31,7 +30,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const guardian2DniField = document.getElementById("guardian2-dni-field");
     const guardian2StreetField = document.getElementById("guardian2-street-field");
     const guardian2NumberField = document.getElementById("guardian2-number-field");
-    const guardian2AparmentField = document.getElementById("guardian2-apartment-field");
     const guardian2PhoneField = document.getElementById("guardian2-phone-field");
     const guardian2EmailField = document.getElementById("guardian2-email-field");
     const guardian2OccupationField = document.getElementById("guardian2-occupation-field");
@@ -73,9 +71,8 @@ document.addEventListener("DOMContentLoaded", function () {
         "guardian1-dni-field": [guardian1DniField, validateDNI],
         "guardian1-street-field": [guardian1StreetField, validateEmpty],
         "guardian1-number-field": [guardian1NumberField, validateNumber],
-        "guardian1-apartment-field": [guardian1AparmentField, validateEmpty],
         "guardian1-phone-field": [guardian1PhoneField, validatePhone],
-        "guardian1-email-field": [guardian1EmailField, validateEmpty],
+        "guardian1-email-field": [guardian1EmailField, validateEmail],
         "guardian1-occupation-field": [guardian1OccupationField, validateEmpty],
         "guardian1-relationship-field": [guardian1RelationshipField, validateEmpty],
         "guardian2-name-field": [guardian2NameField, validateEmpty],
@@ -83,9 +80,8 @@ document.addEventListener("DOMContentLoaded", function () {
         "guardian2-dni-field": [guardian2DniField, validateDNI],
         "guardian2-street-field": [guardian2StreetField, validateEmpty],
         "guardian2-number-field": [guardian2NumberField, validateNumber],
-        "guardian2-apartment-field": [guardian2AparmentField, validateEmpty],
         "guardian2-phone-field": [guardian2PhoneField, validatePhone],
-        "guardian2-email-field": [guardian2EmailField, validateEmpty],
+        "guardian2-email-field": [guardian2EmailField, validateEmail],
         "guardian2-occupation-field": [guardian2OccupationField, validateEmpty],
         "guardian2-relationship-field": [guardian2RelationshipField, validateEmpty]
     };
@@ -188,17 +184,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   
     // Valida que el mail tenga el formato adecuado y que no esté repetido
-    function validateEmail() {
+    function validateEmail(event) {
+      const emailField = event.target;
+      console.log("a");
       if (!emailField.value.match(/^[A-Za-z\._\-0-9]+[@][A-Za-z]+[\.][a-z]{2,4}$/)) {
         activateError(emailField, "Formato de email inválido");
       } else {
-        if (mails.includes(emailField.value)) {
-          activateError(emailField, "Email ya registrado");
-        } else {
           deactivateError(emailField);
         }
       }
-    }
 
     // Valida que el número de afiliado tenga el formato adecuado y que no esté repetido
     function validateAffiliateNumber() {

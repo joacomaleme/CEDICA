@@ -168,6 +168,11 @@ def create():
         "track-assistant-id": params.get("track-assistant-id"),
     }
 
+    res = check_rider_data(rider_data)
+    if res[0] is False:
+        flash(res[1], "error")
+        return redirect(request.referrer)
+
     check_dni = rider_operations.get_rider_by_dni(rider_data["dni"])
     check_affiliate_number = rider_operations.get_rider_by_affiliate_number(rider_data["affiliate-number"])
 
@@ -307,8 +312,10 @@ def show(id):
         
         dnis = [rider.dni for rider in riders]
         affiliate_numbers = [rider.affiliate_number for rider in riders]
+
         dnis.remove(rider.dni)
         affiliate_numbers.remove(rider.affiliate_number)
+        
 
         data = document_operations.get_documents_filtered_list(documents=documents, page=page, sort_attr=sort_attr, ascending=start_ascending, search_title=search_title, search_type=start_type)
 
@@ -525,6 +532,17 @@ def is_valid_email(email :str) -> bool:
     pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     return re.match(pattern, email) is not None
 
+def domain_exists(email:str):
+    '''
+    Valida que exista un servidor MX para la dirección de mail pasada por parametro. Retorna True si existe, false si no.
+    '''
+    domain = email.split('@')[1]
+    try:
+        dns.resolver.resolve(domain, 'MX')
+        return True
+    except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN):
+        return False
+
 def is_valid_dni(dni: str) -> bool:
     pattern = r'^\d+$'
     return re.match(pattern, dni) is not None
@@ -669,7 +687,7 @@ def check_rider_data(rider_data) -> Tuple[bool, str]:
         return (False, "El departamento del primer tutor debe ser menor a 10 caracteres.")
     if len(rider_data["guardian1-phone"]) > 20 or not is_valid_phone(rider_data["guardian1-phone"]):
         return (False, "Error en el teléfono del primer tutor.")
-    if len(rider_data["guardian1-email"]) > 100 or not is_valid_email(rider_data["guardian1-email"]):
+    if len(rider_data["guardian1-email"]) > 100 or not is_valid_email(rider_data["guardian1-email"]) or not domain_exists(rider_data["guardian1-email"]):
         return (False, "Error en el correo electrónico del primer tutor.")
     if len(rider_data["guardian1-educational-level"]) > 50:
         return (False, "El nivel educativo del primer tutor debe ser menor a 50 caracteres.")
@@ -691,7 +709,7 @@ def check_rider_data(rider_data) -> Tuple[bool, str]:
         return (False, "El departamento del primer tutor debe ser menor a 10 caracteres.")
     if len(rider_data["guardian2-phone"]) > 20 or not is_valid_phone(rider_data["guardian2-phone"]):
         return (False, "Error en el teléfono del primer tutor.")
-    if len(rider_data["guardian2-email"]) > 100 or not is_valid_email(rider_data["guardian2-email"]):
+    if len(rider_data["guardian2-email"]) > 100 or not is_valid_email(rider_data["guardian2-email"]) or not domain_exists(rider_data["guardian1-email"]):
         return (False, "Error en el correo electrónico del primer tutor.")
     if len(rider_data["guardian2-educational-level"]) > 50:
         return (False, "El nivel educativo del primer tutor debe ser menor a 50 caracteres.")

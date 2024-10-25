@@ -122,21 +122,24 @@
     {% endif %}
     
     <div class="page-section">
-        <nav>
-        <ul class="pagination">
-            <li class="pagination-item">
-                <a id="prev" class="ext" href="#">Previo</a>
-            </li>
-            {% for i in range(pages) %}
-                <li class="pagination-item {% if startPage == i+1 %}active{% endif %}">
-                    <a class="pageNum">{{i+1}}</a>
+        <nav class="theNav">
+            <ul class="pagination">
+                <li class="pagination-item">
+                    <a id="prev" class="ext" href="#">Previo</a>
                 </li>
-            {% endfor %}
-            <li class="pagination-item">
-                <a id="next" class="ext" href="#">Siguiente</a>
-            </li>
-        </ul>
+                {% for i in range(pages) %}
+                    {% if ((i > start_page-6) and (i < start_page+5)) or ((5 >= start_page) and (i < 10)) or (pages - start_page < 5 and i > pages - 11) %}
+                        <li class="pagination-item {% if start_page == i+1 %}active{% endif %}">
+                            <a class="pageNum">{{i+1}}</a>
+                        </li> 
+                    {% endif %}
+                {% endfor %}
+                <li class="pagination-item">
+                    <a id="next" class="ext" href="#">Siguiente</a>
+                </li>
+            </ul>
         </nav>
+        <hr>
     </div>
 
     <script>
