@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "guardian2-relationship-field": [guardian2RelationshipField, validateEmpty]
     };
     
-    const MAXVALIDOS = 39;
+    const MAXVALIDOS = 38;
     let validos = 0;
   
     Object.keys(inputs).forEach(e => {

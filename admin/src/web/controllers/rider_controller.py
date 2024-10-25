@@ -1,5 +1,6 @@
 from flask import abort, redirect, render_template, request, url_for
 from flask import Blueprint, flash, current_app
+from typing import List, Optional, Tuple
 from src.model.generic.operations import document_operations
 from src.model.generic.operations import document_types_operations
 from src.web.handlers.check_permission import permission_required
@@ -277,22 +278,43 @@ def show(id):
         employees = employee_operations.list_employees()
         #Aca estaría bueno crear varias listas según el rol para que en la selección se ofrezcan los que trabajan de eso, pero no queda muy claro en las jobs positions
         
-        document_types = document_types_operations.list_document_type()
-        start_document_type = request.args.get('start-document-type') or ""
+        types = document_types_operations.list_document_type()
+        start_type = request.args.get('start-document-type') or ""
+
+        page = request.args.get('page')
+        start_ascending = request.args.get('ascending') is None
+        sort_attr = request.args.get('sort_attr') or "upload_date"
+        search_title = request.args.get('search_title') or ""
+        mode = request.args.get("mode")
+        if not mode or mode != "documents":
+            mode = "general"
+
+        pages = 1
+
+        res = check_show_data(types, page, sort_attr, start_type)
+        if res[0] is False:
+            flash(res[1], "error")
+            return redirect(request.referrer)
+
+        page = 1 if not page else int(page)
+
 
         rider.address = address_operations.get_addres(rider.address_id)
         rider.guardian1_address = address_operations.get_addres(rider.guardian1_address_id)
         rider.guardian2_address = address_operations.get_addres(rider.guardian2_address_id)
         school = schools[rider.school_id - 1]
         
-        mode = request.args.get("mode", "general")
-        
         dnis = [rider.dni for rider in riders]
         affiliate_numbers = [rider.affiliate_number for rider in riders]
         dnis.remove(rider.dni)
         affiliate_numbers.remove(rider.affiliate_number)
 
-        return render_template("riders/show.html", rider=rider, localitys=localitys, provinces=provinces, disability_diagnosis=disability_diagnosis, disability_types = disability_types, family_allowance_types=family_allowance_types, pension_types=pension_types, schools=schools, work_proposals=work_proposals, work_days=work_days, sedes=sedes, horses=horses, employees=employees, school=school, dnis=dnis, affiliate_numbers=affiliate_numbers, documents=documents, mode=mode)
+        data = document_operations.get_documents_filtered_list(documents=documents, page=page, sort_attr=sort_attr, ascending=start_ascending, search_title=search_title, search_type=start_type)
+
+        documents = data[0]
+        pages = data[1]
+
+        return render_template("riders/show.html", rider=rider, localitys=localitys, provinces=provinces, disability_diagnosis=disability_diagnosis, disability_types = disability_types, family_allowance_types=family_allowance_types, pension_types=pension_types, schools=schools, work_proposals=work_proposals, work_days=work_days, sedes=sedes, horses=horses, employees=employees, school=school, dnis=dnis, affiliate_numbers=affiliate_numbers, documents=documents, mode=mode, pages=pages, startPage=page, start_ascending=(not start_ascending), sort_attr=sort_attr, search_title=search_title, start_type=start_type, types=types)
     else:
         return abort(404)
 
@@ -371,6 +393,11 @@ def update(id):
         "horse-id": params.get("horse-id"),
         "track-assistant-id": params.get("track-assistant-id"),
     }
+
+    res = check_rider_data(rider_data)
+    if res[0] is False:
+        flash(res[1], "error")
+        return redirect(request.referrer)
  
     try:
         rider = rider_operations.get_rider(real_id)
@@ -493,8 +520,26 @@ def delete(id):
     rider_operations.delete_rider(id)
     return redirect(url_for("rider.index"))
 
-# Utils functions
 def is_valid_email(email :str) -> bool:
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return re.match(pattern, email) is not None
+
+def is_valid_dni(dni: str) -> bool:
+    pattern = r'^\d+$'
+    return re.match(pattern, dni) is not None
+
+def is_valid_phone(phone: str) -> bool:
+    pattern = r'^[\d\-]+$'
+    return re.match(pattern, phone) is not None
+
+def is_valid_date(date_str: str) -> bool:
+    try:
+        # Intenta convertir la cadena de fecha en un objeto datetime con el formato 'YYYY-MM-DD'
+        datetime.strptime(date_str, "%Y-%m-%d")
+        return True
+    except ValueError:
+        # Si ocurre un error de conversión, la fecha no es válida
+        return False
     pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     return re.match(pattern, email) is not None
 
@@ -506,3 +551,132 @@ def to_spanish(attr: str) -> str:
             return "apellido"
         case _:
             return attr
+
+def check_index_data(
+        page: Optional[str],
+        sort_attr: str,
+        search_attr: str,
+        search_value: str) -> Tuple[bool, str]:
+    if (page and not isinstance(page, str)) or not isinstance(sort_attr, str) or not isinstance(search_attr, str) or not isinstance(search_value, str):
+        return (False, "Algúno de los tipos de los parámetros es incorrecto.")
+    if not sort_attr in ["inserted_at", "name", "last_name"]:
+        return (False, "Atributo de ordenamiento incorrecto.")
+    if not search_attr in ["dni", "name", "last_name", "professionals"]:
+        return (False, "Atributo de busqueda incorrecto.")
+    if start_profession and not start_profession in professions:
+        return (False, "Profesión de busqueda incorrecta.")
+
+    if page:
+        try:
+            int(page)
+        except:
+            return (False, "Tipo de pagina inválido.")
+    
+    return (True, "")
+
+def check_show_data(
+        types: List["DocumentType"],
+        page: Optional[str],
+        sort_attr: str,
+        start_type: str) -> Tuple[bool, str]:
+    if (page and not isinstance(page, str)) or not isinstance(sort_attr, str):
+        return (False, "Algúno de los tipos de los parámetros es incorrecto.")
+    #if not sort_attr in ["upload_date", "title"]:
+        #return (False, "Atributo de ordenamiento incorrecto.")
+    
+    if page:
+        try:
+            int(page)
+        except:
+            return (False, "Tipo de pagina inválido.")
+
+    return (True, "")
+
+def check_rider_data(rider_data) -> Tuple[bool, str]:
+    required_fields = [
+        "name", "surname", "dni", "age", "birth_date", "birth-locality", "birth-province",
+        "street", "number", "apartment", "current-locality", "current-province", "phone",
+        "emergency-contact-name", "emergency-phone", "has-scholarship", "disable-certificate",
+        "disability-diagnosis", "new-disability", "has-family-allowance", "family-allowance-type",
+        "receives-pension", "pension-type", "disability-type", "health-insurance", "affiliate-number",
+        "has-guardianship", "school-id", "school-name", "school-address", "school-phone",
+        "current-grade", "professionals", "guardian1-name", "guardian1-surname", "guardian1-dni",
+        "guardian1-street", "guardian1-number", "guardian1-apartment", "guardian1-locality",
+        "guardian1-province", "guardian1-phone", "guardian1-email", "guardian1-educational-level",
+        "guardian1-occupation", "guardian1-relationship", "guardian2-name", "guardian2-surname",
+        "guardian2-dni", "guardian2-street", "guardian2-number", "guardian2-apartment",
+        "guardian2-locality", "guardian2-province", "guardian2-phone", "guardian2-email",
+        "guardian2-educational-level", "guardian2-occupation", "guardian2-relationship",
+        "work-proposal-id", "active", "sede-id", "teacher-id", "horse-conductor-id",
+        "horse-id", "track-assistant-id"
+    ]
+
+    for field in required_fields:
+        if not rider_data.get(field):
+            return (False, f"Faltó rellenar el campo obligatorio: {field.replace('-', ' ').capitalize()}.")
+
+
+    if len(rider_data["name"]) > 100:
+        return (False, "El nombre debe ser menor a 100 caracteres.")
+    if len(rider_data["surname"]) > 100:
+        return (False, "El apellido debe ser menor a 100 caracteres.")
+    if len(rider_data["dni"]) > 120 or not is_valid_dni(rider_data["dni"]):
+        return (False, "Error en el dni ingresado.")
+    #Agregar los demas chequeos
+
+    try:
+        locality_ids = [locality.id for locality in locality_operations.list_localitys()]
+        if not int(rider_data["birth-locality"]) in locality_ids:
+            return (False, "ID de localidad inexistente.")
+        if not int(rider_data["current-locality"]) in locality_ids:
+            return (False, "ID de localidad inexistente.")
+        if not int(rider_data["guardian1-locality"]) in locality_ids:
+            return (False, "ID de localidad inexistente.")
+        if not int(rider_data["guardian2-locality"]) in locality_ids:
+            return (False, "ID de localidad inexistente.")
+    except:
+        return (False, "Error en alguna localidad ingresada.")
+    
+    try:
+        province_ids = [province.id for province in province_operations.list_provinces()]
+        if not int(rider_data["current-province"]) in province_ids:
+            return (False, "ID de provincia inexistente.")
+        if not int(rider_data["birth-province"]) in province_ids:
+            return (False, "ID de provincia inexistente.")
+        if not int(rider_data["guardian1-province"]) in province_ids:
+            return (False, "ID de provincia inexistente.")
+        if not int(rider_data["guardian2-province"]) in province_ids:
+            return (False, "ID de provincia inexistente.")
+    except:
+        return (False, "Error en alguna provincia ingresada.")
+
+    if (rider_data["disability-diagnosis"] != "Otro"):
+        try:
+            disability_diagnosis_ids = [disability_diagnosis.id for disability_diagnosis in disability_diagnosis_operations.list_disability_diagnosis()]
+            if not int(rider_data["disability-diagnosis"]) in disability_diagnosis_ids:
+                return (False, "ID de discapacidad inexistente.")
+        except:
+            return (False, "Error en la discapacidad ingresada.")
+
+    try:
+        locality_ids = [locality.id for locality in locality_operations.list_localitys()]
+        if not int(rider_data["locality"]) in locality_ids:
+            return (False, "ID de localidad inexistente.")
+    except:
+        return (False, "Error en la localidad ingresada.")
+
+    try:
+        profession_ids = [profession.id for profession in profession_operations.list_professions()]
+        if not int(rider_data["profession_id"]) in profession_ids:
+            return (False, "ID de profesión inexistente.")
+    except:
+        return (False, "Error en la profesión ingresada.")
+    
+    try:
+        job_position_ids = [job_position.id for job_position in job_position_operations.list_job_positions()]
+        if not int(rider_data["job_position_id"]) in job_position_ids:
+            return (False, "ID del puesto laboral inexistente.")
+    except:
+        return (False, "Error en el puesto laboral ingresado.")
+
+    return (True, "")

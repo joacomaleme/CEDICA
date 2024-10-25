@@ -45,6 +45,13 @@ def list_documents_by_horse_id(horse_id):
 
     return documents
 
+def list_documents_by_rider_id(rider_id):
+    rider_documents = RiderDocument.query.filter_by(rider_id=rider_id).all()
+    document_ids = [rider_document.document_id for rider_document in rider_documents]
+    documents = Document.query.filter(Document.id.in_(document_ids))
+
+    return documents
+
 def get_document(id: int) -> Document:
     document = Document.query.get(id)
     db.session.expunge(document)
