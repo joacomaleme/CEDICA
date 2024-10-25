@@ -3,7 +3,6 @@
 {% block head %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}"/>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/dropdown.css') }}"/>
-  <script src="{{ url_for('static', filename='js/dropdownRider.js') }}"></script>
   {% endblock %}
 
 {% block title %}Nuevo jinete - CEDICA{% endblock %}
@@ -15,7 +14,6 @@
   <section class="form-container">
     <h1 class="title">Registrar un jinete</h1>
     <form class="form" action="{{ url_for('rider.create')}}" method="POST" enctype="multipart/form-data">
-      
             <!-- Nombre -->
             <div class="input-set">
               <input spellcheck=false id="name-field" class="input-field" name="name" type="text" placeholder="" required><br>
@@ -248,7 +246,7 @@
                           {% for disability in disability_diagnosis %}
                               <option value="{{ disability.diagnosis }}">{{ disability.diagnosis | upper }}</option>
                           {% endfor %}
-                          <option value="Otro" >OTRO</option>
+                          <option value="Otro">OTRO</option>
                           </select>
                           
                           <p class="selecionado_opcion" onclick="open_select(this)"></p>
@@ -268,7 +266,7 @@
       
                   <!-- Opción otro -->
                   <div class="input-set" id="opcion-otro" style="display:none">
-                      <input value="" spellcheck=false id="new-disability-field" class="input-field" name="new-disability" type="text" placeholder="" required><br>
+                      <input value="" spellcheck=false id="new-disability-field" class="input-field" name="new-disability" type="text" placeholder=""><br>
                       <label id="new-disability-label" class="input-label" for="emergency-contact-phone-field">Discapacidad</label>
                       <span id="new-disability-error" class="input-error"></span>
                   </div>
@@ -468,21 +466,21 @@
       
               <!-- Nombre de la escuela -->
               <div class="input-set">
-                  <input spellcheck=false id="school-name-field" class="input-field" name="school-name" type="text" placeholder="" required><br>
+                  <input spellcheck=false id="school-name-field" class="input-field" name="school-name" type="text" placeholder=""><br>
                   <label id="school-name-label" class="input-label" for="school-name-field">NOMBRE DE LA ESCUELA</label>
                   <span id="school-name-error" class="input-error"></span>
               </div>
       
               <!-- Dirección de la escuela -->
               <div class="input-set">
-                  <input spellcheck=false id="school-address-field" class="input-field" name="school-address" type="text" placeholder="" required><br>
+                  <input spellcheck=false id="school-address-field" class="input-field" name="school-address" type="text" placeholder=""><br>
                   <label id="school-address-label" class="input-label" for="school-address-field">DIRECCIÓN DE LA ESCUELA</label>
                   <span id="school-address-error" class="input-error"></span>
               </div>
       
               <!-- Teléfono de la escuela -->
               <div class="input-set">
-                  <input spellcheck=false id="school-phone-field" class="input-field" name="school-phone" type="text" placeholder="" required><br>
+                  <input spellcheck=false id="school-phone-field" class="input-field" name="school-phone" type="text" placeholder=""><br>
                   <label id="school-phone-label" class="input-label" for="school-phone-field">TELÉFONO DE LA ESCUELA</label>
                   <span id="school-phone-error" class="input-error"></span>
               </div>
@@ -1000,7 +998,8 @@
     const affiliate_numbers = {{ affiliate_numbers | tojson }};
   </script>
   <script src="{{ url_for('static', filename='js/createRider.js') }}"></script>
-  {% endblock %}
+  <script src="{{ url_for('static', filename='js/dropdownRider.js') }}"></script>
+{% endblock %}
 
 {% block footer %}
 {% endblock %}

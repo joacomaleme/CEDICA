@@ -105,11 +105,13 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
     rider_documents = db.relationship("RiderDocument", back_populates="rider")
     documents = db.relationship("Document", secondary="rider_documents", viewonly=True)
 
-
     # Informacion sobre su deuda
     is_indebt = db.Column(db.Boolean, nullable = False, default=False)
     debt = db.Column(db.Float, nullable=False, default=0.0)
 
+    paid_collections = db.relationship('Collection',
+                                    back_populates='paid_by',
+                                    cascade='all, delete-orphan')
     guardian1_name = db.Column(db.String(100), nullable=False)  
     guardian1_last_name = db.Column(db.String(100), nullable=False)  
     guardian1_dni = db.Column(db.String(16), nullable=False)  

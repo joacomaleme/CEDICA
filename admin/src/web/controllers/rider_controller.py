@@ -169,7 +169,7 @@ def create():
     }
 
     check_dni = rider_operations.get_rider_by_dni(rider_data["dni"])
-    check_affiliate_number = rider_operations.get_rider_by_affiliate_number(rider_data["affiliate_number"])
+    check_affiliate_number = rider_operations.get_rider_by_affiliate_number(rider_data["affiliate-number"])
 
     if check_dni or check_affiliate_number:
         flash("Lo lamentamos, ha habido un error inesperado", "error")
@@ -181,14 +181,14 @@ def create():
         addressGuardian2 = address_operations.create_address(rider_data["guardian2-street"], rider_data["guardian2-number"], rider_data["guardian2-apartment"])
 
         if (rider_data["school-name"] == "Otro"):
-            school = School(rider_data["school-name"], rider_data["school-adress"], rider_data["school-phone"])
-            school.id = rider.school_id
-            school_operations.create_school(school)
+            school = school_operations.create_school(rider_data["school-name"], rider_data["school-adress"], rider_data["school-phone"])
+        else:
+            school = school_operations.get_school(rider_data["school-id"])
 
         if (rider_data["disable-certificate"] and rider_data["disability-diagnosis"] == "Otro"):
-            disability = DisabilityDiagnosis(params.get("new-disability"))
-            disability.id = rider.disability_diagnosis_id
-            disability_diagnosis_operations.create_disability_diagnosis(disability)
+            disability_diagnosis =  disability_diagnosis_operations.create_disability_diagnosis(params.get("new-disability"))
+        else:
+            disability_diagnosis = disability_diagnosis_operations.get_disability_diagnosis_by_diagnosis(rider_data["disability-diagnosis"])
 
         rider_operations.create_rider(
             name = rider_data["name"],
@@ -198,7 +198,7 @@ def create():
             birth_date = rider_data["birth_date"],
             birth_locality_id = rider_data["birth-locality"],
             birth_province_id = rider_data["birth-province"],
-            address_id = rider.address_id,
+            address_id = address.id,
             current_locality_id = rider_data["current-locality"],
             current_province_id = rider_data["current-province"],
             phone = rider_data["phone"],
@@ -206,7 +206,7 @@ def create():
             emergency_contact_phone = rider_data["emergency-phone"],
             has_scholarship = rider_data["has-scholarship"],
             has_disability_certificate = rider_data["disable-certificate"],
-            disability_diagnosis_id = rider.disability_diagnosis_id,
+            disability_diagnosis_id = disability_diagnosis.id,
             receives_family_allowance = rider_data["has-family-allowance"],
             family_allowance_type_id = rider_data["family-allowance-type"],
             receives_pension = rider_data["receives-pension"],
@@ -215,7 +215,7 @@ def create():
             health_insurance = rider_data["health-insurance"],
             affiliate_number = rider_data["affiliate-number"],
             has_guardianship = rider_data["has-guardianship"],
-            school_id = rider.school_id,
+            school_id = school.id,
             current_grade = rider_data["current-grade"],
             attending_professionals = rider_data["professionals"],
             work_proposal_id = rider_data["work-proposal-id"],
@@ -229,7 +229,7 @@ def create():
             guardian1_name = rider_data["guardian1-name"],
             guardian1_last_name = rider_data["guardian1-surname"],
             guardian1_dni = rider_data["guardian1-dni"],
-            guardian1_address_id = rider.guardian1_address_id,
+            guardian1_address_id = addressGuardian1.id,
             guardian1_locality_id = rider_data["guardian1-locality"],
             guardian1_province_id = rider_data["guardian1-province"],
             guardian1_phone = rider_data["guardian1-phone"],
@@ -241,7 +241,7 @@ def create():
             guardian2_name = rider_data["guardian2-name"],
             guardian2_last_name = rider_data["guardian2-surname"],
             guardian2_dni = rider_data["guardian2-dni"],
-            guardian2_address_id = rider.guardian1_address_id,
+            guardian2_address_id = addressGuardian2.id,
             guardian2_locality_id = rider_data["guardian2-locality"],
             guardian2_province_id = rider_data["guardian2-province"],
             guardian2_phone = rider_data["guardian2-phone"],
@@ -250,11 +250,12 @@ def create():
             guardian2_occupation = rider_data["guardian2-occupation"],
             guardian2_relationship = rider_data["guardian2-relationship"]
         )
-    except:
-        flash("Uso inválido de parametros, no se pudo actualizar al usuario", "error")
+    except Exception as e:
+        print(e)
+        flash("Uso inválido de parametros, no se pudo crear al usuario", "error")
         return redirect(url_for("home"))
 
-    return redirect(url_for("employee.index"))
+    return redirect(url_for("rider.index"))
 
 @bp.get("/<int:id>")
 @permission_required('rider_show')
