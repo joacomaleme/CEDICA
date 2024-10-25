@@ -4,7 +4,6 @@ from src.model.database import db
 from src.model.riders.tables.family_allowance_type import FamilyAllowanceType
 from src.model.riders.tables.disability_diagnosis import DisabilityDiagnosis
 from src.model.riders.tables.disability_type import DisabilityType
-from src.model.riders.tables.rider_guardian import RiderGuardian
 from src.model.riders.tables.pension_type import PensionType
 from src.model.riders.tables.school import School
 from src.model.horses.tables.horse import Horse
@@ -80,10 +79,6 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
 
     attending_professionals = db.Column(db.Text)  # Profesionales que lo atienden (campo libre)
 
-    # Padre/Madre/Tutor, relacion N a N.
-
-    guardians = db.relationship('Guardian', secondary='rider_guardians', back_populates='riders')
-
     # Información sobre el trabajo en la la institución
     work_proposal_id = db.Column(db.BigInteger, db.ForeignKey('work_proposals.id'))
     work_proposal = db.relationship('WorkProposal', foreign_keys=[work_proposal_id])
@@ -115,8 +110,48 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
     is_indebt = db.Column(db.Boolean, nullable = False, default=False)
     debt = db.Column(db.Float, nullable=False, default=0.0)
 
+    guardian1_name = db.Column(db.String(100), nullable=False)  
+    guardian1_last_name = db.Column(db.String(100), nullable=False)  
+    guardian1_dni = db.Column(db.String(16), nullable=False)  
+    guardian1_address_id = db.Column(db.BigInteger, db.ForeignKey('addresses.id'), nullable=False)
+    guardian1_address = db.relationship('Address', foreign_keys=[guardian1_address_id])
+    guardian1_locality_id = db.Column(db.BigInteger, db.ForeignKey('localities.id'), nullable=False) 
+    guardian1_locality = db.relationship('Locality', foreign_keys=[guardian1_locality_id])
+    guardian1_province_id = db.Column(db.BigInteger, db.ForeignKey('provinces.id'), nullable=False) 
+    guardian1_province = db.relationship('Province', foreign_keys=[guardian1_province_id])
+    guardian1_phone = db.Column(db.String(20), nullable=False) 
+    guardian1_email = db.Column(db.String(100), nullable=False) 
+    guardian1_education_level = db.Column(db.String(50), nullable=False)  
+    guardian1_occupation = db.Column(db.String(100), nullable=False) 
+    guardian1_relationship = db.Column(db.String(20), nullable=False)  
 
-    def __init__(self, name, last_name, dni, age, birth_date, birth_locality_id, birth_province_id, address_id, current_locality_id, current_province_id, phone, emergency_contact_name, emergency_contact_phone, active, sede_id, has_scholarship=False, scholarship_percentage=None, has_disability_certificate=False, disability_diagnosis_id=None, disability_type_id=None, receives_family_allowance=False, family_allowance_type_id=None, receives_pension=False, pension_type_id=None, health_insurance=None, affiliate_number=None, has_guardianship=False, school_id=None, current_grade=None, attending_professionals=None, work_proposal_id=None, teacher_id=None, horse_conductor_id=None, horse_id=None, track_assistant_id=None, is_indebt=False, debt=0.0):
+
+    current_locality_id = db.Column(db.BigInteger, db.ForeignKey('localities.id'), nullable=False)  # Localidad actual
+    current_locality = db.relationship('Locality', backref='current_riders', foreign_keys=[current_locality_id])
+    current_province_id = db.Column(db.BigInteger, db.ForeignKey('provinces.id'), nullable=False)   # Provincia actual
+    current_province = db.relationship('Province', backref='current_riders', foreign_keys=[current_province_id])
+
+    # Información de Guardian 2
+    guardian2_name = db.Column(db.String(100))  
+    guardian2_last_name = db.Column(db.String(100))  
+    guardian2_dni = db.Column(db.String(16))  
+    guardian2_address_id = db.Column(db.BigInteger, db.ForeignKey('addresses.id'), nullable=False)
+    guardian2_address = db.relationship('Address', foreign_keys=[guardian2_address_id]) 
+    guardian2_locality_id = db.Column(db.BigInteger, db.ForeignKey('localities.id'))  
+    guardian2_locality = db.relationship('Locality', foreign_keys=[guardian2_locality_id])
+    guardian2_province_id = db.Column(db.BigInteger, db.ForeignKey('provinces.id'))
+    guardian2_province = db.relationship('Province', foreign_keys=[guardian2_province_id])
+    guardian2_phone = db.Column(db.String(20))
+    guardian2_email = db.Column(db.String(100))
+    guardian2_education_level = db.Column(db.String(50))  
+    guardian2_occupation = db.Column(db.String(100)) 
+    guardian2_relationship = db.Column(db.String(20))  
+
+
+    def __init__(self, name, last_name, dni, age, birth_date, birth_locality_id, birth_province_id, address_id, current_locality_id, current_province_id, phone, emergency_contact_name, emergency_contact_phone, active, sede_id, has_scholarship=False, scholarship_percentage=None, has_disability_certificate=False, disability_diagnosis_id=None, disability_type_id=None, receives_family_allowance=False, family_allowance_type_id=None, receives_pension=False, pension_type_id=None, health_insurance=None, affiliate_number=None, has_guardianship=False, school_id=None, current_grade=None, attending_professionals=None, work_proposal_id=None, teacher_id=None, horse_conductor_id=None, horse_id=None, track_assistant_id=None, is_indebt=False, debt=0.0, 
+             guardian1_name=None, guardian1_last_name=None, guardian1_dni=None, guardian1_address_id=None, guardian1_locality_id=None, guardian1_province_id=None, guardian1_phone=None, guardian1_email=None, guardian1_education_level=None, guardian1_occupation=None, guardian1_relationship=None, 
+             guardian2_name=None, guardian2_last_name=None, guardian2_dni=None, guardian2_address_id=None, guardian2_locality_id=None, guardian2_province_id=None, guardian2_phone=None, guardian2_email=None, guardian2_education_level=None, guardian2_occupation=None, guardian2_relationship=None):
+    
         self.name = name
         self.last_name = last_name
         self.dni = dni
@@ -154,6 +189,28 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
         self.track_assistant_id = track_assistant_id
         self.is_indebt = is_indebt
         self.debt = debt
+        self.guardian1_name = guardian1_name
+        self.guardian1_last_name = guardian1_last_name
+        self.guardian1_dni = guardian1_dni
+        self.guardian1_address_id = guardian1_address_id
+        self.guardian1_locality_id = guardian1_locality_id
+        self.guardian1_province_id = guardian1_province_id
+        self.guardian1_phone = guardian1_phone
+        self.guardian1_email = guardian1_email
+        self.guardian1_education_level = guardian1_education_level
+        self.guardian1_occupation = guardian1_occupation
+        self.guardian1_relationship = guardian1_relationship
+        self.guardian2_name = guardian2_name
+        self.guardian2_last_name = guardian2_last_name
+        self.guardian2_dni = guardian2_dni
+        self.guardian2_address_id = guardian2_address_id
+        self.guardian2_locality_id = guardian2_locality_id
+        self.guardian2_province_id = guardian2_province_id
+        self.guardian2_phone = guardian2_phone
+        self.guardian2_email = guardian2_email
+        self.guardian2_education_level = guardian2_education_level
+        self.guardian2_occupation = guardian2_occupation
+        self.guardian2_relationship = guardian2_relationship
 
 
     # Definición de cómo se muestra la instancia al llamarla

@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const nameField = document.getElementById("name-field");
     const surnameField = document.getElementById("surname-field");
     const dniField = document.getElementById("dni-field");
+    const ageField = document.getElementById("age-field");
     const birthdateField = document.getElementById("birthdate-field");
     const streetField = document.getElementById("street-field");
     const numberField = document.getElementById("number-field");
@@ -16,19 +17,37 @@ document.addEventListener("DOMContentLoaded", function () {
     const schoolAddressField = document.getElementById("school-address-field");
     const schoolNumberField = document.getElementById("school-phone-field");
     const currentGradeField = document.getElementById("current-grade-field");
+    const guardian1NameField = document.getElementById("guardian1-name-field");
+    const guardian1SurnameField = document.getElementById("guardian1-surname-field");
+    const guardian1DniField = document.getElementById("guardian1-dni-field");
+    const guardian1StreetField = document.getElementById("guardian1-street-field");
+    const guardian1NumberField = document.getElementById("guardian1-number-field");
+    const guardian1AparmentField = document.getElementById("guardian1-apartment-field");
+    const guardian1PhoneField = document.getElementById("guardian1-phone-field");
+    const guardian1EmailField = document.getElementById("guardian1-email-field");
+    const guardian1OccupationField = document.getElementById("guardian1-occupation-field");
+    const guardian1RelationshipField = document.getElementById("guardian1-relationship-field");
+    const guardian2NameField = document.getElementById("guardian2-name-field");
+    const guardian2SurnameField = document.getElementById("guardian2-surname-field");
+    const guardian2DniField = document.getElementById("guardian2-dni-field");
+    const guardian2StreetField = document.getElementById("guardian2-street-field");
+    const guardian2NumberField = document.getElementById("guardian2-number-field");
+    const guardian2AparmentField = document.getElementById("guardian2-apartment-field");
+    const guardian2PhoneField = document.getElementById("guardian2-phone-field");
+    const guardian2EmailField = document.getElementById("guardian2-email-field");
+    const guardian2OccupationField = document.getElementById("guardian2-occupation-field");
+    const guardian2RelationshipField = document.getElementById("guardian2-relationship-field");
 
     const disableCertificateCheckbox = document.getElementById("disable-certificate-checkbox");
     const disabilityDiagnosis = document.getElementById("disability-diagnosis-field");
-    const disableCertificateCheckbox = document.getElementById("disable-certificate-checkbox");
-    const disableCertificateCheckbox = document.getElementById("disable-certificate-checkbox");
-    const disableCertificateCheckbox = document.getElementById("disable-certificate-checkbox");
-    const schoolField = document.getElementById("school-id-field");
+    const hasFamilyAllowanceCheckbox = document.getElementById("has-family-allowance-checkbox");
+    const receivesPensionCheckbox = document.getElementById("receives-pension-checkbox");
+
 
     const disabiliyDiagnosisEntero = document.getElementById("disability-diagnosis-entero");
-    const opcionOtro = document.getElementById("opcion-otro");
     const familyAllowanceTypeEntero = document.getElementById("family-allowance-type-entero");
     const pensionTypeEntero = document.getElementById("pension-type-entero");
-    const newSchool = document.getElementById("new-school");
+    
   
     const submitBtn = document.getElementById("button-submit");
   
@@ -36,6 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "name-field": [nameField, validateEmpty],
         "surname-field": [surnameField, validateEmpty],
         "dni-field": [dniField, validateDNI],
+        "age-field": [ageField, validateEmpty],
         "birthdate-field": [birthdateField, validateEmpty],
         "street-field": [streetField, validateEmpty],
         "number-field": [numberField, validateNumber],
@@ -49,10 +69,30 @@ document.addEventListener("DOMContentLoaded", function () {
         "school-name-field": [schoolNameField, validateEmpty],
         "school-address-field": [schoolAddressField, validateEmpty],
         "school-number-field": [schoolNumberField, validateEmpty],
-        "current-grade-field": [currentGradeField, validateEmpty]
+        "current-grade-field": [currentGradeField, validateEmpty],
+        "guardian1-name-field": [guardian1NameField, validateEmpty],
+        "guardian1-surname-field": [guardian1SurnameField, validateEmpty],
+        "guardian1-dni-field": [guardian1DniField, validateDNI],
+        "guardian1-street-field": [guardian1StreetField, validateEmpty],
+        "guardian1-number-field": [guardian1NumberField, validateNumber],
+        "guardian1-apartment-field": [guardian1AparmentField, validateEmpty],
+        "guardian1-phone-field": [guardian1PhoneField, validatePhone],
+        "guardian1-email-field": [guardian1EmailField, validateEmpty],
+        "guardian1-occupation-field": [guardian1OccupationField, validateEmpty],
+        "guardian1-relationship-field": [guardian1RelationshipField, validateEmpty],
+        "guardian2-name-field": [guardian2NameField, validateEmpty],
+        "guardian2-surname-field": [guardian2SurnameField, validateEmpty],
+        "guardian2-dni-field": [guardian2DniField, validateDNI],
+        "guardian2-street-field": [guardian2StreetField, validateEmpty],
+        "guardian2-number-field": [guardian2NumberField, validateNumber],
+        "guardian2-apartment-field": [guardian2AparmentField, validateEmpty],
+        "guardian2-phone-field": [guardian2PhoneField, validatePhone],
+        "guardian2-email-field": [guardian2EmailField, validateEmpty],
+        "guardian2-occupation-field": [guardian2OccupationField, validateEmpty],
+        "guardian2-relationship-field": [guardian2RelationshipField, validateEmpty]
     };
     
-    const MAXVALIDOS = 17;
+    const MAXVALIDOS = 39;
     let validos = 0;
   
     Object.keys(inputs).forEach(e => {
@@ -61,33 +101,22 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 
     disableCertificateCheckbox.addEventListener("change", showDisabilityDiagnosis)
-    disabilityDiagnosis.addEventListener("change", showOpcionOtro)
-    disableCertificateCheckbox.addEventListener("change", showFamilyAllowanceType)
-    disableCertificateCheckbox.addEventListener("change", showPensionType)
-    schoolField.addEventListener("change", showNewSchool)
+    hasFamilyAllowanceCheckbox.addEventListener("change", showFamilyAllowanceType)
+    receivesPensionCheckbox.addEventListener("change", showPensionType)
   
     callAll();
 
     function showDisabilityDiagnosis() {
-        if (disabilityDiagnosis == "Otro") {
-            disabiliyDiagnosisEntero.style.display = "block";
-        }
-        else {
-            disabiliyDiagnosisEntero.style.display = "none";
-        }
-    }
-
-    function showOpcionOtro() {
-        if (disableCertificateCheckbox.checked) {
-            opcionOtro.style.display = "block";
-        }
-        else {
-            opcionOtro.style.display = "none";
-        }
-    }
+      if (disableCertificateCheckbox.checked) {
+          disabiliyDiagnosisEntero.style.display = "block";
+      }
+      else {
+          disabiliyDiagnosisEntero.style.display = "none";
+      }
+  }
 
     function showFamilyAllowanceType() {
-        if (disableCertificateCheckbox.checked) {
+        if (hasFamilyAllowanceCheckbox.checked) {
             familyAllowanceTypeEntero.style.display = "block";
         }
         else {
@@ -96,20 +125,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function showPensionType() {
-        if (disableCertificateCheckbox.checked) {
+        if (receivesPensionCheckbox.checked) {
             pensionTypeEntero.style.display = "block";
         }
         else {
             pensionTypeEntero.style.display = "none";
-        }
-    }
-
-    function showNewSchool() {
-        if (disableCertificateCheckbox.checked) {
-            newSchool.style.display = "block";
-        }
-        else {
-            newSchool.style.display = "none";
         }
     }
   
@@ -127,7 +147,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function validateNewDisability(event) {
         const field = event.target;
   
-        if (field.value.trim() === "" && disabilityDiagnosis == "Otro") {
+        if (field.value.trim() === "" && disabilityDiagnosis.value === "Otro") {
             activateError(field, "Este campo es obligatorio");
         } else {
             deactivateError(field);

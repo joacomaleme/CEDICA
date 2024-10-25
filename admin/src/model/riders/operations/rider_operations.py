@@ -23,7 +23,15 @@ def create_rider(name: str, last_name: str, dni: str, age: int, birth_date: date
                  attending_professionals: Optional[str] = None, work_proposal_id: Optional[str] = None,
                  teacher_id: Optional[int] = None, horse_conductor_id: Optional[int] = None,
                  horse_id: Optional[int] = None, track_assistant_id: Optional[int] = None,
-                 is_indebt: bool = False, debt: float = 0.0) -> Rider:
+                 is_indebt: bool = False, debt: float = 0.0,
+                 guardian1_name: Optional[str] = None, guardian1_last_name: Optional[str] = None, guardian1_dni: Optional[str] = None,
+                 guardian1_address_id: Optional[int] = None, guardian1_locality_id: Optional[int] = None, guardian1_province_id: Optional[int] = None,
+                 guardian1_phone: Optional[str] = None, guardian1_email: Optional[str] = None, guardian1_education_level: Optional[str] = None,
+                 guardian1_occupation: Optional[str] = None, guardian1_relationship: Optional[str] = None,
+                 guardian2_name: Optional[str] = None, guardian2_last_name: Optional[str] = None, guardian2_dni: Optional[str] = None,
+                 guardian2_address_id: Optional[int] = None, guardian2_locality_id: Optional[int] = None, guardian2_province_id: Optional[int] = None,
+                 guardian2_phone: Optional[str] = None, guardian2_email: Optional[str] = None, guardian2_education_level: Optional[str] = None,
+                 guardian2_occupation: Optional[str] = None, guardian2_relationship: Optional[str] = None) -> Rider:
     
     rider = Rider(
         name=name, last_name=last_name, dni=dni, age=age, birth_date=birth_date,
@@ -39,7 +47,17 @@ def create_rider(name: str, last_name: str, dni: str, age: int, birth_date: date
         school_id=school_id, current_grade=current_grade,
         attending_professionals=attending_professionals, work_proposal_id=work_proposal_id,
         teacher_id=teacher_id, horse_conductor_id=horse_conductor_id,
-        horse_id=horse_id, track_assistant_id=track_assistant_id, is_indebt=is_indebt, debt=debt
+        horse_id=horse_id, track_assistant_id=track_assistant_id, is_indebt=is_indebt, debt=debt,
+        
+        # Nuevos campos para los guardians
+        guardian1_name=guardian1_name, guardian1_last_name=guardian1_last_name, guardian1_dni=guardian1_dni,
+        guardian1_address_id=guardian1_address_id, guardian1_locality_id=guardian1_locality_id, guardian1_province_id=guardian1_province_id,
+        guardian1_phone=guardian1_phone, guardian1_email=guardian1_email, guardian1_education_level=guardian1_education_level,
+        guardian1_occupation=guardian1_occupation, guardian1_relationship=guardian1_relationship,
+        guardian2_name=guardian2_name, guardian2_last_name=guardian2_last_name, guardian2_dni=guardian2_dni,
+        guardian2_address_id=guardian2_address_id, guardian2_locality_id=guardian2_locality_id, guardian2_province_id=guardian2_province_id,
+        guardian2_phone=guardian2_phone, guardian2_email=guardian2_email, guardian2_education_level=guardian2_education_level,
+        guardian2_occupation=guardian2_occupation, guardian2_relationship=guardian2_relationship
     )
     db.session.add(rider)
     db.session.commit()
@@ -74,6 +92,12 @@ def get_rider_by_dni(dni: str) -> Optional[Rider]:
         db.session.expunge(rider)
     return rider
 
+def get_rider_by_affiliate_number(affiliate_number: str) -> Optional[Rider]:
+    rider = Rider.query.filter(Rider.affiliate_number == affiliate_number).first()
+    if rider:
+        db.session.expunge(rider)
+    return rider
+
 
 """
     Actualiza un jinete dado otro objeto de tipo Rider
@@ -83,6 +107,8 @@ def __update_rider__(to_update: Rider) -> Rider:
     rider = Rider.query.get(to_update.id)
     if rider is None:
         raise ValueError("No se encontró un jinete con ese ID")
+    
+    # Atributos existentes
     rider.name = to_update.name or rider.name
     rider.last_name = to_update.last_name or rider.last_name
     rider.dni = to_update.dni or rider.dni
@@ -120,6 +146,31 @@ def __update_rider__(to_update: Rider) -> Rider:
     rider.track_assistant_id = to_update.track_assistant_id or rider.track_assistant_id
     rider.is_indebt = to_update.is_indebt or rider.is_indebt
     rider.debt = to_update.debt or rider.debt
+
+    # Nuevos atributos para los guardians
+    rider.guardian1_name = to_update.guardian1_name or rider.guardian1_name
+    rider.guardian1_last_name = to_update.guardian1_last_name or rider.guardian1_last_name
+    rider.guardian1_dni = to_update.guardian1_dni or rider.guardian1_dni
+    rider.guardian1_address_id = to_update.guardian1_address_id or rider.guardian1_address_id
+    rider.guardian1_locality_id = to_update.guardian1_locality_id or rider.guardian1_locality_id
+    rider.guardian1_province_id = to_update.guardian1_province_id or rider.guardian1_province_id
+    rider.guardian1_phone = to_update.guardian1_phone or rider.guardian1_phone
+    rider.guardian1_email = to_update.guardian1_email or rider.guardian1_email
+    rider.guardian1_education_level = to_update.guardian1_education_level or rider.guardian1_education_level
+    rider.guardian1_occupation = to_update.guardian1_occupation or rider.guardian1_occupation
+    rider.guardian1_relationship = to_update.guardian1_relationship or rider.guardian1_relationship
+
+    rider.guardian2_name = to_update.guardian2_name or rider.guardian2_name
+    rider.guardian2_last_name = to_update.guardian2_last_name or rider.guardian2_last_name
+    rider.guardian2_dni = to_update.guardian2_dni or rider.guardian2_dni
+    rider.guardian2_address_id = to_update.guardian2_address_id or rider.guardian2_address_id
+    rider.guardian2_locality_id = to_update.guardian2_locality_id or rider.guardian2_locality_id
+    rider.guardian2_province_id = to_update.guardian2_province_id or rider.guardian2_province_id
+    rider.guardian2_phone = to_update.guardian2_phone or rider.guardian2_phone
+    rider.guardian2_email = to_update.guardian2_email or rider.guardian2_email
+    rider.guardian2_education_level = to_update.guardian2_education_level or rider.guardian2_education_level
+    rider.guardian2_occupation = to_update.guardian2_occupation or rider.guardian2_occupation
+    rider.guardian2_relationship = to_update.guardian2_relationship or rider.guardian2_relationship
 
     db.session.commit()
     db.session.expunge(rider)

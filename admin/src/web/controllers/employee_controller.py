@@ -258,7 +258,6 @@ def update(id):
         flash("Uso inválido de parametros, no se pudo actualizar al usuario", "error")
         return redirect(url_for("home"))
 
-
 @bp.get("/<int:id>/delete")
 @permission_required('employee_destroy')
 @permission_required('employee_destroy')
