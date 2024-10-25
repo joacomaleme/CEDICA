@@ -71,10 +71,10 @@ def run():
     # Creado de permisos para usuarios
     user_permissions = [
         'user_index', 'user_new', 'user_destroy', 'user_update', 'user_show',
-        'employee_index', 'employee_new', 'employee_destroy', 'employee_create', 'employee_show', 'employee_update',
+        'employee_index', 'employee_destroy', 'employee_create', 'employee_show', 'employee_update',
         'payment_index', 'payment_show', 'payment_update', 'payment_create', 'payment_destroy',
         'rider_index', 'rider_show', 'rider_update', 'rider_create', 'rider_destroy',
-        'document_index', 'document_show', 'document_update', 'document_create', 'document_destroy',
+        'employee_document', 'horse_document', 'rider_document',
         'collection_index', 'collection_show', 'collection_update', 'collection_create', 'collection_destroy',
         'horse_index', 'horse_show', 'horse_update', 'horse_create', 'horse_destroy'
     ]
@@ -92,7 +92,7 @@ def run():
 
     # Creado de usuarios
     users_data = [
-        ('Juan', '123a', 'juan@gmail.com', True, None),
+        ('Juan', '123a', 'juan@gmail.com', True, 1),
         ('Martin', '123a', 'martin@gmail.com', True, 1),
         ('Sofia', '123a', 'sofia@gmail.com', True, 2),
         ('Pedro', '123a', 'pedro@gmail.com', True, 3),
@@ -122,7 +122,7 @@ def run():
         ('Emilio', '123a', 'emilio@gmail.com', True, 3),
         ('Gabriela', '123a', 'gabriela@gmail.com', True, 4),
         ('Esteban', '123a', 'esteban@gmail.com', False, 5),
-        ('Santiago', '123a', 'santiago@gmail.com', True, None),
+        ('Santiago', '123a', 'santiago@gmail.com', True, 2),
         ('Graciela', '123a', 'graciela@gmail.com', False, 3),
         ('Javier', '123a', 'javier@gmail.com', True, 2),
         ('Marta', '123a', 'marta@gmail.com', True, 1),
@@ -144,7 +144,7 @@ def run():
         ('Roberto', '123a', 'roberto@gmail.com', False, 4),
         ('Isabel', '123a', 'isabel@gmail.com', True, 3),
         ('Guillermo', '123a', 'guillermo@gmail.com', True, 5),
-        ('Pamela', '123a', 'pamela@gmail.com', True, None),
+        ('Pamela', '123a', 'pamela@gmail.com', True, 3),
         ('Leandro', '123a', 'leandro@gmail.com', True, 1),
         ('Viviana', '123a', 'viviana@gmail.com', True, 4),
         ('Cristina', '123a', 'cristina@gmail.com', True, 3),
@@ -155,7 +155,7 @@ def run():
         ('Daniela', '123a', 'daniela@gmail.com', False, 3),
         ('Mariano', '123a', 'mariano@gmail.com', True, 2),
         ('Nora', '123a', 'nora@gmail.com', True, 5),
-        ('Maximiliano', '123a', 'maximiliano@gmail.com', True, None),
+        ('Maximiliano', '123a', 'maximiliano@gmail.com', True, 1),
         ('Damian', '123a', 'damian@gmail.com', True, 3),
         ('Antonella', '123a', 'antonella@gmail.com', False, 2),
         ('Ramona', '123a', 'ramona@gmail.com', True, 5),
@@ -165,7 +165,7 @@ def run():
         ('Micaela', '123a', 'micaela@gmail.com', True, 1),
         ('Bruno', '123a', 'bruno@gmail.com', True, 5),
         ('Agustina', '123a', 'agustina@gmail.com', True, 4),
-        ('Kevin', '123a', 'kevin@gmail.com', True, None),
+        ('Kevin', '123a', 'kevin@gmail.com', True, 3),
         ('Tamara', '123a', 'tamara@gmail.com', True, 2),
         ('Ezequiel', '123a', 'ezequiel@gmail.com', False, 1),
         ('Mauro', '123a', 'mauro@gmail.com', True, 3),
@@ -180,7 +180,7 @@ def run():
         ('Diego', '123a', 'diego@gmail.com', True, 2),
         ('Antonieta', '123a', 'antonieta@gmail.com', True, 3),
         ('Gonzalo', '123a', 'gonzalo@gmail.com', True, 5),
-        ('Sonia', '123a', 'sonia@gmail.com', True, None),
+        ('Sonia', '123a', 'sonia@gmail.com', True, 4),
         ('Facundo', '123a', 'facundo@gmail.com', True, 1),
         ('Melina', '123a', 'melina@gmail.com', True, 2),
         ('Emmanuel', '123a', 'emmanuel@gmail.com', True, 4),
@@ -396,7 +396,7 @@ def run():
             "locality_id": 8,
             "phone": "555-0890",
             "profession_id": 2,
-            "job_position_id": 3,
+            "job_position_id": 7,
             "emergency_contact_name": "Marco Morales",
             "emergency_contact_phone": "555-2109",
             "obra_social": "Obra Social H",
@@ -436,7 +436,7 @@ def run():
             "locality_id": 10,
             "phone": "555-1010",
             "profession_id": 1,
-            "job_position_id": 1,
+            "job_position_id": 7,
             "emergency_contact_name": "Ricardo Paredes",
             "emergency_contact_phone": "555-8765",
             "obra_social": "Obra Social J",
@@ -498,21 +498,21 @@ def run():
 
     # Create horses
 
-    horses.create_horse(name="Trueno", birth=datetime(2015, 6, 1), sex="Macho", breed="Árabe", coat="Bayo", is_donated=False, sede_id=1, active=True, activity_id=1)
-    horses.create_horse(name="Relámpago", birth=datetime(2017, 3, 15), sex="Hembra", breed="Pura Sangre", coat="Alazán", is_donated=True, sede_id=2, active=True, activity_id=2)
-    horses.create_horse(name="Tormenta", birth=datetime(2016, 9, 25), sex="Macho", breed="Appaloosa", coat="Negro", is_donated=False, sede_id=4, active=True, activity_id=3)
-    horses.create_horse(name="Fuego", birth=datetime(2014, 12, 5), sex="Hembra", breed="Quarter Horse", coat="Dorado", is_donated=True, sede_id=3, active=True, activity_id=4)
-    horses.create_horse(name="Sombra", birth=datetime(2013, 7, 11), sex="Macho", breed="Mustang", coat="Gris", is_donated=False, sede_id=2, active=True, activity_id=5)
-    horses.create_horse(name="Espíritu", birth=datetime(2018, 5, 21), sex="Hembra", breed="Morgan", coat="Palomino", is_donated=True, sede_id=1, active=True, activity_id=1)
-    horses.create_horse(name="Místico", birth=datetime(2019, 2, 18), sex="Macho", breed="Frisón", coat="Negro", is_donated=False, sede_id=3, active=True, activity_id=2)
-    horses.create_horse(name="Cometa", birth=datetime(2020, 8, 10), sex="Hembra", breed="Hanoveriano", coat="Castaño", is_donated=True, sede_id=4, active=True, activity_id=3)
-    horses.create_horse(name="Margarita", birth=datetime(2015, 11, 30), sex="Hembra", breed="Poni Galés", coat="Bayo", is_donated=False, sede_id=1, active=True, activity_id=4)
-    horses.create_horse(name="Jack", birth=datetime(2016, 4, 22), sex="Macho", breed="Clydesdale", coat="Alazán", is_donated=True, sede_id=3, active=True, activity_id=5)
-    horses.create_horse(name="Rubí", birth=datetime(2018, 1, 9), sex="Hembra", breed="Poni Shetland", coat="Negro", is_donated=False, sede_id=2, active=True, activity_id=1)
-    horses.create_horse(name="Ahumado", birth=datetime(2017, 10, 16), sex="Macho", breed="Percherón", coat="Gris", is_donated=True, sede_id=4, active=True, activity_id=2)
-    horses.create_horse(name="Tornado", birth=datetime(2014, 6, 29), sex="Macho", breed="Belga", coat="Dorado", is_donated=False, sede_id=3, active=True, activity_id=3)
-    horses.create_horse(name="Aurora", birth=datetime(2019, 8, 7), sex="Hembra", breed="Connemara", coat="Palomino", is_donated=True, sede_id=2, active=True, activity_id=4)
-    horses.create_horse(name="Estrella", birth=datetime(2020, 12, 3), sex="Hembra", breed="Islandés", coat="Castaño", is_donated=False, sede_id=1, active=True, activity_id=5)
+    horses.create_horse(name="Trueno", birth=datetime(2015, 6, 1), sex=True, breed="Árabe", coat="Bayo", is_donated=False, sede_id=1, active=True, activity_id=1)
+    horses.create_horse(name="Relámpago", birth=datetime(2017, 3, 15), sex=True, breed="Pura Sangre", coat="Alazán", is_donated=True, sede_id=2, active=True, activity_id=2)
+    horses.create_horse(name="Tormenta", birth=datetime(2016, 9, 25), sex=False, breed="Appaloosa", coat="Negro", is_donated=False, sede_id=4, active=True, activity_id=3)
+    horses.create_horse(name="Fuego", birth=datetime(2014, 12, 5), sex=False, breed="Quarter Horse", coat="Dorado", is_donated=True, sede_id=3, active=True, activity_id=4)
+    horses.create_horse(name="Sombra", birth=datetime(2013, 7, 11), sex=False, breed="Mustang", coat="Gris", is_donated=False, sede_id=2, active=True, activity_id=5)
+    horses.create_horse(name="Espíritu", birth=datetime(2018, 5, 21), sex=False, breed="Morgan", coat="Palomino", is_donated=True, sede_id=1, active=True, activity_id=1)
+    horses.create_horse(name="Místico", birth=datetime(2019, 2, 18), sex=True, breed="Frisón", coat="Negro", is_donated=False, sede_id=3, active=True, activity_id=2)
+    horses.create_horse(name="Cometa", birth=datetime(2020, 8, 10), sex=True, breed="Hanoveriano", coat="Castaño", is_donated=True, sede_id=4, active=True, activity_id=3)
+    horses.create_horse(name="Margarita", birth=datetime(2015, 11, 30), sex=False, breed="Poni Galés", coat="Bayo", is_donated=False, sede_id=1, active=True, activity_id=4)
+    horses.create_horse(name="Jack", birth=datetime(2016, 4, 22), sex=False, breed="Clydesdale", coat="Alazán", is_donated=True, sede_id=3, active=True, activity_id=5)
+    horses.create_horse(name="Rubí", birth=datetime(2018, 1, 9), sex=True, breed="Poni Shetland", coat="Negro", is_donated=False, sede_id=2, active=True, activity_id=1)
+    horses.create_horse(name="Ahumado", birth=datetime(2017, 10, 16), sex=True, breed="Percherón", coat="Gris", is_donated=True, sede_id=4, active=True, activity_id=2)
+    horses.create_horse(name="Tornado", birth=datetime(2014, 6, 29), sex=False, breed="Belga", coat="Dorado", is_donated=False, sede_id=3, active=True, activity_id=3)
+    horses.create_horse(name="Aurora", birth=datetime(2019, 8, 7), sex=True, breed="Connemara", coat="Palomino", is_donated=True, sede_id=2, active=True, activity_id=4)
+    horses.create_horse(name="Estrella", birth=datetime(2020, 12, 3), sex=True, breed="Islandés", coat="Castaño", is_donated=False, sede_id=1, active=True, activity_id=5)
 
     # Create work days
     days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]

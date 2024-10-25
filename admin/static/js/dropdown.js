@@ -17,7 +17,7 @@ function crear_select() {
   var select_ = "";
   for (var e = 0; e < div_cont_select.length; e++) {
     div_cont_select[e].setAttribute("data-indx-select", e);
-    div_cont_select[e].setAttribute("data-selec-open", "false");
+    div_cont_select[e].setAttribute("data-selec-type-open", "false");
     var ul_cont = document.querySelectorAll(
       "[data-indx-select='" + e + "'] > .cont_list_select_mate > ul"
     );
@@ -76,7 +76,7 @@ function open_select(idx) {
   var hg = 0;
   var slect_open = document
     .querySelectorAll("[data-indx-select='" + idx1 + "']")[0]
-    .getAttribute("data-selec-open");
+    .getAttribute("data-selec-type-open");
   var slect_element_open = document.querySelectorAll(
     "[data-indx-select='" + idx1 + "'] select"
   )[0];
@@ -85,8 +85,21 @@ function open_select(idx) {
       // All
       var evt = window.document.createEvent("MouseEvents");
       evt.initMouseEvent(
-        "mousedown", false, true,
-        window, 0, 0, 0, 0, 0, false, false, false, false, 0, null
+        "mousedown",
+        false,
+        true,
+        window,
+        0,
+        0,
+        0,
+        0,
+        0,
+        false,
+        false,
+        false,
+        false,
+        0,
+        null
       );
       slect_element_open.dispatchEvent(evt);
     } else if (slect_element_open.fireEvent) {
@@ -102,7 +115,7 @@ function open_select(idx) {
     if (slect_open == "false") {
       document
         .querySelectorAll("[data-indx-select='" + idx1 + "']")[0]
-        .setAttribute("data-selec-open", "true");
+        .setAttribute("data-selec-type-open", "true");
       document.querySelectorAll(
         "[data-indx-select='" + idx1 + "'] > .cont_list_select_mate > ul"
       )[0].style.height = hg + "px";
@@ -112,7 +125,7 @@ function open_select(idx) {
     } else {
       document
         .querySelectorAll("[data-indx-select='" + idx1 + "']")[0]
-        .setAttribute("data-selec-open", "false");
+        .setAttribute("data-selec-type-open", "false");
       document.querySelectorAll(
         "[data-indx-select='" + idx1 + "'] > .icon_select_mate"
       )[0].style.transform = "rotate(0deg)";
@@ -135,7 +148,7 @@ function salir_select(indx) {
   ).style.transform = "rotate(0deg)";
   document
     .querySelectorAll("[data-indx-select='" + indx + "']")[0]
-    .setAttribute("data-selec-open", "false");
+    .setAttribute("data-selec-type-open", "false");
 }
 
 function _select_option(indx, selc) {
@@ -164,12 +177,32 @@ function _select_option(indx, selc) {
     li_s[indx].className = "active";
   }
   select_optiones[indx].selected = true;
-  if (select_.value === "Administrador de Sistema") {
-    checkbox.checked = false;
-    checkbox.disabled = true;
-  } else {
-    checkbox.disabled = false;
-  }
+  // if (select_.value === "Administrador de Sistema") {
+  //   checkbox.checked = false;
+  //   checkbox.disabled = true;
+  // } else {
+  //   checkbox.disabled = false;
+  // }
   select_.selectedIndex = indx;
   salir_select(selc);
 }
+
+// Dropdown multiple
+document.addEventListener("DOMContentLoaded", function () {
+  const dropdownBtn = document.querySelector(".dropdown-btn");
+  const dropdown = document.querySelector(".dropdown");
+
+  if (dropdownBtn) {
+    dropdownBtn.addEventListener("click", function () {
+      // Toggle the visibility of the dropdown content
+      dropdown.classList.toggle("show");
+    });
+  
+    // Close the dropdown if clicked outside
+    window.addEventListener("click", function (e) {
+      if (!dropdown.contains(e.target) && !dropdownBtn.contains(e.target)) {
+        dropdown.classList.remove("show");
+      }
+    });
+  }
+});

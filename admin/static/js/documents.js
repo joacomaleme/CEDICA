@@ -3,12 +3,14 @@ const subtitleGeneral = document.querySelector("#subtitle-general");
 const subtitleDocuments = document.querySelector("#subtitle-documents");
 
 const formGeneral = document.querySelector("#form-general");
-const formDocuments = document.querySelector("#form-documents");
+const formDocuments = document.querySelector("#search-options");
 
 const documentTable = document.querySelector("#document-table");
-const filesInput = document.querySelector("#files-input");
+const filesContainer = document.querySelector("#files-container");
 const files = document.querySelector("#files");
 const uploadForm = document.querySelector("#upload-form");
+
+const pageSection = document.querySelector("#page-section");
 
 // Si la tabla no tiene display none, entonces le agrego los event listeners
 if (!documentTable.classList.contains("display-none")) applyEventListeners();
@@ -22,7 +24,8 @@ subtitleGeneral.addEventListener("click", (e) => {
 
     formDocuments.classList.add("display-none");
     documentTable.classList.add("display-none");
-    filesInput.classList.add("display-none");
+    filesContainer.classList.add("display-none");
+    if (pageSection) pageSection.classList.add("display-none");
     formGeneral.classList.remove("display-none");
   }
 });
@@ -36,7 +39,8 @@ subtitleDocuments.addEventListener("click", (e) => {
 
     formDocuments.classList.remove("display-none");
     documentTable.classList.remove("display-none");
-    filesInput.classList.remove("display-none");
+    filesContainer.classList.remove("display-none");
+    if (pageSection) pageSection.classList.remove("display-none");
     formGeneral.classList.add("display-none");
     applyEventListeners();
   }
@@ -49,7 +53,6 @@ function applyEventListeners() {
   const documentModal = document.getElementById("document-modal");
   const documentCancelBtn = document.getElementById("document-cancel-btn");
 
-  // Attach event listeners to all delete buttons
   const deleteButtons = document.querySelectorAll(".delete-btn");
 
   deleteButtons.forEach((button) => {
@@ -66,10 +69,36 @@ function applyEventListeners() {
       // Show the modal
       documentModal.showModal();
     });
+
+    // Close modal on cancel
+    documentCancelBtn.addEventListener("click", function () {
+      documentModal.close();
+    });
   });
 
-  // Close modal on cancel
-  documentCancelBtn.addEventListener("click", function () {
-    documentModal.close();
-  });
+  const linkBtn = document.getElementById("link-btn");
+  const linkModal = document.getElementById("link-modal");
+  const linkCancelBtn = document.getElementById("link-cancel-btn");
+
+  if (linkBtn) {
+    linkBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      linkModal.showModal();
+    });
+  
+    linkCancelBtn.addEventListener("click", () => {
+      linkModal.close();
+    })
+  }
+
+  const ascending = document.getElementById("ascending");
+  const sortAttr = document.getElementById("sortAttr");
+
+  ascending.addEventListener('change', submitForm);
+  sortAttr.addEventListener('change', submitForm);
+
+  function submitForm(event) {
+    event.preventDefault();
+    formDocuments.submit();
+  }
 }

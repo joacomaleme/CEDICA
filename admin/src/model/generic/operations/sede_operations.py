@@ -13,6 +13,7 @@ def list_sedes():
     [db.session.expunge(sede) for sede in sedes]
     return sedes
 
+
 def get_sede(sede_id):
     sede = Sede.query.get(sede_id)
     db.session.expunge(sede)
