@@ -620,10 +620,84 @@ def check_rider_data(rider_data) -> Tuple[bool, str]:
         return (False, "El nombre debe ser menor a 100 caracteres.")
     if len(rider_data["surname"]) > 100:
         return (False, "El apellido debe ser menor a 100 caracteres.")
-    if len(rider_data["dni"]) > 120 or not is_valid_dni(rider_data["dni"]):
-        return (False, "Error en el dni ingresado.")
-    #Agregar los demas chequeos
-
+    if len(rider_data["dni"]) > 16 or not is_valid_dni(rider_data["dni"]):
+        return (False, "Error en el DNI ingresado.")
+    if len(rider_data["age"]) > 3 or not rider_data["age"].isdigit():
+        return (False, "La edad debe ser un número de hasta 3 dígitos.")
+    if not is_valid_date(rider_data["birth_date"]):
+        return (False, "Fecha de nacimiento no válida.")
+    if len(rider_data["street"]) > 255:
+        return (False, "La calle debe ser menor a 255 caracteres.")
+    if len(rider_data["number"]) > 10:
+        return (False, "El número debe ser menor a 10 caracteres.")
+    if rider_data["apartment"] and len(rider_data["apartment"]) > 10:
+        return (False, "El departamento debe ser menor a 10 caracteres.")
+    if len(rider_data["phone"]) > 20 or not is_valid_phone(rider_data["phone"]):
+        return (False, "Error en el teléfono ingresado.")
+    if len(rider_data["emergency-contact-name"]) > 100:
+        return (False, "El nombre del contacto de emergencia debe ser menor a 100 caracteres.")
+    if len(rider_data["emergency-phone"]) > 20 or not is_valid_phone(rider_data["emergency-phone"]):
+        return (False, "Error en el teléfono del contacto de emergencia.")
+    if rider_data["disability-diagnosis"] == "Otro" and len(rider_data["new-disability"]) > 255:
+        return (False, "La nueva discapacidad debe ser menor a 255 caracteres.")
+    if len(rider_data["health-insurance"]) > 100:
+        return (False, "La obra social debe ser menor a 100 caracteres.")
+    if len(rider_data["affiliate-number"]) > 50:
+        return (False, "El número de afiliado debe ser menor a 50 caracteres.")
+    if (rider_data["school-name"] == "Otro") and len(rider_data["school-name"]) > 255:
+        return (False, "El nombre de la escuela debe ser menor a 100 caracteres.")
+    if (rider_data["school-name"] == "Otro") and len(rider_data["school-address"]) > 255:
+        return (False, "La dirección de la escuela debe ser menor a 255 caracteres.")
+    if (rider_data["school-name"] == "Otro") and (len(rider_data["school-phone"]) > 20 or not is_valid_phone(rider_data["school-phone"])):
+        return (False, "Error en el teléfono de la escuela.")
+    if len(rider_data["current-grade"]) > 50:
+        return (False, "El grado actual debe ser menor a 50 caracteres.")
+    if len(rider_data["professionals"]) > 255:
+        return (False, "La lista de profesionales debe ser menor a 255 caracteres.")
+    if len(rider_data["guardian1-name"]) > 100:
+        return (False, "El nombre del primer tutor debe ser menor a 100 caracteres.")
+    if len(rider_data["guardian1-surname"]) > 100:
+        return (False, "El apellido del primer tutor debe ser menor a 100 caracteres.")
+    if len(rider_data["guardian1-dni"]) > 16 or not is_valid_dni(rider_data["guardian1-dni"]):
+        return (False, "Error en el DNI del primer tutor.")
+    if len(rider_data["guardian1-street"]) > 255:
+        return (False, "La calle del primer tutor debe ser menor a 255 caracteres.")
+    if len(rider_data["guardian1-number"]) > 10:
+        return (False, "El número de calle del primer tutor debe ser menor a 10 caracteres.")
+    if len(rider_data["guardian1-apartment"]) > 10:
+        return (False, "El departamento del primer tutor debe ser menor a 10 caracteres.")
+    if len(rider_data["guardian1-phone"]) > 20 or not is_valid_phone(rider_data["guardian1-phone"]):
+        return (False, "Error en el teléfono del primer tutor.")
+    if len(rider_data["guardian1-email"]) > 100 or not is_valid_email(rider_data["guardian1-email"]):
+        return (False, "Error en el correo electrónico del primer tutor.")
+    if len(rider_data["guardian1-educational-level"]) > 50:
+        return (False, "El nivel educativo del primer tutor debe ser menor a 50 caracteres.")
+    if len(rider_data["guardian1-occupation"]) > 100:
+        return (False, "La ocupación del primer tutor debe ser menor a 100 caracteres.")
+    if len(rider_data["guardian1-relationship"]) > 20:
+        return (False, "La relación con el primer tutor debe ser menor a 50 caracteres.")
+    if len(rider_data["guardian2-name"]) > 100:
+        return (False, "El nombre del primer tutor debe ser menor a 100 caracteres.")
+    if len(rider_data["guardian2-surname"]) > 100:
+        return (False, "El apellido del primer tutor debe ser menor a 100 caracteres.")
+    if len(rider_data["guardian2-dni"]) > 16 or not is_valid_dni(rider_data["guardian2-dni"]):
+        return (False, "Error en el DNI del primer tutor.")
+    if len(rider_data["guardian2-street"]) > 255:
+        return (False, "La calle del primer tutor debe ser menor a 255 caracteres.")
+    if len(rider_data["guardian2-number"]) > 10:
+        return (False, "El número de calle del primer tutor debe ser menor a 10 caracteres.")
+    if len(rider_data["guardian2-apartment"]) > 10:
+        return (False, "El departamento del primer tutor debe ser menor a 10 caracteres.")
+    if len(rider_data["guardian2-phone"]) > 20 or not is_valid_phone(rider_data["guardian2-phone"]):
+        return (False, "Error en el teléfono del primer tutor.")
+    if len(rider_data["guardian2-email"]) > 100 or not is_valid_email(rider_data["guardian2-email"]):
+        return (False, "Error en el correo electrónico del primer tutor.")
+    if len(rider_data["guardian2-educational-level"]) > 50:
+        return (False, "El nivel educativo del primer tutor debe ser menor a 50 caracteres.")
+    if len(rider_data["guardian2-occupation"]) > 100:
+        return (False, "La ocupación del primer tutor debe ser menor a 100 caracteres.")
+    if len(rider_data["guardian2-relationship"]) > 20:
+        return (False, "La relación con el primer tutor debe ser menor a 50 caracteres.")
     try:
         locality_ids = [locality.id for locality in locality_operations.list_localitys()]
         if not int(rider_data["birth-locality"]) in locality_ids:
@@ -650,7 +724,7 @@ def check_rider_data(rider_data) -> Tuple[bool, str]:
     except:
         return (False, "Error en alguna provincia ingresada.")
 
-    if (rider_data["disability-diagnosis"] != "Otro"):
+    if (rider_data["disable-certificate"] and rider_data["disability-diagnosis"] != "Otro"):
         try:
             disability_diagnosis_ids = [disability_diagnosis.id for disability_diagnosis in disability_diagnosis_operations.list_disability_diagnosis()]
             if not int(rider_data["disability-diagnosis"]) in disability_diagnosis_ids:
@@ -658,25 +732,69 @@ def check_rider_data(rider_data) -> Tuple[bool, str]:
         except:
             return (False, "Error en la discapacidad ingresada.")
 
-    try:
-        locality_ids = [locality.id for locality in locality_operations.list_localitys()]
-        if not int(rider_data["locality"]) in locality_ids:
-            return (False, "ID de localidad inexistente.")
-    except:
-        return (False, "Error en la localidad ingresada.")
+    if (rider_data["has-family-allowance"]):
+        try:
+            family_allowance_type_ids = [family_allowance_type.id for family_allowance_type in family_allowance_type_operations.list_family_allowance_types()]
+            if not int(rider_data["family-allowance-type"]) in family_allowance_type_ids:
+                return (False, "ID de tipo de asignación familiar inexistente.")
+        except:
+            return (False, "Error en el tipo de asignación familiar ingresado.")
+
+    if (rider_data["receives-pension"]):
+        try:
+            pension_type_ids = [pension_type.id for pension_type in pension_type_operations.list_pension_types()]
+            if not int(rider_data["pension-type"]) in pension_type_ids:
+                return (False, "ID de tipo de pensión inexistente.")
+        except:
+            return (False, "Error en el tipo de pensión ingresado.")
+
+    if (rider_data["school-name"] == "Otro"):
+        try:
+            school_ids = [school.id for school in school_operations.list_schools()]
+            if not int(rider_data["school-id"]) in school_ids:
+                return (False, "ID de escuela inexistente.")
+        except:
+            return (False, "Error en la escuela ingresada.")
 
     try:
-        profession_ids = [profession.id for profession in profession_operations.list_professions()]
-        if not int(rider_data["profession_id"]) in profession_ids:
-            return (False, "ID de profesión inexistente.")
+        educational_levels = ["Primario", "Secundario", "Terciario", "Universitario"]
+        if not int(rider_data["guardian1-educational-level"]) in educational_levels:
+            return (False, "ID de nivel educativo del primer tutor inexistente.")
+        if not int(rider_data["guardian2-educational-level"]) in educational_levels:
+            return (False, "ID de nivel educativo del segundo tutor inexistente.")
     except:
-        return (False, "Error en la profesión ingresada.")
-    
+        return (False, "Error en el nivel educativo del tutor ingresado.")
+
     try:
-        job_position_ids = [job_position.id for job_position in job_position_operations.list_job_positions()]
-        if not int(rider_data["job_position_id"]) in job_position_ids:
-            return (False, "ID del puesto laboral inexistente.")
+        work_proposal_ids = [work_proposal.id for work_proposal in work_proposal_operations.list_work_proposals()]
+        if not int(rider_data["work-proposal-id"]) in work_proposal_ids:
+            return (False, "ID de propuesta de trabajo inexistente.")
     except:
-        return (False, "Error en el puesto laboral ingresado.")
+        return (False, "Error en la propuesta de trabajo ingresada.")
+
+    try:
+        sede_ids = [sede.id for sede in sede_operations.list_sedes()]
+        if not int(rider_data["sede-id"]) in sede_ids:
+            return (False, "ID de sede inexistente.")
+    except:
+        return (False, "Error en la sede ingresada.")
+
+    try:
+        employee_ids = [employee.id for employee in employee_operations.list_teachers()]
+        if not int(rider_data["teacher-id"]) in employee_ids:
+            return (False, "ID de profesor inexistente.")
+        if not int(rider_data["horse-conductor-id"]) in employee_ids:
+            return (False, "ID de conductor del caballo inexistente.")
+        if not int(rider_data["track-assistant-id"]) in employee_ids:
+            return (False, "ID de auxiliar de pista inexistente.")
+    except:
+        return (False, "Error en alguno de los empleados ingresados.")
+
+    try:
+        horse_ids = [horse.id for horse in horse_operations.list_horses()]
+        if not int(rider_data["horse-id"]) in horse_ids:
+            return (False, "ID de caballo inexistente.")
+    except:
+        return (False, "Error en el caballo ingresado.")
 
     return (True, "")

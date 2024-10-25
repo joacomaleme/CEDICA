@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const birthdateField = document.getElementById("birthdate-field");
     const streetField = document.getElementById("street-field");
     const numberField = document.getElementById("number-field");
-    const apartmentField = document.getElementById("apartment-field");
     const phoneField = document.getElementById("phone-field");
     const emergencyContactField = document.getElementById("emergency-contact-name-field");
     const emergencyContactPhoneField = document.getElementById("emergency-contact-phone-field");
@@ -59,7 +58,6 @@ document.addEventListener("DOMContentLoaded", function () {
         "birthdate-field": [birthdateField, validateEmpty],
         "street-field": [streetField, validateEmpty],
         "number-field": [numberField, validateNumber],
-        "apartment-field": [apartmentField, validateEmpty],
         "phone-field": [phoneField, validatePhone],
         "emergency-contact-field": [emergencyContactField, validateEmpty],
         "emergency-contact-phone-field": [emergencyContactPhoneField, validatePhone],
@@ -92,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "guardian2-relationship-field": [guardian2RelationshipField, validateEmpty]
     };
     
-    const MAXVALIDOS = 38;
+    const MAXVALIDOS = 37;
     let validos = 0;
   
     Object.keys(inputs).forEach(e => {
