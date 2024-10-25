@@ -300,14 +300,14 @@
         </tbody>
     </table>
   </div>
-  <div class="page-section {% if mode=="general" %}display-none{% endif %}" id="page-section" style="margin-bottom:1.5rem;">
+  <div class="page-section">
     <nav class="theNav">
         <ul class="pagination">
             <li class="pagination-item">
                 <a id="prev" class="ext" href="#">Previo</a>
             </li>
             {% for i in range(pages) %}
-                {% if (i > startPage-6) and (i < startPage+4) or ((5 >= startPage) and (i < 10)) %}
+                {% if ((i > startPage-6) and (i < startPage+5)) or ((5 >= startPage) and (i < 10)) or (pages - startPage < 5 and i > pages - 11) %}
                     <li class="pagination-item {% if startPage == i+1 %}active{% endif %}">
                         <a class="pageNum">{{i+1}}</a>
                     </li> 

@@ -44,6 +44,10 @@
   cursor: pointer;
 }
 
+.submit:disabled {
+  cursor: not-allowed;
+}
+
 .submit:hover {
   background-color: #ffc97e;
 }

@@ -192,7 +192,7 @@
         {% if is_permitted(session, 'employee_update') %}
           <button type="submit"  id="button-submit" class="submit" disabled>Aplicar cambios</button>
         {% endif %}
-        {% if is_permitted(session, 'employee_destroy') %}
+        {% if is_permitted(session, 'employee_destroy') and can_delete %}
           <button type="button" id="button-delete" class="del">Eliminar empleado</button>
         {% endif %}
       </div>
@@ -302,14 +302,14 @@
             {% endfor %}
         </tbody>
     </table>
-    <div class="page-section {% if mode=="general" %}display-none{% endif %}" id="page-section" style="margin-bottom:1.5rem;">
+    <div class="page-section">
       <nav class="theNav">
           <ul class="pagination">
               <li class="pagination-item">
                   <a id="prev" class="ext" href="#">Previo</a>
               </li>
               {% for i in range(pages) %}
-                  {% if (i > startPage-6) and (i < startPage+4) or ((5 >= startPage) and (i < 10)) %}
+                  {% if ((i > startPage-6) and (i < startPage+5)) or ((5 >= startPage) and (i < 10)) or (pages - startPage < 5 and i > pages - 11) %}
                       <li class="pagination-item {% if startPage == i+1 %}active{% endif %}">
                           <a class="pageNum">{{i+1}}</a>
                       </li> 
@@ -376,9 +376,11 @@
     const cancelBtn = document.getElementById("cancel-btn");
     const modal = document.getElementById("modal");
 
-    deleteBtn.addEventListener("click", function () {
-      modal.showModal();
-    });
+    if (deleteBtn) {
+      deleteBtn.addEventListener("click", function () {
+        modal.showModal();
+      });
+    }
 
     cancelBtn.addEventListener("click", function () {
       modal.close();
