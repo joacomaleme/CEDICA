@@ -78,16 +78,6 @@ def new():
 def create():
     params = request.form
 
-    print("  ")
-    print("  ")
-    print("  ")
-    print("  ")
-    print(params.get("is-donated"))
-    print("  ")
-    print("  ")
-    print("  ")
-    print("  ")
-
     horse_data = {
         "name": params.get("name"),
         "birth": params.get("birth"),
@@ -172,7 +162,14 @@ def show(id):
 @bp.post("/<int:id>/update")
 @permission_required('horse_update')
 def update(id):
-    real_id = int(id)
+    try:
+        real_id = int(id)
+    except:
+        flash("Uso inválido de parametros, caballo no existente", "error")
+        return redirect(url_for("horse.index"))
+
+
+
     params = request.form   # Solicitud de los datos
 
     # guardado de empleados en variables y checkeo de su validez
@@ -236,7 +233,13 @@ def update(id):
 @permission_required('horse_destroy')
 def delete(id):
     try:
-        horse_operations.delete_horse(id)
+        real_id = int(id)
+    except:
+        flash("Uso inválido de parametros, caballo no existente", "error")
+        return redirect(url_for("horse.index"))
+
+    try:
+        horse_operations.delete_horse(real_id)
         return redirect(url_for("horse.index"))
     except ValueError:
         flash("Uso inválido de parametros, no se pudo Borrar el caballo", "error")

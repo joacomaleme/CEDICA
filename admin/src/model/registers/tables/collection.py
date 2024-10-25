@@ -17,7 +17,6 @@ class Collection(db.Model):
     paid_by_id = db.Column(db.BigInteger, db.ForeignKey('riders.id'))
     paid_by = db.relationship('Rider', foreign_keys=[paid_by_id])
 
-
     def __init__(self, amount: float, date: datetime, observations: str, medium_id: int, received_by_id: int, paid_by_id: int):
         self.amount = amount
         self.date = date

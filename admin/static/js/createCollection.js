@@ -39,6 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
     errorMessage.style.top = "80%";
     
     field.style.borderBottomColor = "red";
+    submitBtn.disabled = validos !== MAXVALIDOS
   }
 
   // Desactiva el error del input dado

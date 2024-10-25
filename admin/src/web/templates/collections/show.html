@@ -91,7 +91,7 @@
                 </div>
 
                 <div class='text input-set'>
-                    <textarea {% if not is_permitted(session, 'collection_update') %}disabled style="cursor: default;" {% endif %} maxlength="1024" placeholder="" id="obs-field" class="input-field desc" name="obs">{{ collection.observations }}</textarea>
+                    <textarea {% if not is_permitted(session, 'collection_update') %}disabled style="cursor: default;" {% endif %} maxlength="255" oninput="autoResize(this)" placeholder="" id="obs-field" class="input-field desc" name="obs">{{ collection.observations }}</textarea>
                     <label class='input-label ltxt' for="obs-field">OBSERVACIONES</label>
                     <span id="obs-error" class="input-error"></span>
                 </div>
@@ -132,6 +132,14 @@
     cancelBtn.addEventListener("click", function () {
       modal.close();
     });
+
+    const obsField = document.getElementById("obs-field");
+    autoResize(obsField);
+
+    function autoResize(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+    }
 </script>
 <script src="{{ url_for('static', filename='js/dropdownVanilla.js')}}"></script>
 <script src="{{ url_for('static', filename='js/updateCollection.js')}}"></script>

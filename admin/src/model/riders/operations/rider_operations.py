@@ -4,11 +4,6 @@ from sqlalchemy.orm  import Query
 from typing import Optional
 from datetime import date
 
-"""
-    Funcion que toma todos los parametros necesarios para crear un Rider, lo instancia y lo agrega a la base de datos.
-"""
-
-
 def create_rider(name: str, last_name: str, dni: str, age: int, birth_date: date,
                  birth_locality_id: int, birth_province_id: int, address_id: int,
                  current_locality_id: int, current_province_id: int, phone: str,
@@ -24,7 +19,9 @@ def create_rider(name: str, last_name: str, dni: str, age: int, birth_date: date
                  teacher_id: Optional[int] = None, horse_conductor_id: Optional[int] = None,
                  horse_id: Optional[int] = None, track_assistant_id: Optional[int] = None,
                  is_indebt: bool = False, debt: float = 0.0) -> Rider:
-    
+    """
+    Funcion que toma todos los parametros necesarios para crear un Rider, lo instancia y lo agrega a la base de datos.
+    """
     rider = Rider(
         name=name, last_name=last_name, dni=dni, age=age, birth_date=birth_date,
         birth_locality_id=birth_locality_id, birth_province_id=birth_province_id, address_id=address_id,
@@ -46,40 +43,45 @@ def create_rider(name: str, last_name: str, dni: str, age: int, birth_date: date
     db.session.expunge(rider)
     return rider
 
-
-"""
-    Lista a todos los jinetes, NO usar sin una necesidad clara.
-"""
 def list_riders():
+    """
+    Lista a todos los jinetes, NO usar sin una necesidad clara.
+    """
     riders = Rider.query.all()
     [db.session.expunge(rider) for rider in riders]
     return riders
 
-
-"""
-    Devuelve un jinete con un id especifico
-"""
 def get_rider(id: int) -> Optional[Rider]:
+    """
+    Devuelve un jinete con un id especifico
+    """
     rider = Rider.query.get(id)
     if rider:
         db.session.expunge(rider)
     return rider
 
-"""
-    Devuelve un jinete con un dni especifico
-"""
 def get_rider_by_dni(dni: str) -> Optional[Rider]:
+    """
+    Devuelve un jinete con un dni especifico
+    """
     rider = Rider.query.filter(Rider.dni == dni).first()
     if rider:
         db.session.expunge(rider)
     return rider
 
-
-"""
-    Actualiza un jinete dado otro objeto de tipo Rider
-"""
+def employee_exists(employee_id: int) -> bool:
+    """
+    Retorna True o False dependiendo si el empleado recibido está relacionado
+    o no con algún jinete
+    """
+    rider = Rider.query.filter(db.or_(Rider.teacher_id==employee_id, Rider.horse_conductor_id==employee_id, Rider.track_assistant_id==employee_id)).first()
+    return rider is not None
 
 def __update_rider__(to_update: Rider) -> Rider:
+
+    """
+    Actualiza un jinete dado otro objeto de tipo Rider
+    """
     rider = Rider.query.get(to_update.id)
     if rider is None:
         raise ValueError("No se encontró un jinete con ese ID")
@@ -125,22 +127,20 @@ def __update_rider__(to_update: Rider) -> Rider:
     db.session.expunge(rider)
     return rider
 
-
-"""
-    Elimina un jinete dado un id especifico
-"""
 def delete_rider(id: int):
+    """
+    Elimina un jinete dado un id especifico
+    """
     rider = Rider.query.get(id)
     if not rider:
         raise ValueError("No se encontró un jinete con ese ID")
     db.session.delete(rider)
     db.session.commit()
 
-
-"""
-    Cambia el estado de la flag "active" para un jinete especifico
-"""
 def toggle_active(id: int) -> Rider:
+    """
+    Cambia el estado de la flag "active" para un jinete especifico
+    """
     rider = Rider.query.get(id)
     if not rider:
         raise ValueError("No se encontró un jinete con ese ID")
@@ -149,12 +149,7 @@ def toggle_active(id: int) -> Rider:
     db.session.expunge(rider)
     return rider
 
-
-
-"""
-    Operaciones de busqueda especificas
-"""
-
+ # Operaciones de busqueda especificas #
 
 # Ordena por un atributo específico (nombre por defecto)
 def sorted_by_attribute(riders: Query, attribute: str = "name", ascending: bool = True) -> Query:

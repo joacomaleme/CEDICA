@@ -1,3 +1,4 @@
+from typing import Tuple
 from flask import Blueprint, render_template, request, abort, redirect, url_for, flash
 from src.model.registers.operations import collection_operations, collection_medium_operations
 from src.model.registers.tables.collection import Collection
@@ -17,6 +18,10 @@ def index():
     until = request.args.get('until')
     search_attr = request.args.get('search_attr') or "name"
     search_value = request.args.get('search_value') or ""
+
+    if search_attr and search_attr not in ["name", "surname"]:
+        flash("Atributo de busqueda inválido", "error")
+        return redirect(request.referrer)
 
     start_search_attr = search_attr if search_attr else ""
     start_search_val = search_value if search_value else ""
@@ -42,13 +47,21 @@ def index():
     medium_name = request.args.get('medium')
     medium = []
     if medium_name:
-        medium_name = str(medium_name)
+        mediums = [medium.name for medium in collection_medium_operations.list_collection_mediums()]
+        if medium_name not in mediums:
+            flash("Medio de pago inválido", "error")
+            return redirect(request.referrer)
+
         medium = [collection_medium_operations.get_collection_medium_by_name(medium_name)]
 
     page = request.args.get('page')
 
     if page:
-        page = int(page)
+        try:
+            page = int(page)
+        except:
+            flash("Tipo de página inválido", "error")
+            return redirect(request.referrer)
     else:
         page = 1
 
@@ -78,7 +91,13 @@ def index():
 @bp.get("/<id>")
 @permission_required('collection_show')
 def show(id):
-    collection = collection_operations.get_collection(int(id))
+    try:
+        id = int(id)
+    except:
+        flash("Tipo de ID inválido", "error")
+        return abort(404)
+
+    collection = collection_operations.get_collection(id)
     mediums = collection_medium_operations.list_collection_mediums()
     employees = employee_operations.list_employees()
     riders = rider_operations.list_riders()
@@ -100,57 +119,20 @@ def register():
 @permission_required('collection_create')
 def upload():
     params = request.form
-    monto = params.get('amount')
+    amount = params.get('amount')
     date = params.get('date')
-    medium = params.get('medium')
-    received_by = params.get('emp')
-    paid_by = params.get('rider')
-    obs = params.get('obs')
+    medium_id = params.get('medium')
+    received_by_id = params.get('emp')
+    paid_by_id = params.get('rider')
+    obs = params.get('obs') or ""
 
-    try:
-        monto = float(monto)
-    except:
-        flash("Monto invalido", "error")
-        return redirect(url_for("collection.register"))
+    res = check_collection_data(amount, date, medium_id, received_by_id, paid_by_id, obs)
+    if res[0] is False:
+        flash(res[1], "error")
+        return redirect(request.referrer)
     
-    try:
-        date = datetime.strptime(date, '%Y-%m-%d')
-    except:
-        flash("Fecha invalida", "error")
-        return redirect(url_for("collection.register"))
-
-    medium = collection_medium_operations.get_collection_medium(int(medium))
-    if not medium:
-        flash("Tipo de pago invalido", "error")
-        return redirect(url_for("collection.register"))
-
-    try:
-        received_by = employee_operations.get_employee(int(received_by))
-        if not received_by:
-            raise ValueError
-        else:
-            received_by = received_by.id
-    except:
-        flash('Pagos de honorarios requieren un empleado', "error")
-        return redirect(url_for("collection.register"))
-
-    try:
-        paid_by = rider_operations.get_rider(int(paid_by))
-        if not paid_by:
-            raise ValueError
-        else:
-            paid_by = paid_by.id
-    except:
-        flash('Pagos de honorarios requieren un empleado', "error")
-        return redirect(url_for("collection.register"))
-
-
-    if len(str(obs)) > 1024:
-        flash('Descripción demasiado larga', "error")
-        return redirect(url_for("collection.register"))
-
-    collection_operations.create_collection(amount=monto, date=date, observations=str(obs), medium_id=medium.id,
-                                            received_by_id=received_by, paid_by_id=paid_by)
+    collection_operations.create_collection(amount=amount, date=date, observations=str(obs), medium_id=medium_id,
+                                            received_by_id=received_by_id, paid_by_id=paid_by_id)
     return redirect(url_for("collection.register"))
 
 @bp.post("/<int:id>/update")
@@ -158,15 +140,19 @@ def upload():
 def update(id):
     real_id = int(id)
     params = request.form
-    employees = employee_operations.list_employees()
 
     amount = params.get("amount")
     date = params.get("date")
-    obs = params.get("obs")
     medium_id = params.get("medium")
     received_by_id = params.get("emp")
     paid_by_id = params.get("rider")
-        
+    obs = params.get("obs") or ""
+    
+    res = check_collection_data(amount, date, medium_id, received_by_id, paid_by_id, obs)
+    if res[0] is False:
+        flash(res[1], "error")
+        return redirect(request.referrer)
+    
     try:
         collection = collection_operations.get_collection(real_id)
 
@@ -186,7 +172,23 @@ def update(id):
 @bp.get("/<int:id>/delete")
 @permission_required('collection_destroy')
 def delete(id):
-    collection_operations.delete_collection(id)
+    try:
+        id = int(id)
+    except:
+        flash("Tipo de ID inválido", "error")
+        return redirect(request.referrer)
+    
+    collection = collection_operations.get_collection(id)
+    if not collection:
+        flash("ID de cobro inexistente", "error")
+        return redirect(request.referrer)
+
+    try:
+        collection_operations.delete_collection(id)
+    except:
+        flash("Error al eliminar cobro", "error")
+        return redirect(request.referrer)
+    
     return redirect(url_for("collection.index"))
 
 def to_spanish(attr: str) -> str:
@@ -197,3 +199,42 @@ def to_spanish(attr: str) -> str:
             return "apellido"
         case _:
             return attr
+
+def check_collection_data(amount: str, date: str, medium_id: str, received_by_id: str, paid_by_id: str, obs: str) -> Tuple[bool, str]:
+    try:
+        amount = float(amount)
+    except:
+        return (False, "Monto invalido")
+    
+    try:
+        date = datetime.strptime(date, '%Y-%m-%d')
+    except:
+        return (False, "Fecha invalida")
+
+    try:
+        medium_id = int(medium_id)
+    except:
+        return (False, "El medio de pago es obligatorio")
+
+    medium = collection_medium_operations.get_collection_medium(medium_id)
+    if not medium:
+        return (False, "Medio de pago invalido")
+
+    try:
+        received_by_id = employee_operations.get_employee(int(received_by_id))
+        if not received_by_id:
+            return (False, "Quien recibe el dinero requiere un empleado")
+    except:
+        return (False, "Quien recibe el dinero requiere un empleado")
+
+    try:
+        paid_by_id = rider_operations.get_rider(int(paid_by_id))
+        if not paid_by_id:
+            return (False, "Quien realiza el pago es obligatorio")
+    except:
+        return (False, "Quien realiza el pago es obligatorio")
+
+    if len(obs) > 255:
+        return (False, "Descripción demasiado larga")
+
+    return (True, "")

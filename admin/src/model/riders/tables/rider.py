@@ -63,7 +63,6 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
     pension_type_id = db.Column(db.BigInteger, db.ForeignKey('pension_types.id'))
     pension_type = db.relationship('PensionType', back_populates='riders', foreign_keys=[pension_type_id])
 
-
     # Información sobre la obra social y salud
     health_insurance = db.Column(db.String(100))  # Obra social del alumno
     affiliate_number = db.Column(db.String(50))  # Número de afiliado
@@ -74,11 +73,9 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
     school = db.relationship('School', backref='riders', foreign_keys=[school_id])
     current_grade = db.Column(db.String(50))  # Grado o año escolar actual
 
-
     attending_professionals = db.Column(db.Text)  # Profesionales que lo atienden (campo libre)
 
     # Padre/Madre/Tutor, relacion N a N.
-
     guardians = db.relationship('Guardian', secondary='rider_guardians', back_populates='riders')
 
     # Información sobre el trabajo en la la institución
@@ -101,7 +98,6 @@ class Rider(db.Model):  # Representa Jinetes y Amazonas (J&A)
     # Relacion con sus Documentos
     rider_documents = db.relationship("RiderDocument", back_populates="rider")
     documents = db.relationship("Document", secondary="rider_documents", viewonly=True)
-
 
     # Informacion sobre su deuda
     is_indebt = db.Column(db.Boolean, nullable = False, default=False)
