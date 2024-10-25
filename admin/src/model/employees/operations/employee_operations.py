@@ -71,13 +71,15 @@ def update_employee(to_update: Employee) -> Employee:
     employee.emergency_contact_phone = to_update.emergency_contact_phone or employee.emergency_contact_phone
     employee.obra_social = to_update.obra_social or employee.obra_social
     employee.affiliate_number = to_update.affiliate_number or employee.affiliate_number
+    employee.start_date = to_update.start_date or employee.start_date
+    employee.end_date = to_update.end_date or employee.end_date
     employee.is_volunteer = to_update.is_volunteer if to_update.is_volunteer is not None else employee.is_volunteer
     employee.enabled = to_update.enabled if to_update.enabled is not None else employee.enabled
     db.session.commit()
     db.session.expunge(employee)
     return employee
 
-def delete_employee(id: int):   # creo que no hace falta excepcion aca
+def delete_employee(id: int):
     employee = Employee.query.get(id)
     if employee is None:
         raise ValueError("No se encontro un emplead con ese ID")

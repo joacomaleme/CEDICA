@@ -22,7 +22,9 @@ def delete(id):
     '''
     try:
         real_id = int(id)
-        user_operations.delete_user(real_id)
+        user = user_operations.get_user(real_id)
+        if user.role.name != 'Administrador de Sistema':
+            user_operations.delete_user(real_id)
     except:
         flash("Uso inválido de parametros, no se pudo eliminar al usuario", "error")
     return redirect(url_for("user.index"))
@@ -105,12 +107,20 @@ def update(id):
         role_id = None
         if role:
             role_id = role.id
+
         if mail == "None" or mail == "":
             mail = user.email
+
         if password == "None" or password == "":
             password = None
+
         if alias == "None" or alias == "":
             alias = user.alias
+
+        if user.role and user.role.name == 'Administrador de Sistema':
+            role_id = user.role_id
+            enabled = True
+
         user = User(mail, alias, password, enabled=enabled, role_id=role_id)
         user.id = real_id
         user_operations.update_user(user)

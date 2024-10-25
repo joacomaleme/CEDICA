@@ -25,7 +25,6 @@ class Collection(db.Model):
                                back_populates='received_collections',
                                passive_deletes=True)
 
-
     def __init__(self, amount: float, date: datetime, observations: str, medium_id: int, received_by_id: int, paid_by_id: int):
         self.amount = amount
         self.date = date

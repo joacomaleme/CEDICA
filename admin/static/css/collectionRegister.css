@@ -44,6 +44,10 @@
   cursor: pointer;
 }
 
+.submit:disabled {
+  cursor: not-allowed;
+}
+
 .submit:hover {
   background-color: #ffc97e;
 }
@@ -141,7 +145,7 @@ h1 {
   border: 1px solid darkgray;
   border-radius: 8px;
   font-size: 0.9rem;
-  line-height: 0.6rem;
+  line-height: 1rem;
 
   width: 100%;
   height: auto;

@@ -3,6 +3,7 @@ from typing import List, Optional, Tuple
 from flask import abort, redirect, render_template, request, url_for
 from flask import Blueprint, flash
 from model.generic.operations import document_types_operations
+from src.model.riders.operations import rider_operations
 from src.web.handlers.check_permission import permission_required
 from src.model.employees.operations import employee_operations
 from src.model.employees.operations import job_position_operations
@@ -12,6 +13,7 @@ from src.model.generic.operations import locality_operations
 from src.model.generic.operations import address_operations
 from src.model.generic.tables.address import Address
 from src.model.employees.tables.employee import Employee
+import dns.resolver
 import re
 
 bp = Blueprint("employee", __name__, url_prefix="/empleados")
@@ -209,9 +211,12 @@ def show(id):
         documents = data[0]
         pages = data[1]
 
+        # Checkeo si el empleado está relacionado con jinetes
+        can_delete = not rider_operations.employee_exists(id)
+
         return render_template("employees/show.html", employee=employee, localitys=localitys, professions=professions, job_positions=job_positions,
                                 documents=documents, mails=mails, dnis=dnis, affiliate_numbers=affiliate_numbers, mode=mode, pages=pages, startPage=page,
-                                start_ascending=(not start_ascending), sort_attr=sort_attr, search_title=search_title, start_type=start_type, types=types)
+                                start_ascending=(not start_ascending), sort_attr=sort_attr, search_title=search_title, start_type=start_type, types=types, can_delete=can_delete)
     else:
         return abort(404)
 
@@ -303,11 +308,26 @@ def update(id):
 @permission_required('employee_destroy')
 @permission_required('employee_destroy')
 def delete(id):
-    employee_operations.delete_employee(id)
+    employee = employee_operations.get_employee(id)
+
+    if not employee:
+        flash("ID de empleado ingresado inexistente", "error")
+        return redirect(request.referrer)
+    
+    if rider_operations.employee_exists(id):
+        flash("No es posible eliminar este empleado", "error")
+        return redirect(request.referrer)
+    
+    try:
+        employee_operations.delete_employee(id)
+    except:
+        flash("Error al eliminar el usuario", "error")
+        return redirect(request.referrer)
+
     return redirect(url_for("employee.index"))
 
 # Utils functions
-def is_valid_email(email :str) -> bool:
+def is_valid_email(email: str) -> bool:
     pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     return re.match(pattern, email) is not None
 
@@ -326,6 +346,14 @@ def is_valid_date(date_str: str) -> bool:
         return True
     except ValueError:
         # Si ocurre un error de conversión, la fecha no es válida
+        return False
+    
+def domain_exists(email: str) -> bool:
+    domain = email.split('@')[1]
+    try:
+        dns.resolver.resolve(domain, 'MX')
+        return True
+    except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN):
         return False
 
 def to_spanish(attr: str) -> str:
@@ -357,7 +385,7 @@ def check_index_data(
         try:
             int(page)
         except:
-            return (False, "Tipo de pagina inválido.")
+            return (False, "Tipo de página inválido.")
     
     return (True, "")
 
@@ -377,7 +405,7 @@ def check_show_data(
         try:
             int(page)
         except:
-            return (False, "Tipo de pagina inválido.")
+            return (False, "Tipo de página inválido.")
 
     return (True, "")
 
@@ -397,7 +425,7 @@ def check_employee_data(employee_data) -> Tuple[bool, str]:
         return (False, "El número debe ser menor a 10 caracteres.")
     if employee_data["apartment"] and len(employee_data["apartment"]) > 10:
         return (False, "El departamento debe ser menor a 10 caracteres.")
-    if len(employee_data["email"]) > 120 or not is_valid_email(employee_data["email"]):
+    if len(employee_data["email"]) > 120 or not is_valid_email(employee_data["email"]) or not domain_exists(employee_data["email"]):
         return (False, "Error en el email ingresado.")
     if len(employee_data["phone"]) > 20 or not is_valid_phone(employee_data["phone"]):
         return (False, "Error en el telefono ingresado.")

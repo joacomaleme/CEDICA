@@ -8,7 +8,7 @@
 {% block content %}
     <section class="registerbox">
         <div class="formRegister">
-            <h1>Registar Pago</h1>
+            <h1>Registar Cobro</h1>
             <form class='form' action="{{ url_for('collection.upload')}}" method="POST">
                 <div class="input-set" style="width:fit-content;">
                     <input step="0.01" placeholder="" id="amount-field" class="input-field" name="amount" type="number" required><br>
@@ -91,7 +91,7 @@
                 </div>
 
                 <div class='text input-set'>
-                    <textarea maxlength="1024" oninput="autoResize(this)" placeholder="" id="obs-field" class="input-field desc" name="obs"></textarea>
+                    <textarea maxlength="255" oninput="autoResize(this)" placeholder="" id="obs-field" class="input-field desc" name="obs"></textarea>
                     <label class='input-label ltxt' for="obs-field">OBSERVACIONES</label>
                     <span id="obs-error" class="input-error"></span>
                 </div>

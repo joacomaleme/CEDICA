@@ -23,7 +23,7 @@
         <h1>Pago {{payment.id}}</h1>
         <div class='form'>
             <div class="input-set">
-                <input id="amount-field" value="{{payment.amount}}" {% if not is_permitted(session, 'payment_update') %} disabled {% endif %} placeholder="" id="amount-field" class="input-field" name="amount" type="number" required><br>
+                <input step="0.01" id="amount-field" value="{{payment.amount}}" {% if not is_permitted(session, 'payment_update') %} disabled {% endif %} placeholder="" id="amount-field" class="input-field" name="amount" type="number" required><br>
                 <label for="amount-field" class="input-label">MONTO</label>
                 <span id="amount-error" class="input-error"></span>
             </div>
@@ -100,6 +100,9 @@
 <script src="{{ url_for('static', filename='js/dropdownReadOnly.js')}}"/></script>
 
 <script>
+    const descField = document.getElementById("desc-field");
+    autoResize(descField);
+    
     function autoResize(textarea) {
       textarea.style.height = 'auto';
       textarea.style.height = textarea.scrollHeight + 'px';
@@ -113,8 +116,6 @@
       }
     }
 </script>
-
-
 <script>
     var is_permitted =  {{is_permitted(session, 'payment_update')|tojson}};
 
@@ -141,12 +142,8 @@
         cartel.style.opacity = 0;
         overlay.style.opacity= 0;
         setTimeout(function(){cartel.style.display = 'none'; overlay.style.display="none";}, 500);
-
-    
     });
 </script>
-
-
 <script>
     var st_am = {{payment.amount|tojson}};
     var st_ty = {{type.name|tojson}};
@@ -216,8 +213,7 @@
         }
     };
 
-    function validateDate(){
-
+    function validateDate() {
         var objDate = new Date(date.value + "T00:00:00Z");
         var minDate = new Date("1/1/1950");
         if(date.value === st_da){

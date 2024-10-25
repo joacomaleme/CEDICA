@@ -22,8 +22,11 @@
 }
 
 .dropselect {
-  grid-area: filtro;
   width: 80%;
+}
+
+.filtro {
+  grid-area: filtro;
 }
 
 .orden {
@@ -215,24 +218,42 @@
   transform: rotateY(20deg);
 }
 
-@media only screen and (max-width: 650px) {
+@media only screen and (max-width: 1025px) {
   .search-options {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-rows: 0.5fr 1fr 1fr 1fr;
     margin-right: 5%;
     margin-left: 5%;
     width: 90%;
     margin-bottom: 1.5rem;
     margin-top: 1rem;
-    grid-template-areas: "orden" "fechas" "dropselect";
+    grid-template-areas: 
+      "orden" 
+      "fechas"
+      "busquedas"
+      "filtro";
   }
-  .search-options > * {
-    margin-bottom: 1rem;
+
+  .filtro {
+    justify-self: center;
+    min-width: 15rem;
   }
+  
+  .orden {
+    justify-content: center;
+  }
+  
+  .fechas {
+    justify-self: center;
+  }
+  
+  .busquedas {
+    justify-self: center;
+  }
+
   .dropselect {
-    width: 60%;
+    width: 100%;
     margin-left: 0%;
-    grid-area: dropselect;
   }
 }
