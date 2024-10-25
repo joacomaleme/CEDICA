@@ -18,6 +18,12 @@ def get_disability_diagnosis(disability_diagnosis_id):
     db.session.expunge(disability_diagnosis)
     return disability_diagnosis
 
+def get_disability_diagnosis_by_diagnosis(disability_diagnosis_name: str):
+    disability_diagnosis = DisabilityDiagnosis.query.filter(DisabilityDiagnosis.diagnosis == disability_diagnosis_name).first()
+    if disability_diagnosis:
+        db.session.expunge(disability_diagnosis)
+    return disability_diagnosis
+
 def delete_disability_diagnosis(disability_diagnosis_id):
     disability_diagnosis = DisabilityDiagnosis.query.get(disability_diagnosis_id)
     if disability_diagnosis is None:
