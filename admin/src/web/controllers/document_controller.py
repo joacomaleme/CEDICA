@@ -136,7 +136,7 @@ def destroy(document_id: int):
     if not document:
         return abort(404, description="Documento no encontrado.")
 
-    if relation != "employee" or relation != "horse" or relation != "rider":
+    if relation != "employee" and relation != "horse" and relation != "rider":
         return abort(404, description="Parámetro inválido.")
 
     try:
