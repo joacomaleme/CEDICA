@@ -1,3 +1,4 @@
+import tempfile
 from typing import Optional, Tuple
 from uuid import uuid4
 from flask import redirect, request, send_file, abort, flash, Blueprint, current_app
@@ -102,23 +103,29 @@ def download(document_id: int):
     if not document:
         return abort(404)
 
-    # Si is_external=False entonces está en minio
     if not document.is_external:
         try:
             bucket_name = "grupo03"
             object_name = document.file_address
 
-            # Descargo el archivo de minio
+            # Descargo el archivo de MinIO
             try:
                 minio_client = current_app.storage.client
                 response = minio_client.get_object(bucket_name, object_name)
-            except:
-                flash("El servidor esta teniendo problemas para realizar esta accion en este momento, intente mas tarde.", "error")
+                data = response.read()
+                
+                # Guardar el archivo temporalmente
+                with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+                    temp_file.write(data)
+                    temp_file_path = temp_file.name
+
+            except Exception as e:
+                flash("El servidor está teniendo problemas para realizar esta acción en este momento, intente más tarde.", "error")
                 return redirect(request.referrer)
 
-            # Retorno el archivo como descarga
+            # Retornar el archivo temporal como descarga
             return send_file(
-                response,
+                temp_file_path,
                 download_name=document.file_address,
                 as_attachment=True
             )
