@@ -20,7 +20,6 @@ bp = Blueprint("employee", __name__, url_prefix="/empleados")
 
 @bp.route("/")
 @permission_required('employee_index')
-@permission_required('employee_index')
 def index():
     """
     Muestra una lista paginada de los empleados. Además permite aplicar filtros el resultado.
@@ -60,8 +59,7 @@ def index():
 
         employees = data[0]
         pages = data[1]
-    except Exception as e:
-        print(e)
+    except:
         flash("Uso inválido de parametros, no se pudo aplicar el filtro", "error")
         page = 0
 
@@ -88,7 +86,6 @@ def new():
                            mails=mails, dnis=dnis, affiliate_numbers=affiliate_numbers)
 
 @bp.post("/create")
-@permission_required('employee_create')
 @permission_required('employee_create')
 def create():
     """
@@ -134,7 +131,6 @@ def create():
         address = address_operations.create_address(employee_data["street"], employee_data["number"], employee_data["apartment"])
 
         employee_operations.create_employee(
-        employee_operations.create_employee(
             name = employee_data["name"],
             surname = employee_data["surname"],
             dni = employee_data["dni"],
@@ -152,7 +148,6 @@ def create():
             start_date = employee_data["start_date"],
             end_date = employee_data["end_date"],
         )
-        )
     except:
         flash("Uso inválido de parametros, no se pudo actualizar al usuario", "error")
         return redirect(url_for("home"))
@@ -160,7 +155,6 @@ def create():
     return redirect(url_for("employee.index"))
 
 @bp.get("/<int:id>")
-@permission_required('employee_show')
 @permission_required('employee_show')
 def show(id):
     employee = employee_operations.get_employee(id)
@@ -221,7 +215,6 @@ def show(id):
         return abort(404)
 
 @bp.post("/<int:id>/update")
-@permission_required('employee_update')
 @permission_required('employee_update')
 def update(id):
     real_id = int(id)
@@ -305,7 +298,6 @@ def update(id):
         return redirect(url_for("home"))
 
 @bp.get("/<int:id>/delete")
-@permission_required('employee_destroy')
 @permission_required('employee_destroy')
 def delete(id):
     employee = employee_operations.get_employee(id)

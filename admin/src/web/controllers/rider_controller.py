@@ -40,9 +40,17 @@ def index():
 
     page = request.args.get('page')
     start_ascending = request.args.get('ascending') is None
-    sort_attr = request.args.get('sort_attr') or "inserted_at"
+    sort_attr = request.args.get('sort_attr') or "name"
     search_attr = request.args.get('search_attr') or "name"
     search_value = request.args.get('search_value') or ""
+
+    if sort_attr not in ["name", "last_name"]:
+        flash("Uso inválido de parametros, no se pudo aplicar el filtro", "error")
+        sort_attr = "name"
+
+    if search_attr not in ["name", "dni", "last_name", "professionals"]:
+        flash("Uso inválido de parametros, no se pudo aplicar el filtro", "error")
+        search_attr = "name"
 
     start_sort_attr = sort_attr if sort_attr else ""
     start_search_attr = search_attr if search_attr else ""
@@ -56,16 +64,15 @@ def index():
             page = 1
         else:
             page = int(page)
-
-        data = rider_operations.get_riders_filtered_list(page=page, sort_attr=sort_attr, ascending=start_ascending, search_attr=search_attr,
-                                                                search_value=search_value)
-
-        riders = data[0]
-        pages = data[1]
-    except Exception as e:
-        print(e)
+    except:
         flash("Uso inválido de parametros, no se pudo aplicar el filtro", "error")
         page = 0
+    
+    data = rider_operations.get_riders_filtered_list(page=page, sort_attr=sort_attr, ascending=start_ascending, search_attr=search_attr,
+                                                            search_value=search_value)
+
+    riders = data[0]
+    pages = data[1]
 
     return render_template("riders/index.html", pages=pages, riders=riders, localities=localities, provinces=provinces, start_sort_attr=start_sort_attr,
                             start_search_attr=start_search_attr, search_attr_esp=search_attr_esp, start_search_val=start_search_val,
@@ -561,8 +568,6 @@ def is_valid_date(date_str: str) -> bool:
     except ValueError:
         # Si ocurre un error de conversión, la fecha no es válida
         return False
-    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    return re.match(pattern, email) is not None
 
 def to_spanish(attr: str) -> str:
     match attr:
@@ -584,8 +589,6 @@ def check_index_data(
         return (False, "Atributo de ordenamiento incorrecto.")
     if not search_attr in ["dni", "name", "last_name", "professionals"]:
         return (False, "Atributo de busqueda incorrecto.")
-    if start_profession and not start_profession in professions:
-        return (False, "Profesión de busqueda incorrecta.")
 
     if page:
         try:

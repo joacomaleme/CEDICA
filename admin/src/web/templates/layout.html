@@ -25,7 +25,9 @@
         </button>
         <ul class="nav-links">
             <li><a href="{{ url_for('home') }}">Inicio</a></li>
-            <li><a href="/JyA">J&#38;A</a></li>
+            {% if is_permitted(session, 'rider_index') %}
+                <li><a href="{{ url_for('rider.index')  }}">J&#38;A</a></li>
+            {% endif %}
             {% if is_permitted(session, 'horse_index') %}
                 <li><a href="{{ url_for('horse.index')  }}">Ecuestre</a></li>
             {% endif %}
