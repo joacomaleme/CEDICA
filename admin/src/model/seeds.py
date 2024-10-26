@@ -211,16 +211,24 @@ def run():
     # Crear localities
     localities = [
         "La Plata", "San Carlos", "Villa Adelina", "Boulogne", "Martínez", "Beccar",
-        "Quilmes", "Avellaneda", "Lanús", "Banfield", "Lomas de Zamora", "Adrogué"
+        "Quilmes", "Avellaneda", "Lanús", "Banfield", "Lomas de Zamora", "Adrogué",
+        "Berazategui", "San Fernando", "Tigre", "Vicente López", "Pilar", "Morón", 
+        "Hurlingham", "San Isidro", "Escobar", "José C. Paz", "Malvinas Argentinas",
+        "San Miguel", "Merlo", "Moreno", "Tres de Febrero", "Ituzaingó", "Ezeiza",
+        "Esteban Echeverría", "Florencio Varela", "Almirante Brown", "La Matanza",
+        "Tandil", "Olavarría", "Bahía Blanca", "Mar del Plata", "Necochea"
     ]
     for loc in localities:
         locality.create_locality(loc)
 
-    # Crear provinces
+    # Provincias de Argentina
     provinces = [
         "Buenos Aires", "Córdoba", "Mendoza", "Santa Fe", "Tucumán",
-        "Entre Ríos", "Salta", "Chaco", "Misiones", "San Juan"
-    ]
+        "Entre Ríos", "Salta", "Chaco", "Misiones", "San Juan",
+        "San Luis", "Jujuy", "Corrientes", "Río Negro", "Neuquén", 
+        "Formosa", "La Pampa", "Chubut", "Santa Cruz", "La Rioja",
+        "Catamarca", "Santiago del Estero", "Tierra del Fuego"
+    ]    
     for prov in provinces:
         province.create_province(prov)
 
@@ -230,29 +238,34 @@ def run():
 
     # Creado de profesiones
     professions_list = [
-        "Médico/a", "Docente", "Psicólogo/a", "Otro", "Fisioterapeuta",
-        "Terapeuta Ocupacional", "Trabajador/a Social", "Enfermero/a", "Nutricionista"
-    ]
+        "Psicólogo/a", "Psicomotricista", "Médico/a", "Kinesiólogo/a", "Terapista Ocupacional",
+        "Psicopedagogo/a", "Docente", "Profesor", "Fonoaudiólogo/a", "Veterinario/a", "Otro",
+        "Fisioterapeuta", "Trabajador/a Social", "Enfermero/a", "Nutricionista",
+        "Asistente Social", "Acompañante Terapéutico", "Musicoterapeuta", "Psiquiatra",
+        "Neurólogo/a", "Cardiólogo/a"
+    ]    
     for prof in professions_list:
         professions.create_profession(prof)
 
     # Creado de posiciones
     job_positions_list = [
-        "Terapeuta", "Domador", "Profesor de Equitación", "Otro",
-        "Coordinador de Programas", "Asistente Administrativo", "Cuidador de Caballos",
-        "Voluntario", "Recepcionista", "Mantenimiento"
-    ]
+        "Administrativo/a", "Terapeuta", "Conductor", "Auxiliar de pista", "Herrero",
+        "Veterinario", "Entrenador de Caballos", "Domador", "Profesor de Equitación", 
+        "Docente de Capacitación", "Auxiliar de mantenimiento", "Otro", "Coordinador de Programas",
+        "Asistente Administrativo", "Cuidador de Caballos", "Voluntario", "Recepcionista",
+        "Mantenimiento", "Psicólogo/a Institucional", "Técnico en Equipos", "Encargado de Seguridad"
+    ]    
     for job in job_positions_list:
         job_positions.create_job_position(job)
 
     # Creado de empleados
     employees = [
         {
-            "name": "Juan",
-            "surname": "Pérez",
-            "dni": "12345678",
+            "name": "Juans",
+            "surname": "Pérezs",
+            "dni": "123456001",
             "address_id": 1,
-            "email": "juan.perez@example.com",
+            "email": "juans.perez@example.com",
             "locality_id": 1,
             "phone": "555-0123",
             "profession_id": 1,
@@ -447,6 +460,206 @@ def run():
             "start_date": datetime(2023, 10, 1),
             "end_date": None
         },
+       {
+            "name": "Esteban",
+            "surname": "García",
+            "dni": "91234567",
+            "address_id": 1,
+            "email": "esteban.garcia@example.com",
+            "locality_id": 1,
+            "phone": "555-0111",
+            "profession_id": 1,
+            "job_position_id": 1,
+            "emergency_contact_name": "Ana García",
+            "emergency_contact_phone": "555-9877",
+            "obra_social": "Obra Social A",
+            "affiliate_number": "A123457",
+            "is_volunteer": False,
+            "user_id": 11,
+            "enabled": True,
+            "start_date": datetime(2023, 1, 15),
+            "end_date": None
+        },
+        {
+            "name": "Marta",
+            "surname": "Jiménez",
+            "dni": "82345678",
+            "address_id": 2,
+            "email": "marta.jimenez@example.com",
+            "locality_id": 2,
+            "phone": "555-0222",
+            "profession_id": 2,
+            "job_position_id": 2,
+            "emergency_contact_name": "Luis Jiménez",
+            "emergency_contact_phone": "555-8766",
+            "obra_social": "Obra Social B",
+            "affiliate_number": "B234568",
+            "is_volunteer": True,
+            "user_id": 12,
+            "enabled": True,
+            "start_date": datetime(2023, 2, 1),
+            "end_date": None
+        },
+        {
+            "name": "Hugo",
+            "surname": "Soto",
+            "dni": "73456789",
+            "address_id": 3,
+            "email": "hugo.soto@example.com",
+            "locality_id": 3,
+            "phone": "555-0333",
+            "profession_id": 3,
+            "job_position_id": 3,
+            "emergency_contact_name": "Sofía Soto",
+            "emergency_contact_phone": "555-7655",
+            "obra_social": "Obra Social C",
+            "affiliate_number": "C345679",
+            "is_volunteer": False,
+            "user_id": 13,
+            "enabled": True,
+            "start_date": datetime(2023, 3, 10),
+            "end_date": None
+        },
+        {
+            "name": "Rocío",
+            "surname": "Mendoza",
+            "dni": "84567890",
+            "address_id": 4,
+            "email": "rocio.mendoza@example.com",
+            "locality_id": 4,
+            "phone": "555-0444",
+            "profession_id": 1,
+            "job_position_id": 4,
+            "emergency_contact_name": "Fernando Mendoza",
+            "emergency_contact_phone": "555-6544",
+            "obra_social": "Obra Social D",
+            "affiliate_number": "D456780",
+            "is_volunteer": True,
+            "user_id": 14,
+            "enabled": True,
+            "start_date": datetime(2023, 4, 20),
+            "end_date": None
+        },
+        {
+            "name": "Camila",
+            "surname": "Torres",
+            "dni": "95678901",
+            "address_id": 5,
+            "email": "camila.torres@example.com",
+            "locality_id": 5,
+            "phone": "555-0555",
+            "profession_id": 2,
+            "job_position_id": 5,
+            "emergency_contact_name": "Hugo Torres",
+            "emergency_contact_phone": "555-5433",
+            "obra_social": "Obra Social E",
+            "affiliate_number": "E567891",
+            "is_volunteer": False,
+            "user_id": 15,
+            "enabled": True,
+            "start_date": datetime(2023, 5, 15),
+            "end_date": None
+        },
+        {
+            "name": "Felipe",
+            "surname": "Núñez",
+            "dni": "06789012",
+            "address_id": 6,
+            "email": "felipe.nunez@example.com",
+            "locality_id": 6,
+            "phone": "555-0666",
+            "profession_id": 3,
+            "job_position_id": 1,
+            "emergency_contact_name": "Patricia Núñez",
+            "emergency_contact_phone": "555-4322",
+            "obra_social": "Obra Social F",
+            "affiliate_number": "F678902",
+            "is_volunteer": True,
+            "user_id": 16,
+            "enabled": True,
+            "start_date": datetime(2023, 6, 30),
+            "end_date": None
+        },
+        {
+            "name": "Adrián",
+            "surname": "Salas",
+            "dni": "17890123",
+            "address_id": 7,
+            "email": "adrian.salas@example.com",
+            "locality_id": 7,
+            "phone": "555-0777",
+            "profession_id": 1,
+            "job_position_id": 2,
+            "emergency_contact_name": "Laura Salas",
+            "emergency_contact_phone": "555-3211",
+            "obra_social": "Obra Social G",
+            "affiliate_number": "G789013",
+            "is_volunteer": False,
+            "user_id": 17,
+            "enabled": True,
+            "start_date": datetime(2023, 7, 25),
+            "end_date": None
+        },
+        {
+            "name": "Valeria",
+            "surname": "López",
+            "dni": "28901234",
+            "address_id": 8,
+            "email": "valeria.lopez@example.com",
+            "locality_id": 8,
+            "phone": "555-0888",
+            "profession_id": 2,
+            "job_position_id": 3,
+            "emergency_contact_name": "Carlos López",
+            "emergency_contact_phone": "555-2108",
+            "obra_social": "Obra Social H",
+            "affiliate_number": "H890124",
+            "is_volunteer": True,
+            "user_id": 18,
+            "enabled": True,
+            "start_date": datetime(2023, 8, 5),
+            "end_date": None
+        },
+        {
+            "name": "Roberto",
+            "surname": "Rivera",
+            "dni": "39012345",
+            "address_id": 9,
+            "email": "roberto.rivera@example.com",
+            "locality_id": 9,
+            "phone": "555-0999",
+            "profession_id": 3,
+            "job_position_id": 4,
+            "emergency_contact_name": "Elena Rivera",
+            "emergency_contact_phone": "555-1097",
+            "obra_social": "Obra Social I",
+            "affiliate_number": "I901235",
+            "is_volunteer": False,
+            "user_id": 19,
+            "enabled": True,
+            "start_date": datetime(2023, 9, 10),
+            "end_date": None
+        },
+        {
+            "name": "Nadia",
+            "surname": "Castillo",
+            "dni": "40223434",
+            "address_id": 10,
+            "email": "nadia_castillo@example.com",
+            "locality_id": 10,
+            "phone": "555-1011",
+            "profession_id": 1,
+            "job_position_id": 1,
+            "emergency_contact_name": "Ricardo Castillo",
+            "emergency_contact_phone": "555-2018",
+            "obra_social": "Obra Social J",
+            "affiliate_number": "J012346",
+            "is_volunteer": True,
+            "user_id": 20,
+            "enabled": True,
+            "start_date": datetime(2023, 10, 1),
+            "end_date": None
+        }
     ]
 
     for emp in employees:
@@ -477,12 +690,21 @@ def run():
     #############################
 
     # Create disability types
-    disability_types_list = ["Física", "Intelectual", "Sensorial", "Psíquica", "Visceral", "Múltiple"]
+    disability_types_list = ["Mental", "Motora", "Sensorial", "Visceral", "Múltiple"]
     for dt in disability_types_list:
         disability_types.create_disability_type(dt)
 
     # Create disability diagnoses
-    diagnoses_list = ["Parálisis Cerebral", "Síndrome de Down", "Autismo", "Lesión Medular", "Esclerosis Múltiple", "Distrofia Muscular"]
+    diagnoses_list = [
+        "Parálisis Cerebral", "Síndrome de Down", "Autismo", "Lesión Medular", 
+        "Esclerosis Múltiple", "Distrofia Muscular", "ECNE", "Lesión post-traumática", 
+        "Mielomeningocele", "Escoliosis Leve", "Secuelas de ACV", 
+        "Discapacidad Intelectual", "Trastorno del Espectro Autista", 
+        "Trastorno del Aprendizaje", "Trastorno por Déficit de Atención/Hiperactividad", 
+        "Trastorno de la Comunicación", "Trastorno de Ansiedad", "Retraso Madurativo", 
+        "Psicosis", "Trastorno de Conducta", "Trastornos del ánimo y afectivos", 
+        "Trastorno Alimentario", "OTRO"
+    ]
     for diag in diagnoses_list:
         disability_diagnoses.create_disability_diagnosis(diag)
 
@@ -492,7 +714,7 @@ def run():
         sedes.create_sede(sede)
 
     # Create work proposals
-    proposals = ["Hipoterapia", "Monta Terapéutica", "Equitación Adaptada", "Volteo Adaptado", "Carruaje Adaptado"]
+    proposals = ["Hipoterapia", "Monta Terapéutica", "Equitación Adaptada", "Volteo Adaptado", "Carruaje Adaptado", "Deporte Ecuestre Adaptado", "Actividades Recreativas"]
     for prop in proposals:
         work_proposals.create_work_proposal(prop)
 
@@ -520,7 +742,7 @@ def run():
         work_days.create_work_day(day)
 
     # Create family allowance types
-    allowance_types = ["Universal", "Discapacidad", "Escolar"]
+    allowance_types = ["Asignacion Universal por Hijo", "Asignacion Universal por hijo con Discapacidad", "Asignacion por ayuda escolar anual"]
     for at in allowance_types:
         family_allowance_types.create_family_allowance_type(at)
 
@@ -530,35 +752,64 @@ def run():
         pension_types.create_pension_type(pt)
 
     # Create schools
-    schools.create_school(name="Greenwood High School", address="123 Oak Street, Springfield", phone="123-456-7890", observations="Focus on STEM programs.")
-    schools.create_school(name="Sunnydale Elementary", address="456 Maple Avenue, Rivertown", phone="987-654-3210", observations="Strong emphasis on arts and music.")
-    schools.create_school(name="Lakeside Academy", address="789 Pine Road, Lakeview", phone="555-123-4567", observations="Offers international exchange programs.")
-    schools.create_school(name="Hillcrest Secondary School", address="321 Cedar Drive, Mountain City", phone="444-987-6543", observations="Known for sports excellence.")
-    schools.create_school(name="Riverbank Primary School", address="654 Elm Street, Rivertown", phone="333-555-7777", observations="Bilingual education offered.")
-    schools.create_school(name="Maplewood High School", address="987 Birch Lane, Greenwood", phone="222-666-8888", observations="Top ranking in local exams.")
-    schools.create_school(name="Crestview College", address="432 Spruce Avenue, Crestview", phone="777-888-9999", observations="Advanced vocational training programs.")
-    schools.create_school(name="Westfield Technical School", address="876 Willow Road, Westfield", phone="111-333-5555", observations="Focus on technology and trades.")
-    schools.create_school(name="Eastfield Technical School", address="679 Road Willow, Eastfield", phone="555-533-3111", observations=".sedart dna yholonhcet no sucoF")
-    schools.create_school(name="Blue Ridge Middle School", address="101 Mountain View Drive, Blue Ridge", phone="123-789-4560", observations="Focus on outdoor education and environmental awareness.")
-    schools.create_school(name="Willowbrook Primary School", address="567 Oak Lane, Willowbrook", phone="234-567-8901", observations="Renowned for inclusive education and community involvement.")
-    schools.create_school(name="Evergreen High School", address="890 Forest Road, Pinehill", phone="345-678-9012", observations="Known for their excellence in science and math competitions.")
-    schools.create_school(name="Meadowview College", address="234 Sunrise Avenue, Meadowview", phone="456-789-0123", observations="Highly regarded for their business and entrepreneurship programs.")
-    schools.create_school(name="Brookstone Elementary", address="456 Riverbend Road, Brookstone", phone="567-890-1234", observations="Arts-focused school with regular community theater performances.")
-    schools.create_school(name="Pinecrest Secondary School", address="789 Summit Way, Pinecrest", phone="678-901-2345", observations="Emphasis on leadership programs and student government.")
-    schools.create_school(name="Clearwater Technical Institute", address="101 Marina Drive, Clearwater", phone="789-012-3456", observations="Specializes in IT and software development courses.")
-    schools.create_school(name="Sunrise High School", address="202 Hilltop Road, Sunrise City", phone="890-123-4567", observations="Focus on academic excellence with extensive AP courses.")
-    schools.create_school(name="Shady Grove Academy", address="345 Grove Lane, Shady Grove", phone="901-234-5678", observations="Known for innovative STEM curriculum and modern labs.")
-    schools.create_school(name="Silver Lake Prep", address="567 Silver Lake Boulevard, Silver City", phone="012-345-6789", observations="Offers a preparatory curriculum with a focus on college readiness.")
-    schools.create_school(name="Oakwood High School", address="890 Woodland Drive, Oakwood", phone="234-456-7890", observations="Strong athletic programs with state championship teams.")
-    schools.create_school(name="Harborview Academy", address="123 Harborview Road, Seaview", phone="345-567-8901", observations="Focus on marine biology and oceanography studies.")
-    schools.create_school(name="Riverside High School", address="567 Riverside Drive, Riverside", phone="456-678-9012", observations="Offers a comprehensive arts program including music and visual arts.")
-    schools.create_school(name="Bayside Elementary", address="789 Seaside Boulevard, Bayside", phone="567-789-0123", observations="Known for their early childhood education excellence.")
-    schools.create_school(name="Mountainview Secondary School", address="101 Peak Road, Mountainview", phone="678-890-1234", observations="Highly regarded for its rigorous academic and extracurricular programs.")
-    schools.create_school(name="Woodland Park Academy", address="345 Woodland Avenue, Woodside", phone="789-901-2345", observations="Focus on sustainability and environmental science.")
-    schools.create_school(name="Bridgewater High School", address="678 Bridgewater Lane, Bridgewater", phone="890-012-3456", observations="Offers advanced courses in technology and engineering.")
-    schools.create_school(name="Elmwood Technical School", address="123 Elmwood Street, Green Valley", phone="012-345-6789", observations="Known for trade programs in automotive and construction fields.")
-    schools.create_school(name="Cedar Grove College", address="456 Cedar Grove Road, Cedarville", phone="234-567-8901", observations="Specializes in liberal arts and humanities.")
-    schools.create_school(name="Hillside Prep", address="789 Hillside Boulevard, Hilltown", phone="345-678-9012", observations="Prep school with an emphasis on college preparatory and advanced placement courses.")
+    
+# Crear escuelas en Buenos Aires
+    schools.create_school(name="Colegio Nacional de Buenos Aires", address="Bolívar 263, CABA", phone="011-4307-1234", observations="Enfocado en formación académica de alto nivel.")
+    schools.create_school(name="Escuela Técnica ORT", address="Yatay 240, CABA", phone="011-4857-4567", observations="Reconocida por sus programas en tecnología e innovación.")
+    schools.create_school(name="Instituto River Plate", address="Av. Figueroa Alcorta 7597, CABA", phone="011-4789-7890", observations="Fuerte enfoque en educación deportiva y académica.")
+    schools.create_school(name="Escuela Superior de Comercio Carlos Pellegrini", address="Marcelo T. de Alvear 1851, CABA", phone="011-4373-6789", observations="Especializada en administración y economía.")
+    schools.create_school(name="Escuela Normal Superior en Lenguas Vivas", address="Carlos Pellegrini 1515, CABA", phone="011-4811-5678", observations="Conocida por sus programas en idiomas y traducción.")
+    schools.create_school(name="Instituto Libre de Segunda Enseñanza (ILSE)", address="Av. Paseo Colón 1252, CABA", phone="011-4362-8901", observations="Enfocado en ciencias sociales y humanísticas.")
+    schools.create_school(name="Colegio San José", address="Bartolomé Mitre 2455, CABA", phone="011-4951-2345", observations="Enfasis en formación religiosa y académica integral.")
+    schools.create_school(name="Colegio Nuestra Señora de la Misericordia", address="Perú 435, CABA", phone="011-4331-9012", observations="Excelencia en educación bilingüe y valores cristianos.")
+    schools.create_school(name="Colegio Marín", address="Av. del Libertador 17115, San Isidro", phone="011-4747-3456", observations="Enfocado en liderazgo y desarrollo personal.")
+    schools.create_school(name="Colegio del Pilar", address="Maipú 956, CABA", phone="011-4312-6789", observations="Fuerte énfasis en educación en ciencias y humanidades.")
+    schools.create_school(name="Colegio Belgrano Day School", address="Juramento 1931, CABA", phone="011-4783-3456", observations="Destacado por su educación bilingüe y currículo internacional.")
+    schools.create_school(name="Instituto French", address="Moreno 1576, San Fernando", phone="011-4745-6789", observations="Ofrece educación integral con orientación humanística.")
+    schools.create_school(name="Instituto María Auxiliadora", address="Av. Pueyrredón 751, CABA", phone="011-4961-1234", observations="Conocido por su educación en valores y desarrollo integral.")
+    schools.create_school(name="Escuela Cristiana Evangélica Argentina", address="Coronel Díaz 2942, CABA", phone="011-4823-2345", observations="Enseñanza basada en valores cristianos.")
+    schools.create_school(name="Instituto La Salle", address="Hipólito Yrigoyen 4254, CABA", phone="011-4952-9012", observations="Famoso por su formación técnica y en valores.")
+    schools.create_school(name="Escuela Técnica Raggio", address="Av. del Libertador 8651, CABA", phone="011-4701-7890", observations="Enfasis en formación técnica en ciencias aplicadas.")
+    schools.create_school(name="Escuela de Comercio Nº 7", address="Juncal 1287, CABA", phone="011-4815-6789", observations="Destacada en ciencias económicas y administrativas.")
+    schools.create_school(name="Colegio Champagnat", address="Marcelo T. de Alvear 1600, CABA", phone="011-4816-3456", observations="Fuerte enfoque en educación humanística y social.")
+    schools.create_school(name="Instituto San Antonio de Padua", address="Av. San Martín 3030, CABA", phone="011-4581-5678", observations="Destacado por su orientación en artes y ciencias sociales.")
+    schools.create_school(name="Escuela Argentina Modelo", address="Aráoz 2800, CABA", phone="011-4861-2345", observations="Reconocida por su currículo en ciencias y arte.")
+    schools.create_school(name="Escuela Técnica N°5", address="Av. Álvarez Jonte 4950, CABA", phone="011-4561-7890", observations="Destacada en formación técnica y científica.")
+    schools.create_school(name="Instituto Santa Ana", address="Calle 9 de Julio 1234, Tigre", phone="011-4749-3456", observations="Enseñanza en valores cristianos y educación bilingüe.")
+    schools.create_school(name="Colegio Santa Isabel", address="Av. de Mayo 2564, Moreno", phone="011-4623-5678", observations="Conocido por su enfoque en humanidades y ciencias.")
+    schools.create_school(name="Colegio Los Robles", address="Paraná 2245, San Isidro", phone="011-4737-9012", observations="Enseñanza personalizada y orientación académica sólida.")
+    schools.create_school(name="Instituto Grilli", address="Av. Maipú 2200, Vicente López", phone="011-4795-6789", observations="Educación bilingüe y enfoque en liderazgo.")
+    schools.create_school(name="Colegio Nacional Rafael Hernández", address="Av. 1 e/ 47 y 48, La Plata", phone="0221-425-1234", observations="Colegio público con excelencia académica.")
+    schools.create_school(name="Escuela Graduada Joaquín V. González", address="Calle 50 e/ 117 y 118, La Plata", phone="0221-427-5678", observations="Enfocada en formación integral y humanística.")
+    schools.create_school(name="Colegio Nuestra Señora de Lourdes", address="Calle 3 e/ 62 y 63, La Plata", phone="0221-482-7890", observations="Colegio católico con enseñanza en valores.")
+    schools.create_school(name="Instituto Inmaculada", address="Calle 44 e/ 5 y 6, La Plata", phone="0221-424-9012", observations="Reconocido por su educación bilingüe y compromiso social.")
+    schools.create_school(name="Colegio San Luis", address="Calle 9 e/ 57 y 58, La Plata", phone="0221-421-3456", observations="Colegio mixto con formación académica sólida.")
+    schools.create_school(name="Instituto Mater Dei", address="Calle 13 e/ 64 y 65, La Plata", phone="0221-427-6789", observations="Especializado en educación cristiana y humanística.")
+    schools.create_school(name="Escuela Técnica Nº 2 Albert Thomas", address="Calle 1 e/ 57 y 58, La Plata", phone="0221-482-2345", observations="Escuela técnica destacada en formación industrial y técnica.")
+    schools.create_school(name="Instituto Superior de Formación Docente Nº 9", address="Calle 59 e/ 8 y 9, La Plata", phone="0221-483-5678", observations="Formación de docentes con especialización en pedagogía.")
+    schools.create_school(name="Colegio Sagrado Corazón", address="Calle 12 e/ 39 y 40, La Plata", phone="0221-421-7890", observations="Colegio católico con énfasis en educación moral.")
+    schools.create_school(name="Escuela de Enseñanza Técnica Nº 3", address="Calle 52 e/ 3 y 4, La Plata", phone="0221-425-9012", observations="Ofrece especialidades en electromecánica y electrónica.")
+    schools.create_school(name="Colegio San Cayetano", address="Calle 6 e/ 46 y 47, La Plata", phone="0221-423-3456", observations="Con fuerte enfoque en educación en valores y deportes.")
+    schools.create_school(name="Instituto Superior Juan N. Terranova", address="Calle 54 e/ 7 y 8, La Plata", phone="0221-429-6789", observations="Especializado en formación técnica y profesional.")
+    schools.create_school(name="Colegio Patris", address="Calle 8 e/ 36 y 37, La Plata", phone="0221-426-2345", observations="Conocido por su formación en ciencias y humanidades.")
+    schools.create_school(name="Escuela Normal Nº 1 Mary O. Graham", address="Calle 51 e/ 14 y 15, La Plata", phone="0221-421-5678", observations="Reconocida por su formación en ciencias de la educación.")
+    schools.create_school(name="Colegio Santa Teresa de Jesús", address="Calle 5 e/ 42 y 43, La Plata", phone="0221-428-7890", observations="Colegio religioso con orientación humanística.")
+    schools.create_school(name="Escuela Técnica Nº 5", address="Calle 7 e/ 76 y 77, La Plata", phone="0221-427-9012", observations="Formación en tecnología aplicada y electrónica.")
+    schools.create_school(name="Instituto San Vicente de Paul", address="Calle 60 e/ 10 y 11, La Plata", phone="0221-424-3456", observations="Enseñanza católica con fuerte orientación social.")
+    schools.create_school(name="Escuela Secundaria Técnica Nº 4", address="Calle 1 e/ 68 y 69, La Plata", phone="0221-429-6789", observations="Destacada por su formación en mecánica y construcción.")
+    schools.create_school(name="Colegio Lincoln", address="Calle 11 e/ 34 y 35, La Plata", phone="0221-423-2345", observations="Educación bilingüe y enfoque en ciencias y artes.")
+    schools.create_school(name="Instituto Cultural Argentino", address="Calle 55 e/ 8 y 9, La Plata", phone="0221-481-5678", observations="Enseñanza personalizada con foco en la cultura y el arte.")
+    schools.create_school(name="Colegio Virgen del Pilar", address="Calle 61 e/ 10 y 11, La Plata", phone="0221-486-7890", observations="Educación cristiana y fuerte compromiso social.")
+    schools.create_school(name="Instituto El Carmen", address="Calle 9 e/ 38 y 39, La Plata", phone="0221-422-9012", observations="Enseñanza en valores y orientación religiosa.")
+    schools.create_school(name="Colegio San Pio X", address="Calle 58 e/ 8 y 9, La Plata", phone="0221-480-3456", observations="Fuerte en educación técnica y en ciencias aplicadas.")
+    schools.create_school(name="Escuela Nuestra Señora de la Paz", address="Calle 16 e/ 46 y 47, La Plata", phone="0221-427-6789", observations="Orientación cristiana y formación académica.")
+    schools.create_school(name="Colegio Santa Ana", address="Calle 6 e/ 67 y 68, La Plata", phone="0221-483-2345", observations="Enseñanza personalizada con orientación en ciencias.")
+    schools.create_school(name="Instituto Domingo Savio", address="Calle 33 e/ 10 y 11, La Plata", phone="0221-481-5678", observations="Educación en valores y formación católica.")
+    schools.create_school(name="Escuela de Comercio N° 32", address="Calle 19 e/ 45 y 46, La Plata", phone="0221-420-7890", observations="Enfocado en administración y ciencias contables.")
+    schools.create_school(name="Colegio Santa Lucía", address="Calle 15 e/ 50 y 51, La Plata", phone="0221-422-9012", observations="Formación cristiana y programas de voluntariado.")
+    schools.create_school(name="Instituto San Jorge", address="Calle 31 e/ 9 y 10, La Plata", phone="0221-425-3456", observations="Colegio mixto con orientación en ciencias y arte.")
+    schools.create_school(name="Colegio Pablo VI", address="Calle 30 e/ 8 y 9, La Plata", phone="0221-421-6789", observations="Enseñanza religiosa con enfoque en desarrollo humano.")
+    schools.create_school(name="Instituto Santa María", address="Calle 2 e/ 41 y 42, La Plata", phone="0221-429-2345", observations="Conocido por su educación bilingüe y actividades artísticas.")
 
     from datetime import date
     # Create riders
@@ -772,6 +1023,7 @@ def run():
         payment_type.create_payment_type(pt)
 
     # Creado de pagos
+
     payments_data = [
         (5000, datetime(2024, 9, 10), "Pago realizado", 1, 1),
         (7200, datetime.now(), "El pago fue exitoso", 3, None),
@@ -781,6 +1033,41 @@ def run():
         (2800, datetime(2024, 10, 5), "Compra de materiales", 5, 2),
         (15000, datetime(2024, 10, 12), "Alquiler de instalaciones", 6, None),
         (4200, datetime(2024, 10, 18), "Honorarios profesionales", 1, 4),
+        (5600, datetime(2024, 10, 20), "Pago de servicios", 3, 2),
+        (900, datetime(2024, 8, 25), "Mantenimiento de equipos", 2, None),
+        (11500, datetime(2024, 9, 3), "Renovación de contrato", 4, 5),
+        (2200, datetime(2023, 12, 30), "Pago parcial", 5, 1),
+        (3600, datetime(2022, 7, 15), "Compra de suministros", 2, 3),
+        (8900, datetime(2023, 2, 11), "Donación puntual", 1, None),
+        (4500, datetime(2024, 1, 20), "Honorarios de consultoría", 3, 4),
+        (6800, datetime(2023, 6, 25), "Pago de impuestos", 5, 6),
+        (9700, datetime(2024, 8, 1), "Pago de publicidad", 2, None),
+        (2300, datetime(2023, 5, 14), "Compra de mobiliario", 4, 3),
+        (19000, datetime(2023, 9, 17), "Gastos generales", 1, None),
+        (7500, datetime(2024, 3, 9), "Renovación de equipos", 5, 5),
+        (4100, datetime(2022, 11, 4), "Pago de electricidad", 3, 1),
+        (3200, datetime(2024, 7, 22), "Arreglo de infraestructura", 2, 4),
+        (6200, datetime(2024, 4, 18), "Pago de evento especial", 4, 6),
+        (5700, datetime(2023, 10, 6), "Material de oficina", 1, 3),
+        (4300, datetime(2024, 5, 26), "Compra de tecnología", 3, 2),
+        (8900, datetime(2023, 3, 3), "Pago adicional", 5, 4),
+        (4800, datetime(2023, 8, 11), "Pago de reparaciones", 2, None),
+        (16000, datetime(2024, 6, 30), "Renovación de licencia", 1, 5),
+        (2100, datetime(2022, 10, 19), "Mantenimiento de software", 4, None),
+        (5900, datetime(2024, 2, 5), "Pago por diseño gráfico", 3, 6),
+        (7100, datetime(2023, 12, 17), "Inversión en capacitación", 5, 1),
+        (3700, datetime(2023, 7, 13), "Pago de consultoría", 1, 2),
+        (8100, datetime(2024, 3, 21), "Compra de uniformes", 4, 4),
+        (2700, datetime(2024, 8, 7), "Servicios de limpieza", 2, 3),
+        (5600, datetime(2023, 9, 15), "Pago de hosting", 3, 5),
+        (8500, datetime(2022, 4, 28), "Pago de dominio", 5, None),
+        (2900, datetime(2024, 10, 10), "Gastos de transporte", 2, 1),
+        (9300, datetime(2023, 11, 16), "Pago de marketing digital", 1, 6),
+        (3900, datetime(2022, 6, 22), "Compra de herramientas", 4, 2),
+        (6400, datetime(2023, 5, 8), "Insumos médicos", 3, None),
+        (4700, datetime(2024, 7, 29), "Material educativo", 5, 4),
+        (1200, datetime(2023, 3, 19), "Pago de conferencia", 1, 3),
+        (6000, datetime(2024, 9, 5), "Pago de software", 4, 5),
     ]
     for payment in payments_data:
         payments.create_payment(*payment)
@@ -790,16 +1077,35 @@ def run():
         collection_medium.create_collection_medium(cm)
 
     collections_data = [
-        (5000, datetime(2024, 9, 10), "Pago realizado en efectivo por servicio", 1, 1, 1),  # Efectivo
-        (12500, datetime(2024, 9, 12), "Pago por materiales", 2, 2, 2),  # Tarjeta de crédito
-        (7200, datetime(2024, 10, 2), "Pago mensual de la membresía", 3, 3, 2),  # Tarjeta de débito
-        (3200, datetime(2024, 10, 5), "Pago parcial por productos", 1, 2, 3),  # Efectivo
-        (10500, datetime(2024, 10, 6), "Pago total del contrato", 2, 1, 4),  # Tarjeta de crédito
-        (4600, datetime(2024, 10, 10), "Donación anual", 1, 4, 6),  # Efectivo
-        (2850, datetime(2024, 10, 12), "Pago por suscripción", 3, 2, 1),  # Tarjeta de débito
-        (9750, datetime(2024, 10, 15), "Pago por servicios contratados", 2, 3, 4),  # Tarjeta de crédito
-        (500, datetime(2024, 10, 18), "Pago parcial por artículo", 1, 1, 3),  # Efectivo
-        (6900, datetime(2024, 10, 20), "Pago por evento", 2, 4, 5),  # Tarjeta de crédito
+        (5000, datetime(2024, 9, 10), "Pago realizado en efectivo por servicio", 1, 1, 1),
+        (12500, datetime(2024, 9, 12), "Pago por materiales", 2, 2, 2),
+        (7200, datetime(2024, 10, 2), "Pago mensual de la membresía", 3, 3, 2),
+        (3200, datetime(2024, 10, 5), "Pago parcial por productos", 1, 2, 3),
+        (10500, datetime(2024, 10, 6), "Pago total del contrato", 2, 1, 4),
+        (4600, datetime(2024, 10, 10), "Donación anual", 1, 4, 6),
+        (2850, datetime(2024, 10, 12), "Pago por suscripción", 3, 2, 1),
+        (9750, datetime(2024, 10, 15), "Pago por servicios contratados", 2, 3, 4),
+        (500, datetime(2024, 10, 18), "Pago parcial por artículo", 1, 1, 3),
+        (6900, datetime(2024, 10, 20), "Pago por evento", 2, 4, 5),
+        (3700, datetime(2023, 8, 5), "Pago único por servicio", 3, 1, 6),
+        (1500, datetime(2024, 1, 17), "Pago por consultas adicionales", 1, 3, 1),
+        (8800, datetime(2023, 12, 22), "Pago de productos importados", 2, 4, 3),
+        (5400, datetime(2024, 3, 10), "Cobro de gastos médicos", 3, 2, 2),
+        (4300, datetime(2024, 2, 5), "Pago por renovación de membresía", 1, 1, 5),
+        (3000, datetime(2024, 4, 15), "Cobro de contrato mensual", 2, 3, 6),
+        (7600, datetime(2023, 6, 30), "Pago por publicidad", 3, 4, 4),
+        (4100, datetime(2024, 9, 8), "Cobro por servicios de asesoría", 1, 2, 3),
+        (6500, datetime(2024, 8, 23), "Pago por bienes adquiridos", 2, 3, 1),
+        (2300, datetime(2024, 5, 25), "Pago por derechos de uso", 3, 1, 2),
+        (4900, datetime(2024, 6, 13), "Pago de seguros", 1, 4, 5),
+        (1100, datetime(2024, 7, 11), "Pago único por eventos", 2, 2, 3),
+        (3500, datetime(2023, 8, 18), "Pago por licencia anual", 3, 1, 4),
+        (9100, datetime(2023, 5, 5), "Pago único por equipamiento", 1, 3, 6),
+        (6700, datetime(2024, 4, 19), "Cobro de suscripción premium", 2, 2, 4),
+        (5200, datetime(2024, 3, 28), "Pago por mantenimiento", 3, 4, 2),
+        (2800, datetime(2023, 9, 14), "Cobro por cuota de inscripción", 1, 3, 5),
+        (6300, datetime(2024, 10, 8), "Cobro por servicios adicionales", 2, 1, 6),
+        (4600, datetime(2024, 2, 22), "Cobro por equipamiento", 3, 2, 3),
     ]
 
     # Example of creating these payments and populating the database:
