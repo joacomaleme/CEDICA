@@ -1,0 +1,240 @@
+{% extends "layout.html" %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dropdown.css')}}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/payment_register.css')}}"/>
+{% endblock head %}
+{% block title %}Pago {{payment.id}} - CEDICA{% endblock title %}
+
+{% block content %}
+<div id="overlay" class="overlay">
+    <div id="cartel" class="warning-msg">
+        <p> ¿Está seguro de que quiere eliminar el registro del pago {{payment.id}} permanentemente? </p>
+        <div class="opt">
+            <button id="cancel" type="button" class="op -gr">Cancelar</button>
+            <form id="delForm" action="{{ url_for('payments.delete', id=payment.id)}}" method="GET">
+                <button id="confirm" type="button" class="op -re">Confirmar</button>
+            </form>
+        </div>     
+      </div>
+</div>
+
+<section class="registerbox">
+    <form class="formRegister" action="{{ url_for('payments.update', id=payment.id)}}" method="POST">
+        <h1>Pago {{payment.id}}</h1>
+        <div class='form'>
+            <div class="input-set">
+                <input step="0.01" id="amount-field" value="{{payment.amount}}" {% if not is_permitted(session, 'payment_update') %} disabled {% endif %} placeholder="" id="amount-field" class="input-field" name="amount" type="number" required><br>
+                <label for="amount-field" class="input-label">MONTO</label>
+                <span id="amount-error" class="input-error"></span>
+            </div>
+            <div class="input-set">
+                <label class='label' for="date-field">FECHA DE PAGO</label>
+                <input id="date-field" value="{{payment.date.strftime('%Y-%m-%d')}}" {% if not is_permitted(session, 'payment_update') %} disabled {% endif %} id="date-field" class="date-field" name="date" type="date" required><br>
+            </div>
+
+            <div class="types">
+                <div class="input-set">
+                    <div class="select_mate" data-mate-select="active" >
+                    <select name="type" id="sel-type">
+                        {% for t in types %}
+                            <option {% if type.name == t %}selected{% endif %}  value="{{t}}">{{t}}</option>
+                        {% endfor %}
+                    </select>
+                    
+                    <p {% if not is_permitted(session, 'payment_update') %} style="cursor: default;" {% endif %} class="selecionado_opcion"  onclick="open_select(this)" ></p>
+                    <span onclick="open_select(this)" class="icon_select_mate" >
+                        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                            <path d="M0-.75h24v24H0z" fill="none"/>
+                        </svg>
+                    </span>
+            
+                    <div class="cont_list_select_mate">
+                        <ul class="cont_select_int">  </ul> 
+                    </div>
+                </div>
+                </div>
+            </div>
+            
+            <div {% if not type.name == 'Honorarios' %} style="display: none;" {% endif %} id="emps" class="emps">
+                <div class="input-set">
+                    <div style="cursor: default;" class="select_mate" data-mate-select="active" >
+                        <select style="cursor: default;" name="emp" id="sel-emp">
+                            {% for e in emps %}
+                                <option {% if e.id == emp.id %} selected {% endif %} value="{{e.id}}">{{e.name}} {{e.surname}} ({{e.dni}})</option>
+                            {% endfor %}
+                        </select>
+                        
+                        <p {% if not is_permitted(session, 'payment_update') %} style="cursor: default;" {% endif %} class="selecionado_opcion"  onclick="open_select(this)" ></p>
+                        <span onclick="open_select(this)" class="icon_select_mate" >
+                            <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                                <path d="M0-.75h24v24H0z" fill="none"/>
+                            </svg>
+                        </span>
+    
+                        <div class="cont_list_select_mate">
+                            <ul class="cont_select_int">  </ul> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+
+            <div class='text'>
+                {% if not is_permitted(session, 'payment_update') %}
+                    <label class='input-label ltxt' for="desc-field">DESCRIPCIÓN</label>
+                    <br>
+                    <br>
+                    <p class="simple-text" id="desc-field">{{payment.description}}</p>
+                {% else %}
+                    <textarea maxlength="1024" oninput="autoResize(this)" placeholder="" id="desc-field" class="input-field desc" name="desc">{{payment.description}}</textarea>
+                    <label class='input-label ltxt' for="desc-field">DESCRIPCIÓN</label>
+                {% endif %}
+            </div>
+            {% if is_permitted(session, 'payment_update') %}<button id="button-submit" class="submit" type="submit" disabled>Aplicar cambios</button>{% endif %}
+            <button type="button" {% if not is_permitted(session, 'payment_destroy') %} style="display:none;" {% endif %} id="button-delete" class="del">Eliminar registro de pago</button>
+        </div>
+    </form>
+</section>
+<script src="{{ url_for('static', filename='js/dropdownReadOnly.js')}}"/></script>
+
+<script>
+    const descField = document.getElementById("desc-field");
+    autoResize(descField);
+    
+    function autoResize(textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = textarea.scrollHeight + 'px';
+      if(textarea.value != st_desc){
+        desc_mod = true;
+        button.disabled = !(montoValido && fechaValida);
+      }
+      else{
+        desc_mod = false;
+        button.disabled = !(montoValido && fechaValida && onePlusModified());
+      }
+    }
+</script>
+<script>
+    var is_permitted =  {{is_permitted(session, 'payment_update')|tojson}};
+
+    var overlay = document.getElementById("overlay");
+    var cartel = document.getElementById("cartel");
+    var buttonDel = document.getElementById("button-delete");
+    buttonDel.addEventListener("click", function(){
+        cartel.style.opacity = 1;
+        overlay.style.opacity=1;
+        overlay.style.display = "inline-block";
+        cartel.style.display = 'inline-block';
+        cartel.style.opacity = 1;
+    });
+    var delForm = document.getElementById("delForm");
+    var confirm = document.getElementById("confirm");
+    confirm.addEventListener("click", function(){
+        cartel.style.display = 'none';
+        overlay.style.display="none";
+        delForm.submit();
+    });
+
+    var cancel = document.getElementById("cancel");
+    cancel.addEventListener("click", function(){
+        cartel.style.opacity = 0;
+        overlay.style.opacity= 0;
+        setTimeout(function(){cartel.style.display = 'none'; overlay.style.display="none";}, 500);
+    });
+</script>
+<script>
+    var st_am = {{payment.amount|tojson}};
+    var st_ty = {{type.name|tojson}};
+    var st_desc = {{payment.description|tojson}}
+
+
+    var selectEmp = document.getElementById("sel-emp");
+
+    var st_bf = 0;
+
+    if(st_ty === 'Honorarios'){ st_bf = selectEmp.value;}
+    
+    var am_mod = false;
+    var da_mod = false;
+    var ty_mod = false;
+    var bf_mod = false;
+    var desc_mod = false;
+
+    var button = document.getElementById("button-submit");
+    var monto = document.getElementById("amount-field");
+    var montoError = document.getElementById("amount-error");
+    var date = document.getElementById("date-field");
+    var type = document.getElementById("sel-type");
+
+    var st_da = date.value;
+
+    var montoValido = true;
+    var fechaValida = true;
+
+    monto.addEventListener("input", validateMonto);
+    monto.addEventListener("focus", validateMonto);
+    date.addEventListener("change", validateDate);
+
+    function onePlusModified(){
+        return am_mod || da_mod || ty_mod || desc_mod || (bf_mod && type.value === 'Honorarios');
+    }
+
+    function validateMonto(){
+        
+        if(monto.value == st_am){
+            montoError.innerHTML = "";
+            monto.style.borderBottomColor = "#555";
+            montoError.style.top = "50%";
+            montoValido = true;
+            am_mod = false;
+            button.disabled = !(montoValido && fechaValida && onePlusModified());
+            return true;
+        }
+        else{
+            if (monto.value === ""){
+                montoError.innerHTML = "Campo obligatorio";
+                montoError.style.top = "80%";
+                monto.style.borderBottomColor = "red";
+                montoValido = false;
+                button.disabled = true;
+                return false;
+            }
+            else{
+                montoError.innerHTML = "";
+                monto.style.borderBottomColor = "green";
+                montoError.style.top = "50%";
+                montoValido = true;
+                am_mod = true;
+                button.disabled = !(montoValido && fechaValida);
+                return true;
+            }
+        }
+    };
+
+    function validateDate() {
+        var objDate = new Date(date.value + "T00:00:00Z");
+        var minDate = new Date("1/1/1950");
+        if(date.value === st_da){
+            fechaValida = true;
+            da_mod = false;
+            button.disabled = !(montoValido && fechaValida && onePlusModified()) ;
+            return true;
+        }
+        else{
+            if (date.value.length < 10 || objDate < minDate){
+                fechaValida = false;
+                button.disabled = true;
+                return false;
+            }
+            else{
+                fechaValida = true;
+                da_mod = true;
+                button.disabled = !(montoValido && fechaValida);
+                return true;
+            }
+        }
+    };
+</script>
+{% endblock content %}

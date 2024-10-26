@@ -1,21 +1,19 @@
 {% extends "layout.html" %}
-{% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='home.css')}}"/>
-{% endblock %}
-{% block title %}VeryOriginalTitle™{% endblock %}
-{% block navbar %}
-    <a href="/NoExisto">Este link no lleva a ningún lado</a><br>
-    <a href="/NoExisto">Osea, cuenta esto siquiera como una barra de navegación?</a><br>
-    <a href="/NoExisto">Yo diría que no</a><br>
-    <a href="/NoExisto">No, no, confirmo, esto no cuenta</a>
-{% endblock %}
+{% block head %}<link rel="stylesheet" href="{{ url_for('static', filename='start_page.css')}}"/>{% endblock head %}
+{% block title %}Inicio - CEDICA{% endblock title %}
 {% block content %}
-    <h1>Soy una página de inicio</h1>
-    <p>Soy increíble<p>
-    <p>Sé que mi existencia es temporal, probablemente muera en una semana, cuando tengan que desarrollar la página real</p>
-    <p>Aún así, saber que fuí útil, aunque sea para una entrega, me llena de felicidad</p>
-    <button>No hago nada</button>
-{% endblock %}
-{% block footer %}
-    <p>SoyUnFooter :3</p>
-{% endblock %}
+<div class="page">
+    <div class="present">
+        <h1>¡Bienvenidos a equinoterapia!</h1>
+        <br>
+        <h2>Cumplimos 30 años:</h2>
+    </div>
+    <article class="content">
+        <p>Nos llena de orgullo llevar 30 años intentando hacer esta página con ustedes! &lt;3</p>
+    </article>
+    <nav class="links">
+        {% if is_authenticated(session) %}{% if is_permitted(session, 'user_new') %} <a href="{{ url_for('auth.register')}}">Registar Usuario</a>{% endif %}
+        {% if is_permitted(session, 'user_index') %}<a href="{{ url_for('user.index')}}">Listado Usuarios</a>{% endif %} {% endif %}
+    </nav>
+</div>
+{% endblock  %}

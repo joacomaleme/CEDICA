@@ -1,0 +1,1210 @@
+{% extends "layout.html" %}
+
+{% block head %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dropdown.css') }}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pagination.css')}}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/fileInput.css')}}"/>
+  <script src="{{ url_for('static', filename='js/dropdownRider.js') }}"></script>
+{% endblock %}
+
+{% block title %}Visualizar jinete - CEDICA{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block content %}
+  
+  <section class="form-container">
+    <h1 class="title">Visualizar un jinete</h1>
+    <div class="subtitles">
+      <h2 class="subtitle selected" id="subtitle-general">Información personal</h2>
+      <h2 class="subtitle" id="subtitle-documents">Documentos</h2>
+    </div>
+    <form class="form {% if mode=="documents" %}display-none{% endif %}" id="form-general" action="{{ url_for('rider.update', id=rider.id)}}" method="POST">
+      
+
+    <h3 class="subtitulos"> Datos personales </h3>
+
+      <!-- Nombre -->
+      <div class="input-set">
+        <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.name }}" spellcheck=false id="name-field" class="input-field" name="name" type="text" placeholder="" required><br>
+        <label id="name-label" class="input-label" for="name-field">NOMBRE</label>
+        <span id="name-error" class="input-error"></span>
+      </div>
+
+      <!-- Apellido -->
+      <div class="input-set">
+        <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.last_name }}" spellcheck=false id="surname-field" class="input-field" name="surname" type="text" placeholder="" required><br>
+        <label id="surname-label" class="input-label" for="surname-field">APELLIDO</label>
+        <span id="surname-error" class="input-error"></span>
+      </div>
+
+      <!-- DNI -->
+      <div class="input-set">
+        <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.dni }}" id="dni-field" class="input-field" name="dni" type="text" placeholder="" required><br>
+        <label id="dni-label" class="input-label" for="dni-field">DNI</label>
+        <span id="dni-error" class="input-error"></span>
+      </div>
+
+      <!-- Edad -->
+      <div class="input-set">
+        <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.age }}" id="age-field" class="input-field" name="age" type="text" placeholder="" required><br>
+        <label id="age-label" class="input-label" for="age-field">EDAD</label>
+        <span id="age-error" class="input-error"></span>
+      </div>
+
+      <!-- Cumpleaños -->
+      <div class="input-set">
+        <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.birth_date }}" id="birthdate-field" class="input-field" name="birth_date" type="date" placeholder="" required><br>
+        <label id="birthdate-label" class="input-label" for="birthdate-field">FECHA DE NACIMIENTO</label>
+        <span id="birthdate-error" class="input-error"></span>
+      </div>
+
+      <!-- Localidad de nacimiento -->
+      <div class="order">
+        <div class="input-set">
+          <label id="birth-locality-label" class="select-label" for="birth-locality-field">LOCALIDAD DE NACIMIENTO</label>
+          <div class="select_mate" data-mate-select="active">
+            <select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="birth-locality" id="birth-locality-field" required>
+              {% for locality in localitys %}
+                <option value="{{ locality.id }}" {% if locality.id == rider.birth_locality_id %}selected{% endif %}>{{ locality.name | upper }}</option>
+              {% endfor %}
+            </select>
+            
+            <p class="selecionado_opcion" onclick="open_select(this)"></p>
+            <span onclick="open_select(this)" class="icon_select_mate">
+              <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                <path d="M0-.75h24v24H0z" fill="none"/>
+              </svg>
+            </span>
+
+            <div class="cont_list_select_mate">
+              <ul class="cont_select_int"></ul> 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Provincia de nacimiento -->
+      <div class="order">
+        <div class="input-set">
+          <label id="birth-province-label" class="select-label" for="birth-province-field">PROVINCIA DE NACIMIENTO</label>
+          <div class="select_mate" data-mate-select="active">
+            <select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="birth-province" id="birth-province-field" required>
+              {% for province in provinces %}
+                <option value="{{ province.id }}" {% if province.id == rider.birth_province_id %}selected{% endif %}>{{ province.name | upper }}</option>
+              {% endfor %}
+            </select>
+            
+            <p class="selecionado_opcion" onclick="open_select(this)"></p>
+            <span onclick="open_select(this)" class="icon_select_mate">
+              <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                <path d="M0-.75h24v24H0z" fill="none"/>
+              </svg>
+            </span>
+
+            <div class="cont_list_select_mate">
+              <ul class="cont_select_int"></ul> 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calle -->
+      <div class="input-set">
+        <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.address.street }}" id="street-field" class="input-field" name="street" placeholder="" type="text" required><br>
+        <label id="street-label" class="input-label" for="street-field">CALLE</label>
+        <span id="street-error" class="input-error"></span>
+      </div>
+
+      <!-- Numero -->
+      <div class="input-set">
+        <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.address.number }}" id="number-field" class="input-field" name="number" placeholder="" type="text" required><br>
+        <label id="number-label" class="input-label" for="number-field">NÚMERO</label>
+        <span id="number-error" class="input-error"></span>
+      </div>
+
+      <!-- Departamento -->
+      <div class="input-set">
+        <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.address.apartment }}" id="apartment-field" class="input-field" name="apartment" placeholder="" type="text"><br>
+        <label id="apartment-label" class="input-label" for="apartment-field">DEPARTAMENTO</label>
+        <span id="apartment-error" class="input-error"></span>
+      </div>
+
+      <!-- Localidad actual -->
+      <div class="order">
+        <div class="input-set">
+          <label id="current-locality-label" class="select-label" for="current-locality-field">LOCALIDAD ACTUAL</label>
+          <div class="select_mate" data-mate-select="active">
+            <select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="current-locality" id="current-locality-field" required>
+              {% for locality in localitys %}
+                <option value="{{ locality.id }}" {% if locality.id == rider.current_locality_id %}selected{% endif %}>{{ locality.name | upper }}</option>
+              {% endfor %}
+            </select>
+            
+            <p class="selecionado_opcion" onclick="open_select(this)"></p>
+            <span onclick="open_select(this)" class="icon_select_mate">
+              <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                <path d="M0-.75h24v24H0z" fill="none"/>
+              </svg>
+            </span>
+
+            <div class="cont_list_select_mate">
+              <ul class="cont_select_int"></ul> 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Provincia actual -->
+      <div class="order">
+        <div class="input-set">
+          <label id="current-province-label" class="select-label" for="current-province-field">PROVINCIA ACTUAL</label>
+          <div class="select_mate" data-mate-select="active">
+            <select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="current-province" id="current-province-field" required>
+              {% for province in provinces %}
+                <option value="{{ province.id }}" {% if province.id == rider.current_province_id %}selected{% endif %}>{{ province.name | upper }}</option>
+              {% endfor %}
+            </select>
+            
+            <p class="selecionado_opcion" onclick="open_select(this)"></p>
+            <span onclick="open_select(this)" class="icon_select_mate">
+              <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                <path d="M0-.75h24v24H0z" fill="none"/>
+              </svg>
+            </span>
+
+            <div class="cont_list_select_mate">
+              <ul class="cont_select_int"></ul> 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Telefono -->
+      <div class="input-set">
+        <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.phone }}" spellcheck=false id="phone-field" class="input-field" name="phone" type="text" placeholder="" required><br>
+        <label id="phone-label" class="input-label" for="phone-field">TELEFONO ACTUAL</label>
+        <span id="phone-error" class="input-error"></span>
+      </div>
+
+      <!-- Contacto de emergencia -->
+      <div class="input-set">
+        <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.emergency_contact_name }}" id="emergency-contact-name-field" class="input-field" name="emergency-contact-name" type="text" placeholder="" required><br>
+        <label id="emergency-contact-name-label" class="input-label" for="emergency-contact-name-field">CONTACTO DE EMERGENCIA</label>
+        <span id="emergency-contact-name-error" class="input-error"></span>
+      </div>
+
+      <!-- Telefono de emergencia -->
+      <div class="input-set">
+        <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.emergency_contact_phone }}" spellcheck=false id="emergency-contact-phone-field" class="input-field" name="emergency-phone" type="text" placeholder="" required><br>
+        <label id="emergency-contact-phone-label" class="input-label" for="emergency-contact-phone-field">TELEFONO DE EMERGENCIA</label>
+        <span id="emergency-contact-phone-error" class="input-error"></span>
+      </div>
+
+      <!-- Si esta becado -->
+      <div class="input-set">
+        <label class="order-checkbox" for="has-scholarship-checkbox">BECADO</label>
+        <div class="checkbox-wrapper-30">
+          <span class="checkbox">
+          <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} type="checkbox" id="has-scholarship-checkbox" name="has-scholarship" {% if rider.has_scholarship %}checked{% endif %}/>
+          <svg>
+            <use xlink:href="#checkbox-30" class="checkbox"></use>
+          </svg>
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+          <symbol id="checkbox-30" viewBox="0 0 22 22">
+            <path fill="none" stroke="currentColor" d="M5.5,11.3L9,14.8L20.2,3.3l0,0c-0.5-1-1.5-1.8-2.7-1.8h-13c-1.7,0-3,1.3-3,3v13c0,1.7,1.3,3,3,3h13 c1.7,0,3-1.3,3-3v-13c0-0.4-0.1-0.8-0.3-1.2"/>
+          </symbol>
+          </svg>
+        </div>
+      </div>
+
+      <h3 class="subtitulos"> Información importante </h3>
+    
+      <div class="documentos-columnas" >
+
+        <div class="documentos-filas" > 
+
+            <!-- Si tiene certificado de discapacidad -->
+            <div class="input-set">
+                <label class="order-checkbox-ivy" for="disable-certificate-checkbox">CERTIFICADO DE DISCAPACIDAD</label>
+                <div class="checkbox-wrapper-30">
+                <span class="checkbox">
+                <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} type="checkbox" id="disable-certificate-checkbox" name="disable-certificate" {% if rider.has_disability_certificate %}checked{% endif %}/>
+                <svg>
+                    <use xlink:href="#checkbox-30" class="checkbox"></use>
+                </svg>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+                <symbol id="checkbox-30" viewBox="0 0 22 22">
+                    <path fill="none" stroke="currentColor" d="M5.5,11.3L9,14.8L20.2,3.3l0,0c-0.5-1-1.5-1.8-2.7-1.8h-13c-1.7,0-3,1.3-3,3v13c0,1.7,1.3,3,3,3h13 c1.7,0,3-1.3,3-3v-13c0-0.4-0.1-0.8-0.3-1.2"/>
+                </symbol>
+                </svg>
+                </div>
+            </div>
+
+            <!-- Seleccionar discapacidad -->
+            <div class="order" id="disability-diagnosis-entero" {% if not rider.has_disability_certificate %} style = "display:none;" {% endif %}>
+                <div class="input-set">
+                <label id="disability-diagnosis-label" class="select-label" for="disability-diagnosis-field">SELECCIONAR DISCAPACIDAD</label>
+                <div class="select_mate" data-mate-select="active">
+                    <select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="disability-diagnosis" id="disability-diagnosis-field" required>
+                    {% for disability in disability_diagnosis %}
+                        <option value="{{ disability.diagnosis }}" {% if disability.id == rider.disability_diagnosis_id %}selected{% endif %}>{{ disability.diagnosis | upper }}</option>
+                    {% endfor %}
+                    <option value="Otro" >OTRO</option>
+                    </select>
+                    
+                    <p class="selecionado_opcion" onclick="open_select(this)"></p>
+                    <span onclick="open_select(this)" class="icon_select_mate">
+                    <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                        <path d="M0-.75h24v24H0z" fill="none"/>
+                    </svg>
+                    </span>
+
+                    <div class="cont_list_select_mate">
+                    <ul class="cont_select_int"></ul> 
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <!-- Opción otro -->
+            <div class="input-set" id="opcion-otro" style="display:none">
+                <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="" spellcheck=false id="new-disability-field" class="input-field" name="new-disability" type="text" placeholder=""><br>
+                <label id="new-disability-label" class="input-label" for="emergency-contact-phone-field">Discapacidad</label>
+                <span id="new-disability-error" class="input-error"></span>
+            </div>
+
+        </div>
+
+        <div class="documentos-columnas" >
+
+            <!-- Percibe asignacion familiar -->
+            <div class="input-set">
+                <label class="order-checkbox-ivy" for="has-family-allowance-checkbox">ASIGNACIÓN FAMILIAR</label>
+                <div class="checkbox-wrapper-30">
+                <span class="checkbox">
+                    <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} type="checkbox" id="has-family-allowance-checkbox" name="has-family-allowance" {% if rider.has_family_allowance %}checked{% endif %}/>
+                    <svg>
+                    <use xlink:href="#checkbox-30" class="checkbox"></use>
+                    </svg>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+                    <symbol id="checkbox-30" viewBox="0 0 22 22">
+                    <path fill="none" stroke="currentColor" d="M5.5,11.3L9,14.8L20.2,3.3l0,0c-0.5-1-1.5-1.8-2.7-1.8h-13c-1.7,0-3,1.3-3,3v13c0,1.7,1.3,3,3,3h13 c1.7,0,3-1.3,3-3v-13c0-0.4-0.1-0.8-0.3-1.2"/>
+                    </symbol>
+                </svg>
+                </div>
+            </div>
+
+            <!-- Seleccionar asignacion familiar -->
+            <div class="order" id="family-allowance-type-entero" {% if not rider.has_family_allowance %} style = "display:none;" {% endif %}>
+                <div class="input-set">
+                <label id="family-allowance-type-label" class="select-label" for="family-allowance-type-field">TIPO DE ASIGNACIÓN FAMILIAR</label>
+                <div class="select_mate" data-mate-select="active">
+                    <select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="family-allowance-type" id="family-allowance-type-field" required>
+                    {% for family_allowance_type in family_allowance_types %}
+                        <option value="{{ family_allowance_type.id }}" {% if family_allowance_type.id == rider.family_allowance_type_id %}selected{% endif %}>{{ family_allowance_type.name | upper }}</option>
+                    {% endfor %}
+                    </select>
+            
+                    <p class="selecionado_opcion" onclick="open_select(this)"></p>
+                    <span onclick="open_select(this)" class="icon_select_mate">
+                    <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                        <path d="M0-.75h24v24H0z" fill="none"/>
+                    </svg>
+                    </span>
+            
+                    <div class="cont_list_select_mate">
+                    <ul class="cont_select_int"></ul> 
+                    </div>
+                </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="documentos-columnas" >
+
+            <!-- Es beneficiario de alguna pensión -->
+            <div class="input-set">
+                <label class="order-checkbox-ivy" for="receives-pension-checkbox">PENSIÓN</label>
+                <div class="checkbox-wrapper-30">
+                <span class="checkbox">
+                    <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} type="checkbox" id="receives-pension-checkbox" name="receives-pension" {% if rider.receives_pension %}checked{% endif %}/>
+                    <svg>
+                    <use xlink:href="#checkbox-30" class="checkbox"></use>
+                    </svg>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+                    <symbol id="checkbox-30" viewBox="0 0 22 22">
+                    <path fill="none" stroke="currentColor" d="M5.5,11.3L9,14.8L20.2,3.3l0,0c-0.5-1-1.5-1.8-2.7-1.8h-13c-1.7,0-3,1.3-3,3v13c0,1.7,1.3,3,3,3h13 c1.7,0,3-1.3,3-3v-13c0-0.4-0.1-0.8-0.3-1.2"/>
+                    </symbol>
+                </svg>
+                </div>
+            </div>
+
+            <!-- Seleccionar tipo de pensión -->
+            <div class="order" id="pension-type-entero" {% if not rider.receives_pension %} style = "display:none;" {% endif %}>
+                <div class="input-set">
+                <label id="pension-type-label" class="select-label" for="pension-type-field">SELECCIONAR TIPO DE PENSIÓN</label>
+                <div class="select_mate" data-mate-select="active">
+                    <select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="pension-type" id="pension-type-field" required>
+                    {% for type in pension_types %}
+                        <option value="{{ type.id }}" {% if type.id == rider.pension_type_id %}selected{% endif %}>{{ type.name | upper }}</option>
+                    {% endfor %}
+                    </select>
+
+                    <p class="selecionado_opcion" onclick="open_select(this)"></p>
+                    <span onclick="open_select(this)" class="icon_select_mate">
+                    <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                        <path d="M0-.75h24v24H0z" fill="none"/>
+                    </svg>
+                    </span>
+
+                    <div class="cont_list_select_mate">
+                    <ul class="cont_select_int"></ul> 
+                    </div>
+                </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="documentos-columnas" >
+
+            <!-- Tipo de discapacidad -->
+            <div class="order">
+                <div class="input-set">
+                <label id="disability-type-label" class="select-label" for="disability-type-field">TIPO DE DISCAPACIDAD</label>
+                <div class="select_mate" data-mate-select="active">
+                    <select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="disability-type" id="disability-type-field" required>
+                    {% for type in disability_types %}
+                        <option value="{{ type.id }}" {% if type.id == rider.disability_type_id %}selected{% endif %}>{{ type.type | upper }}</option>
+                    {% endfor %}
+                    </select>
+            
+                    <p class="selecionado_opcion" onclick="open_select(this)"></p>
+                    <span onclick="open_select(this)" class="icon_select_mate">
+                    <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                        <path d="M0-.75h24v24H0z" fill="none"/>
+                    </svg>
+                    </span>
+            
+                    <div class="cont_list_select_mate">
+                    <ul class="cont_select_int"></ul> 
+                    </div>
+                </div>
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+
+      <h3 class="subtitulos"> Situación previsional </h3>
+      
+      <!-- Obra social del alumno -->
+      <div class="input-set">
+        <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.health_insurance }}" spellcheck=false id="health-insurance-field" class="input-field" name="health-insurance" type="text" placeholder="" required><br>
+        <label id="health-insurance-label" class="input-label" for="health-insurance-field">OBRA SOCIAL DEL ALUMNO</label>
+        <span id="health-insurance-error" class="input-error"></span>
+      </div>
+
+      <!-- Número de afiliado -->
+      <div class="input-set">
+        <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.affiliate_number }}" spellcheck=false id="affiliate-number-field" class="input-field" name="affiliate-number" type="text" placeholder="" required><br>
+        <label id="affiliate-number-label" class="input-label" for="affiliate-number-field">NÚMERO DE AFILIADO</label>
+        <span id="affiliate-number-error" class="input-error"></span>
+      </div>
+
+      <!-- Posee curatela -->
+      <div class="input-set">
+        <label class="order-checkbox" for="has-guardianship-checkbox">POSEE CURATELA</label>
+        <div class="checkbox-wrapper-30">
+          <span class="checkbox">
+            <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} type="checkbox" id="has-guardianship-checkbox" name="has-guardianship" {% if rider.has_guardianship %}checked{% endif %}/>
+            <svg>
+              <use xlink:href="#checkbox-30" class="checkbox"></use>
+            </svg>
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+            <symbol id="checkbox-30" viewBox="0 0 22 22">
+              <path fill="none" stroke="currentColor" d="M5.5,11.3L9,14.8L20.2,3.3l0,0c-0.5-1-1.5-1.8-2.7-1.8h-13c-1.7,0-3,1.3-3,3v13c0,1.7,1.3,3,3,3h13 c1.7,0,3-1.3,3-3v-13c0-0.4-0.1-0.8-0.3-1.2"/>
+            </symbol>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Institución escolar -->
+      <div class="order">
+        <div class="input-set">
+          <label id="school-id-label" class="select-label" for="school-id-field">INSTITUCIÓN ESCOLAR</label>
+          <div class="select_mate" data-mate-select="active">
+            <select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="school-id" id="school-id-field" required>
+              {% for school in schools %}
+                <option value="{{ school.id }}" {% if school.id == rider.school_id %}selected{% endif %}>{{ school.name | upper }}</option>
+              {% endfor %}
+              <option value="Otro" >OTRO</option>
+            </select>
+
+            <p class="selecionado_opcion" onclick="open_select(this)"></p>
+            <span onclick="open_select(this)" class="icon_select_mate">
+              <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                <path d="M0-.75h24v24H0z" fill="none"/>
+              </svg>
+            </span>
+
+            <div class="cont_list_select_mate">
+              <ul class="cont_select_int"></ul> 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="new-school" style = "display:none;">
+
+        <!-- Nombre de la escuela -->
+        <div class="input-set">
+            <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} spellcheck=false id="school-name-field" class="input-field" name="school-name" type="text" placeholder=""><br>
+            <label id="school-name-label" class="input-label" for="school-name-field">NOMBRE DE LA ESCUELA</label>
+            <span id="school-name-error" class="input-error"></span>
+        </div>
+
+        <!-- Dirección de la escuela -->
+        <div class="input-set">
+            <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} spellcheck=false id="school-address-field" class="input-field" name="school-address" type="text" placeholder=""><br>
+            <label id="school-address-label" class="input-label" for="school-address-field">DIRECCIÓN DE LA ESCUELA</label>
+            <span id="school-address-error" class="input-error"></span>
+        </div>
+
+        <!-- Teléfono de la escuela -->
+        <div class="input-set">
+            <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} spellcheck=false id="school-phone-field" class="input-field" name="school-phone" type="text" placeholder=""><br>
+            <label id="school-phone-label" class="input-label" for="school-phone-field">TELÉFONO DE LA ESCUELA</label>
+            <span id="school-phone-error" class="input-error"></span>
+        </div>
+
+      </div>
+
+      <!-- Grado que cursa -->
+      <div class="input-set">
+        <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.current_grade }}" spellcheck=false id="current-grade-field" class="input-field" name="current-grade" type="text" placeholder="" required><br>
+        <label id="current-grade-label" class="input-label" for="current-grade-field">GRADO QUE CURSA</label>
+        <span id="current-grade-error" class="input-error"></span>
+      </div>
+
+      <h3 class="subtitulos"> Profesionales que lo atienden </h3>
+
+
+        <!-- Profesionales que lo atienden -->
+        <div class='text'>
+            <textarea oninput="autoResize(this)" placeholder="" id="professionals-field" class="input-field desc" name="professionals">
+            {{rider.attending_professionals}}
+            </textarea>
+        </div>
+
+      <h3 class="subtitulos"> Adultos responsables </h3>
+
+      <h4 class="subtitulos"> {{rider.guardian1_name}} {{rider.guardian1_last_name}} </h4>
+
+        <!-- Nombre -->
+        <div class="input-set">
+            <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian1_name }}" spellcheck=false id="guardian1-name-field" class="input-field" name="guardian1-name" type="text" placeholder="" required><br>
+            <label id="guardian1-name-label" class="input-label" for="guardian1-name-field">NOMBRE</label>
+            <span id="guardian1-name-error" class="input-error"></span>
+        </div>
+
+				<!-- Apellido -->
+        <div class="input-set">
+					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian1_last_name }}" spellcheck=false id="guardian1-surname-field" class="input-field" name="guardian1-surname" type="text" placeholder="" required><br>
+					<label id="guardian1-surname-label" class="input-label" for="guardian1-surname-field">APELLIDO</label>
+					<span id="guardian1-surname-error" class="input-error"></span>
+				</div>
+
+				<!-- DNI -->
+				<div class="input-set">
+					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian1_dni }}" spellcheck=false id="guardian1-dni-field" class="input-field" name="guardian1-dni" type="text" placeholder="" required><br>
+					<label id="guardian1-dni-label" class="input-label" for="guardian1-dni-field">DNI</label>
+					<span id="guardian1-dni-error" class="input-error"></span>
+				</div>
+
+				<!-- Calle -->
+				<div class="input-set">
+					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian1_address.street }}" spellcheck=false id="guardian1-street-field" class="input-field" name="guardian1-street" type="text" placeholder="" required><br>
+					<label id="guardian1-street-label" class="input-label" for="guardian1-street-field">CALLE</label>
+					<span id="guardian1-street-error" class="input-error"></span>
+				</div>
+
+				<!-- Numero -->
+				<div class="input-set">
+					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian1_address.number }}" spellcheck=false id="guardian1-number-field" class="input-field" name="guardian1-number" type="text" placeholder="" required><br>
+					<label id="guardian1-number-label" class="input-label" for="guardian1-number-field">NÚMERO</label>
+					<span id="guardian1-number-error" class="input-error"></span>
+				</div>
+
+				<!-- Departamento -->
+				<div class="input-set">
+					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian1_address.apartment }}" spellcheck=false id="guardian1-apartment-field" class="input-field" name="guardian1-apartment" type="text" placeholder=""><br>
+					<label id="guardian1-apartment-label" class="input-label" for="guardian1-apartment-field">DEPARTAMENTO</label>
+					<span id="guardian1-apartment-error" class="input-error"></span>
+				</div>
+
+				<!-- Localidad -->
+				<div class="order">
+					<div class="input-set">
+						<label id="guardian1-locality-label" class="select-label" for="guardian1-locality-field">LOCALIDAD</label>
+						<div class="select_mate" data-mate-select="active">
+							<select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="guardian1-locality" id="guardian1-locality-field" required>
+								{% for locality in localitys %}
+									<option value="{{ locality.id }}" {% if locality.id == rider.guardian1_locality_id %}selected{% endif %}>{{ locality.name | upper }}</option>
+								{% endfor %}
+							</select>
+	
+							<p class="selecionado_opcion" onclick="open_select(this)"></p>
+							<span onclick="open_select(this)" class="icon_select_mate">
+								<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+									<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+									<path d="M0-.75h24v24H0z" fill="none"/>
+								</svg>
+							</span>
+	
+							<div class="cont_list_select_mate">
+								<ul class="cont_select_int"></ul> 
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Provincia -->
+				<div class="order">
+					<div class="input-set">
+						<label id="guardian1-province-label" class="select-label" for="guardian1-province-field">PROVINCIA</label>
+						<div class="select_mate" data-mate-select="active">
+							<select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="guardian1-province" id="guardian1-province-field" required>
+								{% for province in provinces %}
+									<option value="{{ province.id }}" {% if province.id == rider.guardian1_province_id %}selected{% endif %}>{{ province.name | upper }}</option>
+								{% endfor %}
+							</select>
+	
+							<p class="selecionado_opcion" onclick="open_select(this)"></p>
+							<span onclick="open_select(this)" class="icon_select_mate">
+								<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+									<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+									<path d="M0-.75h24v24H0z" fill="none"/>
+								</svg>
+							</span>
+	
+							<div class="cont_list_select_mate">
+								<ul class="cont_select_int"></ul> 
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Telefono -->
+				<div class="input-set">
+					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian1_phone }}" spellcheck=false id="guardian1-phone-field" class="input-field" name="guardian1-phone" type="text" placeholder="" required><br>
+					<label id="guardian1-phone-label" class="input-label" for="guardian1-phone-field">TELÉFONO</label>
+					<span id="guardian1-phone-error" class="input-error"></span>
+				</div>
+
+				<!-- Mail -->
+				<div class="input-set">
+					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian1_email }}" spellcheck=false id="guardian1-email-field" class="input-field" name="guardian1-email" type="email" placeholder="" required><br>
+					<label id="guardian1-email-label" class="input-label" for="guardian1-email-field">EMAIL</label>
+					<span id="guardian1-email-error" class="input-error"></span>
+				</div>
+
+				<!-- Nivel educacional -->
+				<div class="order">
+					<div class="input-set">
+						<label id="guardian1-educational-level-id-label" class="select-label" for="guardian1-educational-level-field">NIVEL EDUCACIONAL</label>
+						<div class="select_mate" data-mate-select="active">
+							<select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="guardian1-educational-level" id="guardian1-educational-level-field" required>
+								<option value="Primario" >PRIMARIO</option>
+								<option value="Secundario" >SECUNDARIO</option>
+								<option value="Terciario" >TERCIARIO</option>
+								<option value="Universitario" >UNIVERSITARIO</option>
+							</select>
+	
+							<p class="selecionado_opcion" onclick="open_select(this)"></p>
+							<span onclick="open_select(this)" class="icon_select_mate">
+								<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+									<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+									<path d="M0-.75h24v24H0z" fill="none"/>
+								</svg>
+							</span>
+	
+							<div class="cont_list_select_mate">
+								<ul class="cont_select_int"></ul> 
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Ocupación -->
+				<div class="input-set">
+					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian1_occupation }}" spellcheck=false id="guardian1-occupation-field" class="input-field" name="guardian1-occupation" type="text" placeholder="" required><br>
+					<label id="guardian1-occupation-label" class="input-label" for="guardian1-occupation-field">OCUPACIÓN</label>
+					<span id="guardian1-occupation-error" class="input-error"></span>
+				</div>
+
+				<!-- Parentesco -->
+				<div class="input-set">
+					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian1_relationship }}" spellcheck=false id="guardian1-relationship-field" class="input-field" name="guardian1-relationship" type="text" placeholder="" required><br>
+					<label id="guardian1-relationship-label" class="input-label" for="guardian1-relationship-field">RELACIÓN</label>
+					<span id="guardian1-relationship-error" class="input-error"></span>
+				</div>
+
+        <h4 class="subtitulos"> {{rider.guardian2_name}} {{rider.guardian2_last_name}} </h4>
+
+				<!-- Nombre -->
+				<div class="input-set">
+					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian2_name }}" spellcheck=false id="guardian2-name-field" class="input-field" name="guardian2-name" type="text" placeholder="" required><br>
+					<label id="guardian2-name-label" class="input-label" for="guardian2-name-field">NOMBRE</label>
+					<span id="guardian2-name-error" class="input-error"></span>
+				</div>
+
+				<!-- Apellido -->
+        		<div class="input-set">
+					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian2_last_name }}" spellcheck=false id="guardian2-surname-field" class="input-field" name="guardian2-surname" type="text" placeholder="" required><br>
+					<label id="guardian2-surname-label" class="input-label" for="guardian2-surname-field">APELLIDO</label>
+					<span id="guardian2-surname-error" class="input-error"></span>
+				</div>
+
+				<!-- DNI -->
+				<div class="input-set">
+					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian2_dni }}" spellcheck=false id="guardian2-dni-field" class="input-field" name="guardian2-dni" type="text" placeholder="" required><br>
+					<label id="guardian2-dni-label" class="input-label" for="guardian2-dni-field">DNI</label>
+					<span id="guardian2-dni-error" class="input-error"></span>
+				</div>
+
+				<!-- Calle -->
+				<div class="input-set">
+					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian2_address.street }}" spellcheck=false id="guardian2-street-field" class="input-field" name="guardian2-street" type="text" placeholder="" required><br>
+					<label id="guardian2-street-label" class="input-label" for="guardian2-street-field">CALLE</label>
+					<span id="guardian2-street-error" class="input-error"></span>
+				</div>
+
+				<!-- Numero -->
+				<div class="input-set">
+					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian2_address.number }}" spellcheck=false id="guardian2-number-field" class="input-field" name="guardian2-number" type="text" placeholder="" required><br>
+					<label id="guardian2-number-label" class="input-label" for="guardian2-number-field">NÚMERO</label>
+					<span id="guardian2-number-error" class="input-error"></span>
+				</div>
+
+				<!-- Departamento -->
+				<div class="input-set">
+					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian2_address.apartment }}" spellcheck=false id="guardian2-apartment-field" class="input-field" name="guardian2-apartment" type="text" placeholder=""><br>
+					<label id="guardian2-apartment-label" class="input-label" for="guardian2-apartment-field">DEPARTAMENTO</label>
+					<span id="guardian2-apartment-error" class="input-error"></span>
+				</div>
+
+				<!-- Localidad -->
+				<div class="order">
+					<div class="input-set">
+						<label id="guardian2-locality-label" class="select-label" for="guardian2-locality-field">LOCALIDAD</label>
+						<div class="select_mate" data-mate-select="active">
+							<select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="guardian2-locality" id="guardian2-locality-field" required>
+								{% for locality in localitys %}
+									<option value="{{ locality.id }}" {% if locality.id == rider.guardian2_locality_id %}selected{% endif %}>{{ locality.name | upper }}</option>
+								{% endfor %}
+							</select>
+	
+							<p class="selecionado_opcion" onclick="open_select(this)"></p>
+							<span onclick="open_select(this)" class="icon_select_mate">
+								<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+									<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+									<path d="M0-.75h24v24H0z" fill="none"/>
+								</svg>
+							</span>
+	
+							<div class="cont_list_select_mate">
+								<ul class="cont_select_int"></ul> 
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Provincia -->
+				<div class="order">
+					<div class="input-set">
+						<label id="guardian2-province-label" class="select-label" for="guardian2-province-field">PROVINCIA</label>
+						<div class="select_mate" data-mate-select="active">
+							<select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="guardian2-province" id="guardian2-province-field" required>
+								{% for province in provinces %}
+									<option value="{{ province.id }}" {% if province.id == rider.guardian2_province_id %}selected{% endif %}>{{ province.name | upper }}</option>
+								{% endfor %}
+							</select>
+	
+							<p class="selecionado_opcion" onclick="open_select(this)"></p>
+							<span onclick="open_select(this)" class="icon_select_mate">
+								<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+									<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+									<path d="M0-.75h24v24H0z" fill="none"/>
+								</svg>
+							</span>
+	
+							<div class="cont_list_select_mate">
+								<ul class="cont_select_int"></ul> 
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Telefono -->
+				<div class="input-set">
+					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian2_phone }}" spellcheck=false id="guardian2-phone-field" class="input-field" name="guardian2-phone" type="text" placeholder="" required><br>
+					<label id="guardian2-phone-label" class="input-label" for="guardian2-phone-field">TELÉFONO</label>
+					<span id="guardian2-phone-error" class="input-error"></span>
+				</div>
+
+				<!-- Mail -->
+				<div class="input-set">
+					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian2_email }}" spellcheck=false id="guardian2-email-field" class="input-field" name="guardian2-email" type="email" placeholder="" required><br>
+					<label id="guardian2-email-label" class="input-label" for="guardian2-email-field">EMAIL</label>
+					<span id="guardian2-email-error" class="input-error"></span>
+				</div>
+
+				<!-- Nivel educacional -->
+				<div class="order">
+					<div class="input-set">
+						<label id="guardian2-educational-level-id-label" class="select-label" for="guardian2-educational-level-field">NIVEL EDUCACIONAL</label>
+						<div class="select_mate" data-mate-select="active">
+							<select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="guardian2-educational-level" id="guardian2-educational-level-field" required>
+								<option value="Primario" >PRIMARIO</option>
+								<option value="Secundario" >SECUNDARIO</option>
+								<option value="Terciario" >TERCIARIO</option>
+								<option value="Universitario" >UNIVERSITARIO</option>
+							</select>
+	
+							<p class="selecionado_opcion" onclick="open_select(this)"></p>
+							<span onclick="open_select(this)" class="icon_select_mate">
+								<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+									<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+									<path d="M0-.75h24v24H0z" fill="none"/>
+								</svg>
+							</span>
+	
+							<div class="cont_list_select_mate">
+								<ul class="cont_select_int"></ul> 
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Ocupación -->
+				<div class="input-set">
+					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian2_occupation }}" spellcheck=false id="guardian2-occupation-field" class="input-field" name="guardian2-occupation" type="text" placeholder="" required><br>
+					<label id="guardian2-occupation-label" class="input-label" for="guardian2-occupation-field">OCUPACIÓN</label>
+					<span id="guardian2-occupation-error" class="input-error"></span>
+				</div>
+
+				<!-- Parentesco -->
+				<div class="input-set">
+					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian2_relationship }}" spellcheck=false id="guardian2-relationship-field" class="input-field" name="guardian2-relationship" type="text" placeholder="" required><br>
+					<label id="guardian2-relationship-label" class="input-label" for="guardian2-relationship-field">RELACIÓN</label>
+					<span id="guardian2-relationship-error" class="input-error"></span>
+				</div>
+
+      <h3 class="subtitulos"> Trabajo en nuestra institución </h3>
+
+      <!-- Propuesta de trabajo institucional -->
+      <div class="order">
+        <div class="input-set">
+          <label id="work-proposal-id-label" class="select-label" for="work-proposal-id-field">PROPUESTA DE TRABAJO</label>
+          <div class="select_mate" data-mate-select="active">
+            <select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="work-proposal-id" id="work-proposal-id-field" required>
+              {% for proposal in work_proposals %}
+                <option value="{{ proposal.id }}" {% if proposal.id == rider.work_proposal_id %}selected{% endif %}>{{ proposal.name | upper }}</option>
+              {% endfor %}
+            </select>
+
+            <p class="selecionado_opcion" onclick="open_select(this)"></p>
+            <span onclick="open_select(this)" class="icon_select_mate">
+              <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                <path d="M0-.75h24v24H0z" fill="none"/>
+              </svg>
+            </span>
+
+            <div class="cont_list_select_mate">
+              <ul class="cont_select_int"></ul> 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Condición -->
+      <div class="input-set">
+        <label class="order-checkbox" for="active-checkbox">ACTIVO</label>
+        <div class="checkbox-wrapper-30">
+          <span class="checkbox">
+            <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} type="checkbox" id="active-checkbox" name="active" {% if rider.active %}checked{% endif %}/>
+            <svg>
+              <use xlink:href="#checkbox-30" class="checkbox"></use>
+            </svg>
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+            <symbol id="checkbox-30" viewBox="0 0 22 22">
+              <path fill="none" stroke="currentColor" d="M5.5,11.3L9,14.8L20.2,3.3l0,0c-0.5-1-1.5-1.8-2.7-1.8h-13c-1.7,0-3,1.3-3,3v13c0,1.7,1.3,3,3,3h13 c1.7,0,3-1.3,3-3v-13c0-0.4-0.1-0.8-0.3-1.2"/>
+            </symbol>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Sede -->
+      <div class="order">
+        <div class="input-set">
+          <label id="sede-id-label" class="select-label" for="sede-id-field">SEDE</label>
+          <div class="select_mate" data-mate-select="active">
+            <select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="sede-id" id="sede-id-field" required>
+              {% for sede in sedes %}
+                <option value="{{ sede.id }}" {% if sede.id == rider.sede_id %}selected{% endif %}>{{ sede.name | upper }}</option>
+              {% endfor %}
+            </select>
+
+            <p class="selecionado_opcion" onclick="open_select(this)"></p>
+            <span onclick="open_select(this)" class="icon_select_mate">
+              <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                <path d="M0-.75h24v24H0z" fill="none"/>
+              </svg>
+            </span>
+
+            <div class="cont_list_select_mate">
+              <ul class="cont_select_int"></ul> 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profesor/a o terapeuta -->
+      <div class="order">
+        <div class="input-set">
+          <label id="teacher-id-label" class="select-label" for="teacher-id-field">PROFESOR/A O TERAPEUTA</label>
+          <div class="select_mate" data-mate-select="active">
+            <select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="teacher-id" id="teacher-id-field" required>
+              {% for employee in employees %}
+                <option value="{{ employee.id }}" {% if employee.id == rider.teacher_id %}selected{% endif %}>{{ employee.name | upper }} {{ employee.surname | upper }} ({{ employee.dni | upper }})</option>
+              {% endfor %}
+            </select>
+
+            <p class="selecionado_opcion" onclick="open_select(this)"></p>
+            <span onclick="open_select(this)" class="icon_select_mate">
+              <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                <path d="M0-.75h24v24H0z" fill="none"/>
+              </svg>
+            </span>
+
+            <div class="cont_list_select_mate">
+              <ul class="cont_select_int"></ul> 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conductor/a del caballo -->
+      <div class="order">
+        <div class="input-set">
+          <label id="horse-conductor-id-label" class="select-label" for="horse-conductor-id-field">CONDUCTOR/A DEL CABALLO</label>
+          <div class="select_mate" data-mate-select="active">
+            <select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="horse-conductor-id" id="horse-conductor-id-field" required>
+              {% for employee in employees %}
+                <option value="{{ employee.id }}" {% if employee.id == rider.horse_conductor_id %}selected{% endif %}>{{ employee.name | upper }} {{ employee.surname | upper }} ({{ employee.dni | upper }})</option>
+              {% endfor %}
+            </select>
+
+            <p class="selecionado_opcion" onclick="open_select(this)"></p>
+            <span onclick="open_select(this)" class="icon_select_mate">
+              <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                <path d="M0-.75h24v24H0z" fill="none"/>
+              </svg>
+            </span>
+
+            <div class="cont_list_select_mate">
+              <ul class="cont_select_int"></ul> 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Caballo -->
+      <div class="order">
+        <div class="input-set">
+          <label id="horse-id-label" class="select-label" for="horse-id-field">CABALLO</label>
+          <div class="select_mate" data-mate-select="active">
+            <select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="horse-id" id="horse-id-field" required>
+              {% for horse in horses %}
+                <option value="{{ horse.id }}" {% if horse.id == rider.horse_id %}selected{% endif %}>{{ horse.name | upper }}</option>
+              {% endfor %}
+            </select>
+
+            <p class="selecionado_opcion" onclick="open_select(this)"></p>
+            <span onclick="open_select(this)" class="icon_select_mate">
+              <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                <path d="M0-.75h24v24H0z" fill="none"/>
+              </svg>
+            </span>
+
+            <div class="cont_list_select_mate">
+              <ul class="cont_select_int"></ul> 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Auxiliar de pista -->
+      <div class="order">
+        <div class="input-set">
+          <label id="track-assistant-id-label" class="select-label" for="track-assistant-id-field">AUXILIAR DE PISTA</label>
+          <div class="select_mate" data-mate-select="active">
+            <select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="track-assistant-id" id="track-assistant-id-field" required>
+              {% for employee in employees %}
+                <option value="{{ employee.id }}" {% if employee.id == rider.track_assistant_id %}selected{% endif %}>{{ employee.name | upper }} {{ employee.surname | upper }} ({{ employee.dni | upper }})</option>
+              {% endfor %}
+            </select>
+
+            <p class="selecionado_opcion" onclick="open_select(this)"></p>
+            <span onclick="open_select(this)" class="icon_select_mate">
+              <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                <path d="M0-.75h24v24H0z" fill="none"/>
+              </svg>
+            </span>
+
+            <div class="cont_list_select_mate">
+              <ul class="cont_select_int"></ul> 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="submit-btn">
+        {% if is_permitted(session, 'rider_update') %}
+          <button type="submit"  id="button-submit" class="submit">Aplicar cambios</button>
+        {% endif %}
+        {% if is_permitted(session, 'rider_destroy') %}
+          <button type="button" id="button-delete" class="del">Eliminar jinete</button>
+        {% endif %}
+      </div>
+    </form>
+
+  </section>
+
+    <form {% if mode=="general" %}class="display-none"{% endif %} id="search-options" action="{{ url_for('rider.show', id=rider.id)}}" method="GET">
+      <div class="document-filters">
+        <input type="hidden" name="mode" value="documents">
+        <input id="page" type="number" name="page" style="display:none;">
+
+        <div class="empty">
+          <label class="title-cont" for="controllers">Ordenar por:</label>
+          <div id="controllers" class="controllers">
+              <div class="dropselect">
+                  <div class="select_mate" data-mate-select="active" >
+                      <select name="sort_attr" id="sortAttr">
+                          <option {% if sort_attr == 'upload_date' %}selected{% endif %} value="upload_date">Fecha de subida</option>
+                          <option {% if sort_attr == 'title' %}selected{% endif %} value="title">Nombre</option>
+                      </select>
+                      
+                      <p class="selecionado_opcion"  onclick="open_select(this)" ></p>
+                      <span onclick="open_select(this)" class="icon_select_mate" >
+                          <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                              <path d="M0-.75h24v24H0z" fill="none"/>
+                          </svg>
+                      </span>
+          
+                      <div class="cont_list_select_mate">
+                          <ul class="cont_select_int">  </ul> 
+                      </div>
+                  </div>
+              </div>
+
+              <label class="container">
+                  <input id="ascending" {% if start_ascending %}checked{% endif %} name="ascending" value="1" type="checkbox">
+                  <svg viewBox="0 0 512 512" height="1em" xmlns="http://www.w3.org/2000/svg" class="chevron-down"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg>
+              </label>
+          </div>
+        </div>
+
+        <div class="search-bar">
+          <input spellcheck=false type="text" name="search_title" class="search-mail" placeholder="Buscar por titulo" value={{search_title}}>
+          <button class="search-button" type="submit"><i class="fa fa-search"></i></button>
+        </div>
+
+        <div class="dropselect" style="position:relative;">
+          <div class="select_mate" data-mate-select="active" >
+              <select name="type" id="mySelect">
+                  <option value="">Sin filtros de tipo</option>
+                  {% for type in types %}
+                      <option value="{{ type.name }}" {% if start_type == type.name %}selected{% endif %}>{{ type.name }}</option>
+                  {% endfor %}
+              </select>
+              
+              <p class="selecionado_opcion"  onclick="open_select(this)" ></p>
+              <span onclick="open_select(this)" class="icon_select_mate" >
+                  <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                      <path d="M0-.75h24v24H0z" fill="none"/>
+                  </svg>
+              </span>
+              <div class="cont_list_select_mate">
+                  <ul class="cont_select_int">  </ul> 
+              </div>
+          </div>
+          <button class="search-btn" type="submit"><i class="fa fa-search"></i></button>
+        </div>
+      </div>
+    </form>
+
+
+  {% if documents.total > 0  %}
+  <div class="table-container {% if mode=="general" %}display-none{% endif %}" id="document-table">
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Formato</th>
+                <th>Fecha de subida</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for document in documents %}
+            <tr>
+                <td>{{ document.title }}</td>
+                <td>{{ document.format }}</td>
+                <td>{{ document.upload_date.strftime("%d/%m/%Y") }}</td>
+                <td>
+                    {% if document.is_external %}
+                    <!-- External documents: Direct link -->
+                    <a href="{{ document.file_address }}" target="_blank">
+                      <i class="fa fa-external-link"></i>
+                    </a>
+                    {% else %}
+                    <!-- Internal documents: Use a Flask route to download -->
+                    <a href="{{ url_for('document.download', document_id=document.id) }}">
+                      <i class="fa fa-download"></i>
+                    </a>
+                    {% endif %}
+                    <a class="delete-btn" data-document-id="{{ document.id }}">
+                      <i class="fa fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="page-section {% if mode=="general" %}display-none{% endif %}" id="page-section" style="margin-bottom:1.5rem;">
+      <nav class="theNav">
+          <ul class="pagination">
+              <li class="pagination-item">
+                  <a id="prev" class="ext" href="#">Previo</a>
+              </li>
+              {% for i in range(pages) %}
+                  {% if (i > startPage-6) and (i < startPage+4) or ((5 >= startPage) and (i < 10)) %}
+                      <li class="pagination-item {% if startPage == i+1 %}active{% endif %}">
+                          <a class="pageNum">{{i+1}}</a>
+                      </li> 
+                  {% endif %}
+              {% endfor %}
+              <li class="pagination-item">
+                  <a id="next" class="ext" href="#">Siguiente</a>
+              </li>
+          </ul>
+      </nav>
+      <hr>
+    </div>
+  </div>
+  {% else %}
+    <div class="table-container {% if mode=="general" %}display-none{% endif %}" id="document-table">
+      <h1 class="alternative-title">No se encontró ningún documento</h1>
+    </div>
+  {% endif %} 
+
+  <div id="files-container" {% if mode=='general' %}class="display-none"{% endif %} style="margin-bottom:1.5rem;">
+    <div class="container-input">
+      <form id="upload-form" action="{{ url_for('document.create') }}" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="relation" value="rider">
+        <input type="hidden" name="id" value="{{ rider.id }}">
+        <input type="file" name="files" id="files" class="inputfile inputfile-1" data-multiple-caption="{count} archivos seleccionados" multiple />
+        <label for="files">
+          <svg xmlns="http://www.w3.org/2000/svg" class="iborrainputfile" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path></svg>
+          <span class="iborrainputfile">Subir archivos</span>
+        </label>
+      </form>
+    </div>
+  </div>
+
+  <dialog id="modal" class="modal">
+    <div class="modal-body">
+      <h2> ¿Está seguro de que quiere eliminar al jinete {{rider.name}} {{rider.surname}} permanentemente? </h2>
+      <div class="modal-btns">
+        <form id="delForm" action="{{ url_for('rider.delete', id=rider.id)}}" method="GET">
+          <button type="submit" form="delForm" class="modal-btn confirm-btn">Confirmar</button>
+        </form>
+        <button id="cancel-btn" type="button" class="modal-btn cancel-btn">Cancelar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="document-modal" class="modal">
+    <div class="modal-body">
+      <h2>¿Está seguro de que quiere eliminar el documento?</h2>
+      <div class="modal-btns">
+        <form id="documnetDelForm" method="POST">
+          <input type="hidden" name="relation" value="employee">
+          <button type="submit" class="modal-btn confirm-btn">Confirmar</button>
+        </form>
+        <button id="document-cancel-btn" type="button" class="modal-btn cancel-btn">Cancelar</button>
+      </div>
+    </div>
+  </dialog>
+    <script>
+        function autoResize(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+        }
+    </script>
+  <script>
+    const dnis = {{ dnis | tojson }};
+    const affiliate_numbers = {{ affiliate_numbers | tojson }};
+
+    const deleteBtn = document.getElementById("button-delete");
+    const cancelBtn = document.getElementById("cancel-btn");
+    const modal = document.getElementById("modal");
+
+    deleteBtn.addEventListener("click", function () {
+      modal.showModal();
+    });
+
+    cancelBtn.addEventListener("click", function () {
+      modal.close();
+    });
+  </script>
+  <script src="{{ url_for('static', filename='js/updateRider.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/documents.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/pagination.js') }}"></script>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+
+{% block title %} Inicia Sesión - CEDICA {% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css')}}"/>
+{% endblock %}
+
+
+{% block content %}
+<section class="loginbox">
+    <div class="formLogin">
+    <h1>Iniciar sesión</h1>
+    <br>
+    <form action="{{ url_for('auth.authenticate')}}" method="POST">
+        <div class="input-set">
+            <input placeholder="" spellcheck=false id="email-field" class="input-field" name="email" type="email" required><br>
+            <label id="email-label" for="email-field" class="input-label">EMAIL</label>
+            <span id="email-error" class="input-error"></span>
+        </div>
+        <br>
+        <div class="input-set">
+            <input placeholder="" id="password-field" class="input-field" name="password" type="password" required><br>
+            <label id="password-label" class="input-label" for="password-field">CONTRASEÑA</label>
+            <span id="password-error" class="input-error"></span>
+        </div>
+        <button id="button-submit" class="submit" type="submit" disabled>Iniciar Sesión</button>
+    </form>
+</div>
+</section>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var emailField = document.getElementById("email-field");
+            var emailError = document.getElementById("email-error");
+
+            var passwordField = document.getElementById("password-field");
+            var passwordError = document.getElementById("password-error");
+
+            var button = document.getElementById('button-submit');
+            
+            emailField.addEventListener("input", validateEmail);
+            emailField.addEventListener("focus", validateEmail);
+            passwordField.addEventListener("input", validatePassword);
+            passwordField.addEventListener("focus", validatePassword);
+            
+            var contraValida = false;
+            var mailValido = false;
+
+            if (emailField.value) {
+                validateEmail();
+            }
+            if (passwordField.value) {
+                validatePassword();
+            }
+
+            function validateEmail(){
+
+                if(!emailField.value.match(/^[A-Za-z\._\-0-9]*[@][A-Za-z]*[\.][a-z]{2,4}$/)){
+                    emailError.innerHTML = "Mail invalido";
+                    emailError.style.top = "80%";
+                    emailField.style.borderBottomColor = "red";
+                    mailValido = false;
+                    button.disabled = true;
+                    return false;
+                }
+                else{
+                    emailError.innerHTML = "";
+                    emailField.style.borderBottomColor = "green";
+                    emailError.style.top = "50%";
+                    mailValido = true;
+                    button.disabled = !(contraValida && mailValido);
+                    return true;
+                }
+            }
+
+            function validatePassword(){
+
+                if(passwordField.value.length == 0){
+                    passwordError.innerHTML = "Este campo es obligatorio";
+                    passwordError.style.top = "80%";
+                    passwordField.style.borderBottomColor = "red";
+                    contraValida = false;
+                    button.disabled = true;
+                    return false;
+                }
+                else{
+                    passwordError.innerHTML = "";
+                    passwordError.style.top = "50%";
+                    passwordField.style.borderBottomColor = "green";
+                    contraValida = true;
+                    button.disabled = !(contraValida && mailValido);
+                    return true;
+                }
+            }            
+        });
+    </script>
+{% endblock %}

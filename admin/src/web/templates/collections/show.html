@@ -1,0 +1,146 @@
+{% extends "layout.html" %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dropdown.css')}}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/collectionRegister.css')}}"/>
+{% endblock head %}
+{% block title %}Cobro {{ collection.id }} - CEDICA{% endblock title %}
+
+{% block content %}
+<section class="registerbox">
+    <form action="{{ url_for('collection.update', id=collection.id)}}" method="POST">
+        <div class="formRegister">
+            <h1>Cobro {{ collection.id }}</h1>
+            <div class='form'>
+                <div class="input-set" style="width:fit-content;">
+                    <input {% if not is_permitted(session, 'collection_update') %}disabled style="cursor: default;" {% endif %} value="{{ collection.amount }}" placeholder="" id="amount-field" class="input-field" name="amount" type="number" required><br>
+                    <label for="amount-field" class="input-label">MONTO</label>
+                    <span id="amount-error" class="input-error"></span>
+                </div>
+                <div class="input-set" style="width:fit-content;">
+                    <label class='label' for="date-field">FECHA DE PAGO</label>
+                    <input {% if not is_permitted(session, 'collection_update') %}disabled style="cursor: default;" {% endif %} value="{{ collection.date.strftime('%Y-%m-%d') }}" id="date-field" class="date-field" name="date" type="date" required><br>
+                </div>
+
+                <div class="input-set">
+                    <label id="rider-label" class="select-label" for="rider-field">J&amp;A</label>
+                    <div class="select_mate" data-mate-select="active">
+                    <select {% if not is_permitted(session, 'collection_update') %}disabled style="cursor: default;" {% endif %} name="rider" id="sel-rider">
+                        {% for rider in riders %}
+                            <option value="{{ rider.id }}" {% if rider.id == collection.paid_by_id %}selected{% endif %}>{{rider.name}} {{rider.last_name}} ({{rider.dni}})</option>
+                        {% endfor %}
+                    </select>
+                    
+                    <p class="selecionado_opcion"  onclick="open_select(this)" ></p>
+                    <span onclick="open_select(this)" class="icon_select_mate" >
+                        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                            <path d="M0-.75h24v24H0z" fill="none"/>
+                        </svg>
+                    </span>
+            
+                    <div class="cont_list_select_mate">
+                        <ul class="cont_select_int">  </ul>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="input-set">
+                    <label id="medium-label" class="select-label" for="medium-field">MEDIO DE PAGO</label>
+                    <div class="select_mate" data-mate-select="active">
+                    <select {% if not is_permitted(session, 'collection_update') %}disabled style="cursor: default;" {% endif %} name="medium" id="sel-medium">
+                        {% for medium in mediums %}
+                            <option value="{{ medium.id }}" {% if medium.id == collection.medium_id %}selected{% endif %}>{{medium.name}}</option>
+                        {% endfor %}
+                    </select>
+                    
+                    <p class="selecionado_opcion"  onclick="open_select(this)" ></p>
+                    <span onclick="open_select(this)" class="icon_select_mate" >
+                        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                            <path d="M0-.75h24v24H0z" fill="none"/>
+                        </svg>
+                    </span>
+            
+                    <div class="cont_list_select_mate">
+                        <ul class="cont_select_int">  </ul>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="input-set">
+                    <label id="emp-label" class="select-label" for="emp-field">RECIBE EL DINERO</label>
+                    <div class="select_mate" data-mate-select="active">
+                    <select {% if not is_permitted(session, 'collection_update') %}disabled style="cursor: default;" {% endif %} name="emp" id="sel-emp">
+                        {% for emp in employees %}
+                            <option value="{{ emp.id }}" {% if emp.id == collection.received_by_id %}selected{% endif %}>{{emp.name}} {{emp.surname}} ({{emp.dni}})</option>
+                        {% endfor %}
+                    </select>
+                    
+                    <p class="selecionado_opcion"  onclick="open_select(this)" ></p>
+                    <span onclick="open_select(this)" class="icon_select_mate" >
+                        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                            <path d="M0-.75h24v24H0z" fill="none"/>
+                        </svg>
+                    </span>
+            
+                    <div class="cont_list_select_mate">
+                        <ul class="cont_select_int">  </ul>
+                    </div>
+                    </div>
+                </div>
+
+                <div class='text input-set'>
+                    <textarea {% if not is_permitted(session, 'collection_update') %}disabled style="cursor: default;" {% endif %} maxlength="255" oninput="autoResize(this)" placeholder="" id="obs-field" class="input-field desc" name="obs">{{ collection.observations }}</textarea>
+                    <label class='input-label ltxt' for="obs-field">OBSERVACIONES</label>
+                    <span id="obs-error" class="input-error"></span>
+                </div>
+            </div>
+        </div>
+        <div class="submit-btn">
+            {% if is_permitted(session, 'collection_update') %}
+            <button type="submit"  id="button-submit" class="submit" disabled>Aplicar cambios</button>
+            {% endif %}
+            {% if is_permitted(session, 'collection_destroy') %}
+            <button type="button" id="button-delete" class="del">Eliminar cobro</button>
+            {% endif %}
+        </div>
+    </form>
+</section>
+
+<dialog id="modal" class="modal">
+    <div class="modal-body">
+      <h2> ¿Está seguro de que quiere eliminar el cobro {{ collection.id }} permanentemente? </h2>
+      <div class="modal-btns">
+        <form id="delForm" action="{{ url_for('collection.delete', id=collection.id)}}" method="GET">
+          <button type="submit" form="delForm" class="modal-btn confirm-btn">Confirmar</button>
+        </form>
+        <button id="cancel-btn" type="button" class="modal-btn cancel-btn">Cancelar</button>
+      </div>
+    </div>
+</dialog>
+
+<script>
+    const deleteBtn = document.getElementById("button-delete");
+    const cancelBtn = document.getElementById("cancel-btn");
+    const modal = document.getElementById("modal");
+
+    deleteBtn.addEventListener("click", function () {
+      modal.showModal();
+    });
+
+    cancelBtn.addEventListener("click", function () {
+      modal.close();
+    });
+
+    const obsField = document.getElementById("obs-field");
+    autoResize(obsField);
+
+    function autoResize(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+    }
+</script>
+<script src="{{ url_for('static', filename='js/dropdownVanilla.js')}}"></script>
+<script src="{{ url_for('static', filename='js/updateCollection.js')}}"></script>
+{% endblock content %}

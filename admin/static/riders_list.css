@@ -1,0 +1,138 @@
+a {
+    text-decoration: none;
+}
+
+.main-container {
+    display: flex;  /* Usamos flexbox para alinear elementos en filas */
+    justify-content: space-between;  /* Espacio entre los dos contenedores */
+    gap: 20px;  /* Espacio entre los elementos */
+}
+
+.filter-container {
+    margin: 55px auto; /* Cambia 'auto' a un valor específico para alinear más a la izquierda */
+    margin-left: 5px; /* O ajusta a un valor que funcione para ti */
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Espaciado entre los elementos */
+    margin-bottom: 20px; /* Espacio entre los filtros y la lista */
+}
+
+.search-bar input {
+    padding: 10px;
+    width: 100%;
+    max-width: 300px;  /* Ajusta según tu diseño */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.sorting-options {
+    display: flex;
+    align-items: center;
+    background-color: #f9f9f9; /* Color de fondo */
+    border: 1px solid #ddd; /* Borde alrededor de la opción */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 10px; /* Espacio interno */
+}
+
+.sorting-options label {
+    margin-right: 10px; /* Espacio entre etiqueta y menú desplegable */
+    font-weight: bold; /* Negrita para la etiqueta */
+}
+
+.sort-select {
+    padding: 8px; /* Espacio interno para el select */
+    border: 1px solid #ccc; /* Borde del select */
+    border-radius: 5px; /* Bordes redondeados */
+    background-color: #fff; /* Fondo blanco para el select */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el select */
+    transition: border-color 0.3s ease; /* Transición suave para el borde */
+}
+
+/* Efecto al pasar el mouse sobre el select */
+.sort-select:hover {
+    border-color: #888; /* Color del borde al pasar el mouse */
+}
+
+/* Efecto al hacer foco en el select */
+.sort-select:focus {
+    outline: none; /* Quita el contorno predeterminado */
+    border-color: #007bff; /* Color del borde al hacer foco */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Sombra alrededor */
+}
+
+/* Contenedor principal del listado de riders */
+.rider-list {
+    max-width: 1300px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+/* Contenedor de las tarjetas de riders */
+.riders-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* Estilo de cada tarjeta */
+.rider-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 100%;
+    max-width: 300px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+/* Efecto hover para las tarjetas */
+.rider-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Estilos para el nombre del rider */
+.rider-name {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* Estilos para el rol del rider */
+.rider-info {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    color: #666;
+}
+
+/* Información adicional */
+.rider-profesionales {
+    font-size: 0.9em;
+    color: #999;
+}
+
+.footer-container {
+    margin: 40px auto;
+}
+
+.social-button {
+    width: 50px;
+    height: 50px;
+    background-color: #1DA1F2; /* Color de fondo para Twitter */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px; /* Bordes ligeramente redondeados */
+    transition: background-color 0.3s ease;
+}
+
+.social-button:hover {
+    background-color: #0d8ce3; /* Color de fondo al pasar el mouse */
+}
+
+.social-icon {
+    width: 30px;
+    height: 30px;
+    filter: invert(1); /* Hace que el logo sea blanco para contrastar */
+}

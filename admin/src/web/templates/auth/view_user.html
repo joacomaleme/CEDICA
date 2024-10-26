@@ -1,0 +1,331 @@
+{% extends "layout.html" %}
+
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='register.css')}}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dropdown.css')}}"/>
+{% endblock %}
+{% block title %}{{user.alias}} - CEDICA{% endblock %}
+
+{% block content %}
+    <div id="overlay" class="overlay">
+        <div id="cartel" class="warning-msg">
+            <p> ¿Está seguro de que quiere eliminar al usuario {{user.alias}} permanentemente? </p>
+            <div class="opt">
+                <button id="cancel" type="button" class="op -gr">Cancelar</button>
+                <form id="delForm" action="{{ url_for('user.delete', id=user.id)}}" method="GET">
+                    <button id="confirm" type="button" class="op -re">Confirmar</button>
+                </form>
+            </div>
+            
+          </div>
+
+    </div>
+    <section class="registerbox">
+        <div class="formRegister">
+        <h1>Datos de {{user.alias}}</h1>
+        <br>
+        <form action="{{ url_for('user.update', id=user.id)}}" method="POST">
+            <div class="input-set">
+                <input maxlength="120" {% if not is_self(session, user.email) %}disabled style="cursor: default;" {% endif %} placeholder="" value="{{user.email}}" spellcheck=false id="email-field" class="input-field" name="email" type="email" required><br>
+                <label id="email-label" for="email-field" class="input-label">EMAIL</label>
+                <span id="email-error" class="input-error"></span>
+            </div>
+            <br>
+            <div class="input-set">
+                <input maxlength="50" {% if not is_self(session, user.email) %}disabled style="cursor: default;" {% endif %} placeholder="" value="{{user.alias}}" spellcheck=false id="alias-field" class="input-field" name="alias" type="text" required><br>
+                <label id="alias-label" class="input-label" for="alias-field">ALIAS</label>
+                <span id="alias-error" class="input-error"></span>
+            </div>
+            <br>
+            <div {% if not is_self(session, user.email) %} style="display:none;" {% endif %} class="input-set">
+                <input maxlength="128" placeholder="" id="password-field" class="input-field" name="password" type="password"><br>
+                <label id="password-label" class="input-label" for="password-field">NUEVA CONTRASEÑA</label>
+                <span id="password-error" class="input-error"></span>
+            </div>
+            
+            <br>
+            <div class="input-set">
+                <div class="dates">
+                    <p>Usuario creado el:<p><p>Actualizado por última vez:</p>
+                </div>
+                <div class="dates">
+                    <p>{{user.inserted_at.strftime('%d/%m/%Y')}}</p><p>{{user.updated_at.strftime("%d/%m/%Y %H:%M:%S")}}</p>
+                </div>
+            </div>
+            <br>
+            <div class="order">
+                <div class="input-set">
+                    <div {% if not is_permitted(session, 'user_update') %}style="cursor: default;"{% endif %} class="select_mate" data-mate-select="active" >
+                    <select {% if not is_permitted(session, 'user_update') %}disabled style="cursor: default;"{% endif %} name="role" id="mySelect">
+                        <option value="">-</option>
+                        {%for role in roles%}
+                            <option {% if user.role.name == role %}selected{% endif %} value="{{role}}">{{role}}</option>
+                        {% endfor %}
+                    </select>
+                    
+                    <p class="selecionado_opcion"  onclick="open_select(this)" ></p>
+                    <span onclick="open_select(this)" class="icon_select_mate" >
+                        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                            <path d="M0-.75h24v24H0z" fill="none"/>
+                        </svg>
+                    </span>
+
+                    <div class="cont_list_select_mate">
+                    <ul class="cont_select_int">  </ul> 
+                    </div>
+                </div>
+            </div>
+
+            <br>
+                <div class="input-set">
+                    <label class="order-checkbox" for="enabled-checkbox">Bloqueado:</label>
+                    <div class="checkbox-wrapper-30">
+                        <span style="left: 5.3rem;" class="checkbox">
+                        <input {% if (not is_permitted(session, 'user_update') or user.role.name == 'Administrador de Sistema') %}disabled style="cursor: default;" {% endif %}  {% if not user.enabled %}checked{% endif %} type="checkbox" id="enabled-checkbox" name="enabled"/>
+                        <svg>
+                            <use xlink:href="#checkbox-30" class="checkbox"></use>
+                        </svg>
+                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+                        <symbol id="checkbox-30" viewBox="0 0 22 22">
+                            <path fill="none" stroke="currentColor" d="M5.5,11.3L9,14.8L20.2,3.3l0,0c-0.5-1-1.5-1.8-2.7-1.8h-13c-1.7,0-3,1.3-3,3v13c0,1.7,1.3,3,3,3h13 c1.7,0,3-1.3,3-3v-13c0-0.4-0.1-0.8-0.3-1.2"/>
+                        </symbol>
+                        </svg>
+                    </div>
+                </div>
+            <br>
+
+            {% if is_permitted(session, 'user_update') or is_self(session, user.email) %}<button id="button-submit" class="submit" type="submit" disabled>Aplicar cambios</button>{% endif %}
+            <button type="button" {% if is_self(session, user.email) %}style="display:none" {% endif %} {% if not is_permitted(session, 'user_destroy') %} style="display:none;" {% endif %}  {% if user.role.name == 'Administrador de Sistema' %}disabled{% endif %} id="button-delete" class="del">Eliminar Usuario</button>
+        </form>
+
+        </div>
+    </section>
+
+
+<script>
+    var role;
+    if ({{user.role_id is not none | tojson}}){
+        role = "{{user.role.name}}";
+    }
+    else{
+        role = ""
+    }
+    var modified4 = false;
+    var modified5 = false;
+    var modified1 = false;
+    var modified2 = false;
+    var modified3 = false;
+    var button = document.getElementById('button-submit');
+    var has_update_permission = {{is_permitted(session, 'user_update')|tojson}}
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const mails = {{ mails|tojson }};
+        const aliases = {{ aliases|tojson }};
+        const alias = {{user.alias|tojson}};
+        const mail = {{user.email|tojson}};
+        const enabled = {{user.enabled|tojson}};
+
+        var overlay = document.getElementById("overlay");
+        var cartel = document.getElementById("cartel");
+        var buttonDel = document.getElementById("button-delete");
+        buttonDel.addEventListener("click", function(){
+            cartel.style.opacity = 1;
+            overlay.style.opacity=1;
+            overlay.style.display = "inline-block";
+            cartel.style.display = 'inline-block';
+            cartel.style.opacity = 1;
+        })
+
+        var delForm = document.getElementById("delForm");
+        var confirm = document.getElementById("confirm");
+        confirm.addEventListener("click", function(){
+            cartel.style.display = 'none';
+            overlay.style.display="none";
+            delForm.submit();
+        })
+
+        var checkbox = document.getElementById("enabled-checkbox");
+
+        var cancel = document.getElementById("cancel");
+        cancel.addEventListener("click", function(){
+            cartel.style.opacity = 0;
+            overlay.style.opacity= 0;
+            setTimeout(function(){cartel.style.display = 'none'; overlay.style.display="none";}, 500);
+        })
+
+        var emailField = document.getElementById("email-field");
+        var emailLabel = document.getElementById("email-label");
+        var emailError = document.getElementById("email-error");
+
+        var passwordField = document.getElementById("password-field");
+        var passwordLabel = document.getElementById("password-label");
+        var passwordError = document.getElementById("password-error");
+
+        var aliasField = document.getElementById("alias-field");
+        var aliasLabel = document.getElementById("alias-label");
+        var aliasError = document.getElementById("alias-error");
+
+        
+
+        var contraValida = true;
+        var mailValido = true;
+        var aliasValido = true;
+        
+        aliasField.addEventListener("input", validateAlias);
+        aliasField.addEventListener("focus", validateAlias);
+        emailField.addEventListener("input", validateEmail);
+        emailField.addEventListener("focus", validateEmail);
+        passwordField.addEventListener("input", validatePassword);
+        passwordField.addEventListener("focus", validatePassword);
+        passwordField.addEventListener("change", validatePassword);
+        checkbox.addEventListener("change", function(){
+            modified5 = (enabled==checkbox.checked);
+            if (!(modified1 || modified2 || modified3 || modified4|| modified5)){
+                button.disabled = true;
+            }
+
+            if (!(modified1 || modified2 || modified3 || modified4 || !modified5)){
+                button.disabled = false;
+            } 
+        })
+
+        if (emailField.value) {
+            validateEmail();
+        }
+        if (passwordField.value) {
+            validatePassword();
+        }
+        
+        
+        function validateEmail(){
+            if(emailField.value === mail){
+
+                emailField.style.borderBottomColor = "#777";
+                emailError.innerHTML = "";
+                emailError.style.top = "50%";
+                emailValido = true;
+                modified1 = false;
+                button.disabled = !(contraValida && mailValido && aliasValido && (modified1 || modified2 || modified3 || modified4));
+                return true;
+            }
+            else{
+                modified1=true
+                if(!emailField.value.match(/^[A-Za-z\._\-0-9]+[@][A-Za-z]+[\.][a-z]/)){
+                    emailError.innerHTML = "Mail invalido";
+                    emailError.style.top = "80%";
+                    emailField.style.borderBottomColor = "red";
+                    mailValido = false;
+                    button.disabled = true;
+                    return false;
+                }
+                else{
+                    if(mails.includes(emailField.value)){
+                        emailError.innerHTML = "Mail ya registrado";
+                        emailError.style.top = "80%";
+                        emailField.style.borderBottomColor = "red";
+                        mailValido = false;
+                        button.disabled = true;
+                        return false;
+                    }
+                    else{
+                        emailError.innerHTML = "";
+                        emailField.style.borderBottomColor = "green";
+                        emailError.style.top = "50%";
+                        mailValido = true;
+                        button.disabled = !(contraValida && mailValido && aliasValido);
+                        return true;
+                    }
+                }
+            }
+        }
+
+        function validateAlias(){
+            if(aliasField.value === alias){
+                aliasField.style.borderBottomColor = "#777";
+                aliasError.innerHTML = "";
+                aliasError.style.top = "50%";
+                aliasValido = true;
+                modified2 = false;
+                button.disabled = !(contraValida && mailValido && aliasValido && (modified1 || modified2 || modified3 || modified4));
+                return true;
+            }
+            else{
+                modified2=true
+                if(aliasField.value.length == 0){
+                    aliasError.innerHTML = "Este campo es obligatorio";
+                    aliasError.style.top = "80%";
+                    aliasField.style.borderBottomColor = "red";
+                    aliasValido = false;
+                    button.disabled = true;
+                    return false;
+                }
+                else{
+                    if(aliases.includes(aliasField.value)){
+                        aliasError.innerHTML = "Alias ya registrado";
+                        aliasError.style.top = "80%";
+                        aliasField.style.borderBottomColor = "red";
+                        aliasValido = false;
+                        button.disabled = true;
+                        return false;
+                    }
+                    else{
+                        aliasError.innerHTML = "";
+                        aliasError.style.top = "50%";
+                        aliasField.style.borderBottomColor = "green";
+                        aliasValido = true;
+                        button.disabled = !(contraValida && mailValido && aliasValido);
+                        return true;
+                    }
+                }
+            }
+        }   
+
+        function validatePassword(){
+            if(passwordField.value.length < 1){
+                passwordField.style.borderBottomColor = "#777";
+                passwordError.innerHTML = "";
+                passwordError.style.top = "50%";
+                contraValida = true;
+                modified3 = false;
+                button.disabled = !(contraValida && mailValido && aliasValido && (modified1 || modified2 || modified3 || modified4));
+                return true;
+            }
+            else{
+                modified3 = true
+                if(passwordField.value.length < 7){
+                    passwordError.innerHTML = "Contraseña demasiado corta, faltan " + (7-passwordField.value.length) + " caracteres.";
+                    passwordError.style.top = "80%";
+                    passwordField.style.borderBottomColor = "red";
+                    contraValida = false;
+                    button.disabled = true;
+                    return false;
+                }
+                else{
+                    if(passwordField.value.match(/^[A-Za-z]+$/)){
+                        passwordError.innerHTML = "Incluya un número o caracter especial";
+                        passwordError.style.top = "80%";
+                        passwordField.style.borderBottomColor = "red";
+                        contraValida = false;
+                        button.disabled = true;
+                        return false;
+                    }
+                    else{
+                        passwordError.innerHTML = "";
+                        passwordError.style.top = "50%";
+                        passwordField.style.borderBottomColor = "green";
+                        contraValida = true;
+                        button.disabled = !(contraValida && mailValido && aliasValido);
+                        return true;
+                    }
+                }
+            }   
+        }            
+    });
+</script>
+<script src="{{ url_for('static', filename='dropdownUpdate.js') }}"></script>
+{% endblock %}
+
+{% block footer %}{% endblock %}

@@ -1,0 +1,194 @@
+.date-field {
+  border-radius: 15px;
+  outline: none;
+  box-shadow: none;
+  border: 1px solid darkgray;
+  padding: 0.4rem 0.3rem 0.4rem 0.7rem;
+  width: 7.5rem;
+  margin-top: 0.2rem;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.registerbox {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-inline: 1rem;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.submit-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  margin-block: 1.5rem;
+}
+
+.submit {
+  background-color: #f7bc6c;
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  margin-inline: auto;
+  width: 220px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.submit:disabled {
+  cursor: not-allowed;
+}
+
+.submit:hover {
+  background-color: #ffc97e;
+}
+
+.submit[disabled]:hover {
+  background-color: #f7bc6c;
+}
+
+.del {
+  background-color: #ef233c;
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  margin-inline: auto;
+  width: 220px;
+  transition-duration: 0.4s;
+  color:aliceblue;
+}
+
+.del:hover {
+  background-color: rgb(242, 83, 83);
+  cursor: pointer;
+}
+
+.del[disabled]:hover {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  cursor: not-allowed;
+}
+
+.del[disabled] {
+  background-color: #f06f7e;
+}
+
+.input-set {
+  width: 100%;
+  min-height: 3rem;
+  position: relative;
+}
+
+.input-field {
+  display: block;
+  width: 300px;
+  border: 0;
+  border-bottom: 2px solid #555;
+  background: transparent;
+  outline: none;
+  padding: 10px 2px;
+  position: relative;
+  font-size: 1em;
+}
+
+.input-label {
+  display: block;
+  position: absolute;
+  top: 1rem;
+  left: 2px;
+  color: #777;
+  font-size: 0.8em;
+  transition: 0.7s;
+}
+
+.input-error {
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  font-size: 0.8em;
+  font-weight: 400;
+  color: red;
+  transition: top 0.4s;
+}
+
+.input-field:focus ~ .input-label,
+.input-field:not(:placeholder-shown) ~ .input-label {
+  top: -0.7rem;
+  font-size: 0.7em;
+  color: #555;
+}
+
+.label {
+  top: -0.7rem;
+  font-size: 0.7em;
+  color: #555;
+}
+
+h1 {
+  text-align: center;
+}
+
+.text {
+  position: relative;
+  margin-top: 1rem;
+}
+
+.desc {
+  border: 1px solid darkgray;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  line-height: 1rem;
+
+  width: 100%;
+  height: auto;
+  resize: none;
+  overflow: hidden;
+  padding: 8px;
+  box-sizing: border-box;
+  font-family: Panton, Arial, Helvetica;
+}
+
+.ltxt {
+  top: 0.6rem;
+  left: 0.4rem;
+  font-size: 0.8rem;
+}
+
+.desc:focus ~ .ltxt,
+.desc:not(:placeholder-shown) ~ .ltxt {
+  top: -1rem;
+  font-size: 0.75em;
+  color: #555;
+}
+
+.select_mate {
+  width: 100%;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.simple-text {
+  width: 18rem;
+  flex-wrap: wrap;
+  overflow-wrap: break-word;
+  font-size: 0.8rem;
+  background-color: #e5e5e5;
+  border-radius: 15px;
+  padding: 1rem;
+}

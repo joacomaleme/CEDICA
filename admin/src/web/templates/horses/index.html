@@ -1,0 +1,175 @@
+{% extends "layout.html" %}
+
+{% block head %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dropdownSearch.css')}}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pagination.css')}}"/>
+{% endblock %}
+
+{% block title %}Ecuestre - CEDICA{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block content %}
+    <div class="table-header">
+        {% if is_permitted(session, 'horse_create') %}
+            <button class="btn">
+                <a href="{{ url_for('horse.new') }}">Nuevo</a>
+            </button>
+        {% endif %}
+
+
+        <form id="search-options" class="search-options" action="{{ url_for('horse.index')}}" method="GET">
+            <div class="empty">
+                <label class="title-cont" for="controllers">Ordenar por:</label>
+                <div id="controllers" class="controllers">
+                    <div class="dropselect">
+                        <div class="select_mate" data-mate-select="active" >
+                            <select name="sort_attr" id="sortAttr">
+                                <option {% if start_sort_attr == 'inserted_at' %}selected{% endif %} value="inserted_at">Fecha de creación</option>
+                                <option {% if start_sort_attr == 'name' %}selected{% endif %} value="name">Nombre</option>
+                                <option {% if start_sort_attr == 'birth' %}selected{% endif %} value="birth">Fecha de Nacimiento</option>
+                            </select>
+                            
+                            <p class="selecionado_opcion"  onclick="open_select(this)" ></p>
+                            <span onclick="open_select(this)" class="icon_select_mate" >
+                                <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                                    <path d="M0-.75h24v24H0z" fill="none"/>
+                                </svg>
+                            </span>
+                
+                            <div class="cont_list_select_mate">
+                                <ul class="cont_select_int">  </ul> 
+                            </div>
+                        </div>
+                    </div>
+        
+                    <label class="container">
+                        <input id="ascending" {% if start_ascending %}checked{% endif %} name="ascending" value="1" type="checkbox">
+                        <svg viewBox="0 0 512 512" height="1em" xmlns="http://www.w3.org/2000/svg" class="chevron-down"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg>
+                    </label>
+                </div>
+            </div>
+
+            <input id="page" type="number" name="page" style="display:none;">
+            <div class="search-bar">
+                <input spellcheck=false type="text" name="search_value" class="search-mail" placeholder="Buscar por nombre" value={{start_search_val}}>
+                <button class="search-button" type="submit"><i class="fa fa-search"></i></button>
+            </div>
+        
+            <div class="dropselect">
+                <div class="select_mate" data-mate-select="active" >
+                    <select name="activity" id="mySelect">
+                        <option value="">Sin filtros de Actividad</option>
+                        {% for activity in activities %}
+                            <option value="{{activity}}" {% if start_activity == activity %}selected{% endif %}>{{activity}}</option>
+                        {% endfor %}
+                    </select>
+                    
+                    <p class="selecionado_opcion"  onclick="open_select(this)" ></p>
+                    <span onclick="open_select(this)" class="icon_select_mate" >
+                        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+                            <path d="M0-.75h24v24H0z" fill="none"/>
+                        </svg>
+                    </span>
+        
+                    <div class="cont_list_select_mate">
+                        <ul class="cont_select_int">  </ul> 
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    {% if horses.total > 0 %}
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Fecha de Nacimiento</th>
+                    <th>Sexo</th>
+                    <th>Raza</th>
+                    <th>Pelaje</th>
+                    <th>Donado</th>
+                    <th>Sede</th>
+                    <th>Activo</th>
+                    <th>Actividad</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for horse in horses %}
+                <tr {% if is_permitted(session, 'horse_show') %} onclick="window.location='{{ url_for('horse.show', id=horse.id) }}'" style="cursor:pointer;"{% endif %}>
+                    <td>{{ horse.name }}</td>
+                    <td>{{ horse.birth }}</td>
+                    <td>
+                        {% if horse.sex %}
+                            Macho
+                        {% else %}
+                            Hembra
+                        {% endif %}
+                    </td>
+                    <td>{{ horse.breed }}</td>
+                    <td>{{ horse.coat }}</td>
+                    <td>
+                        {% if horse.is_donated %}
+                            Si
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
+                    <td>{{ horse.sede.name }}</td>
+                    <td>
+                        {% if horse.active %}
+                            Si
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
+                    <td>{{ activities[horse.activity_id -1 ] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <h1 style="width:fit-content;margin:auto;margin-top:2rem;margin-bottom:4rem;background-color:var(--nav-bg);padding:1.5rem;border-radius:5px,">No se encontró ningún Caballo</h1>
+    {% endif %}
+
+    <div class="page-section">
+        <nav class="theNav">
+            <ul class="pagination">
+                <li class="pagination-item">
+                    <a id="prev" class="ext" href="#">Previo</a>
+                </li>
+                {% for i in range(pages) %}
+                    {% if ((i > start_page-6) and (i < start_page+5)) or ((5 >= start_page) and (i < 10)) or (pages - start_page < 5 and i > pages - 11) %}
+                        <li class="pagination-item {% if start_page == i+1 %}active{% endif %}">
+                            <a class="pageNum">{{i+1}}</a>
+                        </li> 
+                    {% endif %}
+                {% endfor %}
+                <li class="pagination-item">
+                    <a id="next" class="ext" href="#">Siguiente</a>
+                </li>
+            </ul>
+        </nav>
+        <hr>
+    </div>
+
+    <script>
+        const startPage = {{ start_page }};
+        const pages = {{ pages }};
+    </script>
+    <script src="{{ url_for('static', filename='js/dropdownSearch.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/indexHorse.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pagination.js')}}"></script>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

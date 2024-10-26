@@ -1,0 +1,89 @@
+.table-header {
+    display: flex;
+    margin-top: 2rem;
+    margin-inline: 2rem;
+}
+
+.table-container {
+    overflow-x: auto; /* Permite scroll horizontal */
+    margin-inline: 2rem;
+    margin-block: 1rem;
+}
+
+.table-container a {
+    background: none;
+    background-color: transparent;
+    color: black;
+    font-size: 20px;
+    text-decoration: none;
+}
+
+table {
+    width: 100%;
+    max-width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    transition: background-color 0.3s;
+    word-wrap: break-word;
+}
+
+th {
+    background-color: var(--blue-bg);
+    color: white;
+    text-transform: uppercase;
+}
+
+td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+th:first-child, td:first-child {
+    border-left: 3px solid var(--blue-bg);
+}
+
+th:last-child, td:last-child {
+    border-right: 3px solid var(--blue-bg);
+}
+
+.alternative-title {
+    margin: auto;
+    margin-top: 2rem;
+    margin-bottom: 4rem;
+    padding: 1.5rem;
+    width: fit-content;
+    background-color: var(--nav-bg);
+    border-radius: 5px;
+}
+
+.delete-btn {
+    margin-left: 0.8rem;
+    cursor: pointer;
+}
+
+.fa-trash {
+    color: red;
+    font-size: 20px;
+}
+
+@media only screen and (max-width: 525px) {
+    .table-header {
+      flex-direction: column;
+      gap: 2rem;
+    }
+  }
