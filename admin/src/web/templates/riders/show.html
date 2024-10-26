@@ -480,21 +480,21 @@
 
         <!-- Nombre de la escuela -->
         <div class="input-set">
-            <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ school.name }}" spellcheck=false id="school-name-field" class="input-field" name="school-name" type="text" placeholder="" required><br>
+            <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} spellcheck=false id="school-name-field" class="input-field" name="school-name" type="text" placeholder=""><br>
             <label id="school-name-label" class="input-label" for="school-name-field">NOMBRE DE LA ESCUELA</label>
             <span id="school-name-error" class="input-error"></span>
         </div>
 
         <!-- Dirección de la escuela -->
         <div class="input-set">
-            <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ school.address }}" spellcheck=false id="school-address-field" class="input-field" name="school-address" type="text" placeholder="" required><br>
+            <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} spellcheck=false id="school-address-field" class="input-field" name="school-address" type="text" placeholder=""><br>
             <label id="school-address-label" class="input-label" for="school-address-field">DIRECCIÓN DE LA ESCUELA</label>
             <span id="school-address-error" class="input-error"></span>
         </div>
 
         <!-- Teléfono de la escuela -->
         <div class="input-set">
-            <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ school.phone }}" spellcheck=false id="school-phone-field" class="input-field" name="school-phone" type="text" placeholder="" required><br>
+            <input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} spellcheck=false id="school-phone-field" class="input-field" name="school-phone" type="text" placeholder=""><br>
             <label id="school-phone-label" class="input-label" for="school-phone-field">TELÉFONO DE LA ESCUELA</label>
             <span id="school-phone-error" class="input-error"></span>
         </div>
@@ -559,7 +559,7 @@
 
 				<!-- Departamento -->
 				<div class="input-set">
-					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian1_address.apartment }}" spellcheck=false id="guardian1-apartment-field" class="input-field" name="guardian1-apartment" type="text" placeholder="" required><br>
+					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian1_address.apartment }}" spellcheck=false id="guardian1-apartment-field" class="input-field" name="guardian1-apartment" type="text" placeholder=""><br>
 					<label id="guardian1-apartment-label" class="input-label" for="guardian1-apartment-field">DEPARTAMENTO</label>
 					<span id="guardian1-apartment-error" class="input-error"></span>
 				</div>
@@ -710,7 +710,7 @@
 
 				<!-- Departamento -->
 				<div class="input-set">
-					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian2_address.apartment }}" spellcheck=false id="guardian2-apartment-field" class="input-field" name="guardian2-apartment" type="text" placeholder="" required><br>
+					<input {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} value="{{ rider.guardian2_address.apartment }}" spellcheck=false id="guardian2-apartment-field" class="input-field" name="guardian2-apartment" type="text" placeholder=""><br>
 					<label id="guardian2-apartment-label" class="input-label" for="guardian2-apartment-field">DEPARTAMENTO</label>
 					<span id="guardian2-apartment-error" class="input-error"></span>
 				</div>
@@ -901,7 +901,7 @@
           <div class="select_mate" data-mate-select="active">
             <select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="teacher-id" id="teacher-id-field" required>
               {% for employee in employees %}
-                <option value="{{ employee.id }}" {% if employee.id == rider.teacher_id %}selected{% endif %}>{{ employee.name | upper }}</option>
+                <option value="{{ employee.id }}" {% if employee.id == rider.teacher_id %}selected{% endif %}>{{ employee.name | upper }} {{ employee.surname | upper }} ({{ employee.dni | upper }})</option>
               {% endfor %}
             </select>
 
@@ -927,7 +927,7 @@
           <div class="select_mate" data-mate-select="active">
             <select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="horse-conductor-id" id="horse-conductor-id-field" required>
               {% for employee in employees %}
-                <option value="{{ employee.id }}" {% if employee.id == rider.horse_conductor_id %}selected{% endif %}>{{ employee.name | upper }}</option>
+                <option value="{{ employee.id }}" {% if employee.id == rider.horse_conductor_id %}selected{% endif %}>{{ employee.name | upper }} {{ employee.surname | upper }} ({{ employee.dni | upper }})</option>
               {% endfor %}
             </select>
 
@@ -979,7 +979,7 @@
           <div class="select_mate" data-mate-select="active">
             <select {% if not is_permitted(session, 'rider_update') %}disabled style="cursor: default;" {% endif %} name="track-assistant-id" id="track-assistant-id-field" required>
               {% for employee in employees %}
-                <option value="{{ employee.id }}" {% if employee.id == rider.track_assistant_id %}selected{% endif %}>{{ employee.name | upper }}</option>
+                <option value="{{ employee.id }}" {% if employee.id == rider.track_assistant_id %}selected{% endif %}>{{ employee.name | upper }} {{ employee.surname | upper }} ({{ employee.dni | upper }})</option>
               {% endfor %}
             </select>
 

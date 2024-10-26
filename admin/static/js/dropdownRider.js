@@ -164,9 +164,10 @@ window.onload = function () {
     }
     var opcionOtro = document.getElementById("opcion-otro");
     var newSchool = document.getElementById("new-school");
+    var disabilityCheckbox = document.getElementById("disable-certificate-checkbox");
     select_optiones[indx].selected = true;
     if (select_.getAttribute("id") === "disability-diagnosis-field") {
-      if (select_.value === "Otro") {
+      if (select_.value === "Otro" && disabilityCheckbox.value) {
         opcionOtro.style.display = "block";
       } else {
         opcionOtro.style.display = "none";

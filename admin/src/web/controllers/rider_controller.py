@@ -25,6 +25,8 @@ from src.model.generic.tables.address import Address
 from src.model.riders.tables.school import School
 from src.model.riders.tables.disability_diagnosis import DisabilityDiagnosis
 import re
+from datetime import datetime
+import dns.resolver
 
 bp = Blueprint("rider", __name__, url_prefix="/JyA")
 
@@ -614,26 +616,38 @@ def check_show_data(
 def check_rider_data(rider_data) -> Tuple[bool, str]:
     required_fields = [
         "name", "surname", "dni", "age", "birth_date", "birth-locality", "birth-province",
-        "street", "number", "apartment", "current-locality", "current-province", "phone",
-        "emergency-contact-name", "emergency-phone", "has-scholarship", "disable-certificate",
-        "disability-diagnosis", "new-disability", "has-family-allowance", "family-allowance-type",
-        "receives-pension", "pension-type", "disability-type", "health-insurance", "affiliate-number",
-        "has-guardianship", "school-id", "school-name", "school-address", "school-phone",
-        "current-grade", "professionals", "guardian1-name", "guardian1-surname", "guardian1-dni",
-        "guardian1-street", "guardian1-number", "guardian1-apartment", "guardian1-locality",
+        "street", "number", "current-locality", "current-province", "phone",
+        "emergency-contact-name", "emergency-phone", "disability-type", "health-insurance", "affiliate-number",
+        "has-guardianship", "school-id", "current-grade", "professionals", "guardian1-name", "guardian1-surname", "guardian1-dni",
+        "guardian1-street", "guardian1-number", "guardian1-locality",
         "guardian1-province", "guardian1-phone", "guardian1-email", "guardian1-educational-level",
         "guardian1-occupation", "guardian1-relationship", "guardian2-name", "guardian2-surname",
-        "guardian2-dni", "guardian2-street", "guardian2-number", "guardian2-apartment",
+        "guardian2-dni", "guardian2-street", "guardian2-number",
         "guardian2-locality", "guardian2-province", "guardian2-phone", "guardian2-email",
         "guardian2-educational-level", "guardian2-occupation", "guardian2-relationship",
-        "work-proposal-id", "active", "sede-id", "teacher-id", "horse-conductor-id",
+        "work-proposal-id", "sede-id", "teacher-id", "horse-conductor-id",
         "horse-id", "track-assistant-id"
     ]
 
     for field in required_fields:
         if not rider_data.get(field):
-            return (False, f"Faltó rellenar el campo obligatorio: {field.replace('-', ' ').capitalize()}.")
+            return (False, f"Faltó rellenar un campo obligatorio {field}")
 
+    if (rider_data["disability-diagnosis"] == "Otro"):
+        if not rider_data.get("new-disability"):
+            return (False, f"Faltó rellenar un campo obligatorio")
+    if (rider_data["school-name"] == "Otro"):
+        if not rider_data.get("school-address") or not rider_data.get("school-phone"):
+            return (False, f"Faltó rellenar un campo obligatorio")
+    if (rider_data["has-family-allowance"] is not None):
+        if not rider_data.get("family-allowance-type"):
+            return (False, f"Faltó rellenar un campo obligatorio")
+    if (rider_data["disable-certificate"] is not None):
+        if not rider_data.get("disability-diagnosis"):
+            return (False, f"Faltó rellenar un campo obligatorio")
+    if (rider_data["receives-pension"] is not None):
+        if not rider_data.get("pension-type"):
+            return (False, f"Faltó rellenar un campo obligatorio")
 
     if len(rider_data["name"]) > 100:
         return (False, "El nombre debe ser menor a 100 caracteres.")
@@ -743,27 +757,27 @@ def check_rider_data(rider_data) -> Tuple[bool, str]:
     except:
         return (False, "Error en alguna provincia ingresada.")
 
-    if (rider_data["disable-certificate"] and rider_data["disability-diagnosis"] != "Otro"):
+    if (rider_data["disable-certificate"] is not None and rider_data["disability-diagnosis"] == "Otro"):
         try:
-            disability_diagnosis_ids = [disability_diagnosis.id for disability_diagnosis in disability_diagnosis_operations.list_disability_diagnosis()]
-            if not int(rider_data["disability-diagnosis"]) in disability_diagnosis_ids:
-                return (False, "ID de discapacidad inexistente.")
+            disability_diagnosis = [disability_diagnosis.diagnosis for disability_diagnosis in disability_diagnosis_operations.list_disability_diagnosis()]
+            if not (rider_data["disability-diagnosis"]) in disability_diagnosis:
+                return (False, "Discapacidad inexistente.")
         except:
             return (False, "Error en la discapacidad ingresada.")
 
-    if (rider_data["has-family-allowance"]):
+    if (rider_data["has-family-allowance"] is not None):
         try:
-            family_allowance_type_ids = [family_allowance_type.id for family_allowance_type in family_allowance_type_operations.list_family_allowance_types()]
-            if not int(rider_data["family-allowance-type"]) in family_allowance_type_ids:
-                return (False, "ID de tipo de asignación familiar inexistente.")
+            family_allowance_type = [family_allowance_type.name for family_allowance_type in family_allowance_type_operations.list_family_allowance_types()]
+            if not (rider_data["family-allowance-type"]) in family_allowance_type:
+                return (False, "Tipo de asignación familiar inexistente.")
         except:
             return (False, "Error en el tipo de asignación familiar ingresado.")
 
-    if (rider_data["receives-pension"]):
+    if (rider_data["receives-pension"] is not None):
         try:
-            pension_type_ids = [pension_type.id for pension_type in pension_type_operations.list_pension_types()]
-            if not int(rider_data["pension-type"]) in pension_type_ids:
-                return (False, "ID de tipo de pensión inexistente.")
+            pension_type = [pension_type.name for pension_type in pension_type_operations.list_pension_types()]
+            if not (rider_data["pension-type"]) in pension_type:
+                return (False, "Tipo de pensión inexistente.")
         except:
             return (False, "Error en el tipo de pensión ingresado.")
 
@@ -777,10 +791,10 @@ def check_rider_data(rider_data) -> Tuple[bool, str]:
 
     try:
         educational_levels = ["Primario", "Secundario", "Terciario", "Universitario"]
-        if not int(rider_data["guardian1-educational-level"]) in educational_levels:
-            return (False, "ID de nivel educativo del primer tutor inexistente.")
-        if not int(rider_data["guardian2-educational-level"]) in educational_levels:
-            return (False, "ID de nivel educativo del segundo tutor inexistente.")
+        if not (rider_data["guardian1-educational-level"]) in educational_levels:
+            return (False, "Nivel educativo del primer tutor inexistente.")
+        if not (rider_data["guardian2-educational-level"]) in educational_levels:
+            return (False, "Nivel educativo del segundo tutor inexistente.")
     except:
         return (False, "Error en el nivel educativo del tutor ingresado.")
 
@@ -799,14 +813,15 @@ def check_rider_data(rider_data) -> Tuple[bool, str]:
         return (False, "Error en la sede ingresada.")
 
     try:
-        employee_ids = [employee.id for employee in employee_operations.list_teachers()]
+        employee_ids = [employee.id for employee in employee_operations.list_employees()]
         if not int(rider_data["teacher-id"]) in employee_ids:
             return (False, "ID de profesor inexistente.")
         if not int(rider_data["horse-conductor-id"]) in employee_ids:
             return (False, "ID de conductor del caballo inexistente.")
         if not int(rider_data["track-assistant-id"]) in employee_ids:
             return (False, "ID de auxiliar de pista inexistente.")
-    except:
+    except Exception as e:
+        print(e)
         return (False, "Error en alguno de los empleados ingresados.")
 
     try:

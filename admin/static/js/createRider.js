@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const birthdateField = document.getElementById("birthdate-field");
   const streetField = document.getElementById("street-field");
   const numberField = document.getElementById("number-field");
-  const apartmentField = document.getElementById("apartment-field");
   const phoneField = document.getElementById("phone-field");
   const emergencyContactField = document.getElementById("emergency-contact-name-field");
   const emergencyContactPhoneField = document.getElementById("emergency-contact-phone-field");
@@ -23,7 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const guardian1DniField = document.getElementById("guardian1-dni-field");
   const guardian1StreetField = document.getElementById("guardian1-street-field");
   const guardian1NumberField = document.getElementById("guardian1-number-field");
-  const guardian1AparmentField = document.getElementById("guardian1-apartment-field");
   const guardian1PhoneField = document.getElementById("guardian1-phone-field");
   const guardian1EmailField = document.getElementById("guardian1-email-field");
   const guardian1OccupationField = document.getElementById("guardian1-occupation-field");
@@ -33,7 +31,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const guardian2DniField = document.getElementById("guardian2-dni-field");
   const guardian2StreetField = document.getElementById("guardian2-street-field");
   const guardian2NumberField = document.getElementById("guardian2-number-field");
-  const guardian2AparmentField = document.getElementById("guardian2-apartment-field");
   const guardian2PhoneField = document.getElementById("guardian2-phone-field");
   const guardian2EmailField = document.getElementById("guardian2-email-field");
   const guardian2OccupationField = document.getElementById("guardian2-occupation-field");
@@ -58,7 +55,6 @@ document.addEventListener("DOMContentLoaded", function () {
       "birthdate-field": [birthdateField, validateEmpty],
       "street-field": [streetField, validateEmpty],
       "number-field": [numberField, validateNumber],
-      "apartment-field": [apartmentField, validateEmpty],
       "phone-field": [phoneField, validatePhone],
       "emergency-contact-field": [emergencyContactField, validateEmpty],
       "emergency-contact-phone-field": [emergencyContactPhoneField, validatePhone],
@@ -74,7 +70,6 @@ document.addEventListener("DOMContentLoaded", function () {
       "guardian1-dni-field": [guardian1DniField, validateDNI],
       "guardian1-street-field": [guardian1StreetField, validateEmpty],
       "guardian1-number-field": [guardian1NumberField, validateNumber],
-      "guardian1-apartment-field": [guardian1AparmentField, validateEmpty],
       "guardian1-phone-field": [guardian1PhoneField, validatePhone],
       "guardian1-email-field": [guardian1EmailField, validateEmpty],
       "guardian1-occupation-field": [guardian1OccupationField, validateEmpty],
@@ -84,14 +79,13 @@ document.addEventListener("DOMContentLoaded", function () {
       "guardian2-dni-field": [guardian2DniField, validateDNI],
       "guardian2-street-field": [guardian2StreetField, validateEmpty],
       "guardian2-number-field": [guardian2NumberField, validateNumber],
-      "guardian2-apartment-field": [guardian2AparmentField, validateEmpty],
       "guardian2-phone-field": [guardian2PhoneField, validatePhone],
       "guardian2-email-field": [guardian2EmailField, validateEmpty],
       "guardian2-occupation-field": [guardian2OccupationField, validateEmpty],
       "guardian2-relationship-field": [guardian2RelationshipField, validateEmpty]
   };
   
-  const MAXVALIDOS = 38;
+  const MAXVALIDOS = 35;
   let validos = 0;
 
   Object.keys(inputs).forEach(e => {

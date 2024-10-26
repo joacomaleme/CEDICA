@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const newDisabilityField = document.getElementById("new-disability-field");
     const healthInsuranceField = document.getElementById("health-insurance-field");
     const affiliateNumberField = document.getElementById("affiliate-number-field");
+    const schoolField = document.getElementById("school-id-field");
     const schoolNameField = document.getElementById("school-name-field");
     const schoolAddressField = document.getElementById("school-address-field");
     const schoolNumberField = document.getElementById("school-phone-field");
@@ -44,6 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const disabiliyDiagnosisEntero = document.getElementById("disability-diagnosis-entero");
     const familyAllowanceTypeEntero = document.getElementById("family-allowance-type-entero");
     const pensionTypeEntero = document.getElementById("pension-type-entero");
+    const newDisability = document.getElementById("opcion-otro");
     
   
     const submitBtn = document.getElementById("button-submit");
@@ -62,9 +64,9 @@ document.addEventListener("DOMContentLoaded", function () {
         "new-disability-field": [newDisabilityField, validateNewDisability],
         "health-insurance-field": [healthInsuranceField, validateEmpty],
         "affiliate-number-field": [affiliateNumberField, validateAffiliateNumber],
-        "school-name-field": [schoolNameField, validateEmpty],
-        "school-address-field": [schoolAddressField, validateEmpty],
-        "school-number-field": [schoolNumberField, validateEmpty],
+        "school-name-field": [schoolNameField, validateSchool],
+        "school-address-field": [schoolAddressField, validateSchool],
+        "school-number-field": [schoolNumberField, validateSchool],
         "current-grade-field": [currentGradeField, validateEmpty],
         "guardian1-name-field": [guardian1NameField, validateEmpty],
         "guardian1-surname-field": [guardian1SurnameField, validateEmpty],
@@ -86,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "guardian2-relationship-field": [guardian2RelationshipField, validateEmpty]
     };
     
-    const MAXVALIDOS = 37;
+    const MAXVALIDOS = 35;
     let validos = 0;
   
     Object.keys(inputs).forEach(e => {
@@ -106,6 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       else {
           disabiliyDiagnosisEntero.style.display = "none";
+          newDisability.style.display = "none";
       }
   }
 
@@ -115,6 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         else {
             familyAllowanceTypeEntero.style.display = "none";
+
         }
     }
 
@@ -147,6 +151,16 @@ document.addEventListener("DOMContentLoaded", function () {
             deactivateError(field);
         }
     }
+
+    function validateSchool(event) {
+      const field = event.target;
+  
+      if (field.value.trim() === "" && schoolField.value === "Otro") {
+          activateError(field, "Este campo es obligatorio");
+      } else {
+          deactivateError(field);
+      }
+  }
   
     function validateNumber(event) {
       const field = event.target;
@@ -186,7 +200,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Valida que el mail tenga el formato adecuado y que no esté repetido
     function validateEmail(event) {
       const emailField = event.target;
-      console.log("a");
       if (!emailField.value.match(/^[A-Za-z\._\-0-9]+[@][A-Za-z]+[\.][a-z]{2,4}$/)) {
         activateError(emailField, "Formato de email inválido");
       } else {
@@ -234,7 +247,6 @@ document.addEventListener("DOMContentLoaded", function () {
         validos++;
         field.classList.add('valid');
       }
-  
       errorMessage.innerHTML = "";
       field.style.borderBottomColor = "rgb(0, 170, 0)";
       submitBtn.disabled = validos !== MAXVALIDOS;
