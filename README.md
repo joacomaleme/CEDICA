@@ -35,7 +35,7 @@ El sistema se estructura en diversos módulos, cada uno diseñado para una funci
 La aplicación está actualmente desplegada en un servidor público y accesible para visualización y pruebas en tiempo real. *https://admin-grupo03.proyecto2024.linti.unlp.edu.ar/*
 
 Para acceder a la página de prueba, utiliza las siguientes credenciales de prueba:
--   Usuario: martin@gmail.com
+-   Usuario: juan@gmail.com
 -   Contraseña: 123a
 
 > **Nota**: Aunque accesible, la aplicación sigue en desarrollo, y algunas funcionalidades podrían estar incompletas o presentar errores. Además, ten en cuenta que la base de datos contiene datos ficticios que pueden modificarse a través del enlace proporcionado, pero se reinicia periódicamente para mantener su estado de prueba.
