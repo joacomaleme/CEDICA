@@ -32,7 +32,7 @@ El sistema se estructura en diversos módulos, cada uno diseñado para una funci
 
 ## Acceso al Proyecto en Línea
 
-~~La aplicación está actualmente desplegada~~ en un servidor público y accesible para visualización y pruebas en tiempo real. *https://admin-grupo03.proyecto2024.linti.unlp.edu.ar/*
+~~La aplicación está actualmente desplegada en un servidor público y accesible para visualización y pruebas en tiempo real. *https://admin-grupo03.proyecto2024.linti.unlp.edu.ar/*~~
 
 Para acceder a la página de prueba, utiliza las siguientes credenciales de prueba:
 -   Usuario: juan@gmail.com
