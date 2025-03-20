@@ -1,8 +1,8 @@
 # Sistema de Administración de Datos para CEDICA
 
-**Estado del Proyecto**: En Desarrollo 🚧
+**Estado del Proyecto**: Finalizado ✅
 
-Este es un proyecto en desarrollo de una aplicación web para CEDICA, una organización que requiere un sistema de gestión integral para sus operaciones. El sistema permitirá la administración eficiente de datos críticos, tales como pagos, recibos, clientes, empleados, y caballos, entre otros.
+Este es un proyecto ya finalizado de una aplicación web para CEDICA, una organización que requeria un sistema de gestión integral para sus operaciones. El sistema permite la administración eficiente de datos críticos, tales como pagos, recibos, clientes, empleados, y caballos, entre otros.
 
 ---
 
@@ -32,10 +32,10 @@ El sistema se estructura en diversos módulos, cada uno diseñado para una funci
 
 ## Acceso al Proyecto en Línea
 
-La aplicación está actualmente desplegada en un servidor público y accesible para visualización y pruebas en tiempo real. *https://admin-grupo03.proyecto2024.linti.unlp.edu.ar/*
+~~La aplicación está actualmente desplegada~~ en un servidor público y accesible para visualización y pruebas en tiempo real. *https://admin-grupo03.proyecto2024.linti.unlp.edu.ar/*
 
 Para acceder a la página de prueba, utiliza las siguientes credenciales de prueba:
 -   Usuario: juan@gmail.com
--   Contraseña: 123a
+-   Contraseña: lacontradejuan0820
 
-> **Nota**: Aunque accesible, la aplicación sigue en desarrollo, y algunas funcionalidades podrían estar incompletas o presentar errores. Además, ten en cuenta que la base de datos contiene datos ficticios que pueden modificarse a través del enlace proporcionado, pero se reinicia periódicamente para mantener su estado de prueba.
+> **Nota**: La aplicacion se encontraba desplegada en un servidor otorgado por la facultad y en la actualidad ha sido dado de baja, proximamente se desplegara la aplicacion en un nuevo servidor para su posible acceso.
